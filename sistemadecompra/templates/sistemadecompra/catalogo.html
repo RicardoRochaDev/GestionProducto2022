@@ -1,0 +1,14 @@
+{% extends "sistemadecompra/base.html" %}
+
+{% block content %}
+
+    {% if lista_productos %}
+        <ul>
+        {% for producto in lista_productos %}
+            <li> {{producto.nombre}}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay productos.</p>
+    {% endif %}
+{% endblock %}
