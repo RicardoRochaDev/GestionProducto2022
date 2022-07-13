@@ -19,5 +19,6 @@ from sistemadecompra import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.catalogo, name='/')
+    path('', views.catalogo, name='/'),
+    path('carrito/', views.carrito, name='carrito'),
 ]

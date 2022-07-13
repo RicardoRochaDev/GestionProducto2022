@@ -11,6 +11,33 @@ def catalogo(request):
 
     template = loader.get_template('sistemadecompra/catalogo.html')
     context = {
-        'lista_productos': lista_productos,
+        'lista_productos': lista_productos
     }
+
+    if (request.method == 'GET'):
+        if 'productoId' in request.GET:
+            diccionario = request.GET  # devuelve un diccionario
+            id = diccionario['productoId']
+            id = int(id)
+   
+            carritoAux = request.session.get('carrito', [])
+            if id not in carritoAux:
+                carritoAux.append(id)
+            request.session['carrito'] = carritoAux
+            return render(request, 'sistemadecompra/catalogo.html', context)  
+
     return render(request, 'sistemadecompra/catalogo.html', context)
+
+
+def carrito(request):
+
+    itemsCarrito = []
+    carritoSession = request.session.get('carrito', [])
+
+    if carritoSession:
+        itemsCarrito = Producto.objects.filter(id__in=carritoSession)
+    
+    context = {
+        'itemsCarrito': itemsCarrito
+    }
+    return render(request, 'sistemadecompra/carrito.html', context)

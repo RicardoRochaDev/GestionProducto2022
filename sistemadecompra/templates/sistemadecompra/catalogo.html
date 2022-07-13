@@ -1,14 +1,35 @@
 {% extends "sistemadecompra/base.html" %}
 
 {% block content %}
-
+    
     {% if lista_productos %}
-        <ul>
+        <div class="row justify-content-md-center">
         {% for producto in lista_productos %}
-            <li> {{producto.nombre}}</li>
+            <div class="card m-1" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{producto.nombre}}</h5>
+                    <p class="card-text">{{producto.descripcion}}</p>
+                    <form action="{% url '/' %}" method="GET">
+                        <button type="submit" name="productoId" value="{{producto.id}}" class="btn btn-success">Agregar al
+                            carro</button>
+                    </form>
+                    
+                </div>
+            </div>
         {% endfor %}
-        </ul>
+        </div>
     {% else %}
         <p>No hay productos.</p>
     {% endif %}
+
+
+    {% if request.session.carrito %}
+        {%for item in request.session.carrito%}
+            {{item}}
+        {%endfor%}
+    {%endif%}
+
+
+    <p>Usuario Actual: {{request.user}} </p>
+    <p>ID user: {{request.user.id}} </p> 
 {% endblock %}
