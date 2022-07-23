@@ -1,0 +1,75 @@
+{% extends "sistemadecompra/base.html" %}
+
+{% block title %}
+Carrito
+{% endblock %}
+
+{% block content %}
+    <hr>
+    <hr>
+    <hr>
+    <hr>
+    <h2>Carro de compras</h2>
+    
+    {% comment %}
+        Si el carrito esta vacio se muestra una mensaje
+    {% endcomment %}
+    {% if not elCarrito %}
+        <p>Tu carrito está vacio. Vamo a comprar</p>
+    
+    {% comment %}
+        Si el carrito no esta vacio se muestran los productos separados por proveedor
+    {% endcomment %}
+    {% else %}
+        {% comment %}
+            Se muestra una pestaña por cada proveedor    
+        {% endcomment %}
+        
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for prov in losProveedores %}
+
+            <li class="nav-item">
+                <a class="nav-link" id="home-tab" data-toggle="tab" href="#{{prov.user.username}}" role="tab" aria-controls="home" aria-selected="true">{{prov.user.username}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% comment %}
+            Por cada proveedor se cargan sus productos correspondientes    
+        {% endcomment %}
+        <form action="{% url 'ver_Carrito' %}" method="GET">
+            <div class="tab-content" id="myTabContent">
+                {% for prov in losProveedores %}
+                <div class="tab-pane fade" id="{{prov.user.username}}" role="tabpanel" aria-labelledby="home-tab">
+                    <p>Productos agregados:</p>
+                    <ul>
+                        {% for producto in elCarrito %}
+                            {% if prov == producto.proveedor %}
+                            <li>{{producto.nombre}}  ${{producto.valor}}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                    <p>Ingrese una fecha y horario dentro dentro del siguiente rango de dias y horarios: </p>
+                    <ul>
+                        {% for h in horarios %}
+                            {% if prov == h.proveedor %}
+                                <li>{{h.dia}} - {{h.horaInicio}}hs a {{h.horaFinal}}hs</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                    <input type="date"  name="fecha{{prov.id}}" min="{{fechaActual}}" value="{{fechaActual}}" required>
+
+                    <input type="time"  name="tiempo{{prov.id}}"  value="00:00"required>
+                    
+                </div>
+                {% endfor %}
+            </div>
+            <input type="hidden" name="solicitudCheckout">
+            <p>Total: ${{total}}</p>
+            <button type="submit" name="elboton" value="botonv" class="btn btn-success">Checkout</button>
+        </form>
+    
+    {% endif %}
+
+{% endblock %}

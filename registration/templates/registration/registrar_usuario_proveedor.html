@@ -1,0 +1,22 @@
+{% extends "sistemadecompra/base.html" %}
+
+
+{% block title %} Registrar Proveedor {% endblock %}
+
+{% block content %}
+<hr>
+<hr>
+<hr>
+<hr>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+            <h1>Registro Proveedor</h1>
+        {{ form_user.as_table }}
+        {{ form_user_proveedor.as_table }}
+    </table>
+    <input type="submit" value="Registrar">
+</form>
+
+{% endblock %}

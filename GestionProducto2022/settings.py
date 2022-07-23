@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sistemadecompra.apps.SistemadecompraConfig'
+    'sistemadecompra.apps.SistemadecompraConfig',
+    'registration.apps.RegistrationConfig'
 ]
 
 MIDDLEWARE = [

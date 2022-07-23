@@ -1,10 +1,34 @@
+## ESTOS ERAN NUESTROS IMPORTS QUE METIMOS AHORA
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Producto
 from django.template import loader
 
 
+###############################################
+
+
+from django.shortcuts import render, redirect
+#from django.views.generic.base import TemplateView
+from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, Pedido, Horario, Cliente
+from .form import ProveedorForm
+from datetime import datetime
+import calendar
+from urllib.request import urlopen
+import json
+from django.shortcuts import render
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse, reverse_lazy
+from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto
+from .form import ProveedorForm
+from django.shortcuts import redirect
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
+
 # Create your views here.
+## ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
 
 def catalogo(request):
     lista_productos = Producto.objects.all()
@@ -41,3 +65,272 @@ def carrito(request):
         'itemsCarrito': itemsCarrito
     }
     return render(request, 'sistemadecompra/carrito.html', context)
+
+    ## FIN ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
+
+def mostrar_catalogo_v(request):
+    print("mostrar catalogo v")
+    list_Producto = Producto.objects.all()
+    list_TipoProducto = TipoProducto.objects.all()
+    list_proveedor =  Proveedor.objects.all()
+
+    list_id_users_proveedor= []
+    for it in list_proveedor:
+        list_id_users_proveedor.append(it.user.id)
+        #print ('asdsadasd ', it.user.id)
+
+    if 'carrito' not in request.session:
+        request.session['carrito'] = []
+
+    
+    if 'clasificacion' in request.GET:
+        tipoElegido = request.GET.get('clasificacion') 
+        print('tipoElegido: ', tipoElegido)
+
+        if (tipoElegido != 'Seleccione...'):
+            #print (type(tipoElegido))
+            tipoElegido= int(tipoElegido)
+            #print(type(tipoElegido))
+            list_Producto = Producto.objects.filter(tipo = tipoElegido)
+            #print ('NO 0')
+
+    if (request.method == 'GET'):
+        if 'elId' in request.GET:
+            dic = request.GET  # devuelve un diccionario
+            id = dic['elId']
+            id = int(id)
+            #id= int(dic['elId'])
+
+            # print(type(id))
+            carritoAux = request.session['carrito']
+            if id not in carritoAux:
+                carritoAux.append(id)
+            request.session['carrito'] = carritoAux
+        # if 'clasificacion' in request.GET:
+        #     dic = request.GET
+        #     if dic['clasificacion'] == "1":
+        #         p = Producto.objects.get(id=1)
+            return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto})            
+
+
+    #tipoProductos = TipoProducto.objects.all()
+    # print(tipoProductos)
+
+    #proveedor = Proveedor.objects.all()
+    # print(proveedor['Proveedor'])
+
+    return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 'list_TipoProducto': list_TipoProducto, 'list_id_users_proveedor':list_id_users_proveedor})
+
+
+def iniciar_sesion_v(request):
+    return render(request, 'sistemadecompra/iniciar_sesion.html')
+
+
+class InicioSesionView(TemplateView):
+    template_name = "sistemadecompra/iniciar_sesion.html"
+
+#adsasd
+def registrar_usuario_v(request):
+    formulario_proveedor = ProveedorForm()
+    # print(request.POST)
+    return render(request, 'sistemadecompra/registrar_usuario.html', {'formulario_proveedor': formulario_proveedor})
+
+
+def detalle_producto_v(request, idProducto):
+    producto = Producto.objects.get(id=idProducto)
+    #producto= Producto.objects.filter(id=id)
+
+    return render(request, 'sistemadecompra/detalle_producto.html', {
+        'producto': producto,
+        'carrito': request.session['carrito']
+    })
+
+def mostrar_perfil_proveedor_v(request):
+    
+    return render(request, 'registration/perfil_proveedor.html')
+ 
+def mostrar_perfil_cliente_v(request):
+    
+    return render(request, 'registration/perfil_cliente.html')
+    
+
+##################################################################################################
+
+def verCarrito(request):
+    now = datetime.now()
+    fechaActual= str(now.year) + "-" + str(now.month) + "-" + str(now.day)
+    diasDeLaSemana = {0: 'Lunes', 1: 'Martes', 2: 'Miercoles', 3: 'Jueves', 4: 'Viernes', 5: 'Sabado', 6: 'Domingo'}
+
+    #me aseguro que el carrito exista en la session, por las dudas
+    if 'carrito' not in request.session:
+        request.session['carrito'] = []
+
+    carritoAux = request.session['carrito']
+    #carritoAux.append(1)
+    #carritoAux.append(2)
+    #traigo todos los productos existentes
+    productosQuerySet = Producto.objects.all()
+
+    # inicializo las variables que voy a pasar al template
+    productosAgregados = []
+    proveedores = []
+    total = 0
+    horariosProveedor = Horario.objects.all()
+
+    # guardo los objetos Producto dentro de productosAgregados y extraigo los proveedores
+    for producto in productosQuerySet:
+        if producto.id in carritoAux:
+            productosAgregados.append(producto)
+            if not(Proveedor.objects.get(id=producto.proveedor.id) in proveedores):
+                proveedores.append(Proveedor.objects.get(id=producto.proveedor.id))
+            total = total + producto.valor
+
+    if (request.method == 'GET'):
+        if 'solicitudCheckout' in request.GET:
+            datosValidados = True
+            pedidosParaAlmacenar = []
+            for prov in proveedores:
+                fechaProvId = "fecha" + str(prov.id)
+                tiempoProvId = "tiempo" + str(prov.id)
+                
+                if fechaProvId in request.GET:
+                    dic= request.GET # devuelve un diccionario
+                    fecha = dic[fechaProvId]
+                    tiempo = dic[tiempoProvId]
+
+                    diaDeLaSemana = datetime.strptime(fecha, '%Y-%m-%d').date().weekday()
+                    diaDeLaSemana = diasDeLaSemana.get(diaDeLaSemana)
+
+                    hora = datetime.strptime(tiempo, '%H:%M').time()
+
+                    if diaDeLaSemana in Horario.objects.filter(proveedor = prov).values_list('dia', flat=True):
+                        for h in Horario.objects.filter(proveedor = prov, dia = diaDeLaSemana).values_list('horaInicio', flat=True):
+                            if(hora >= h):
+                                for h in Horario.objects.filter(proveedor = prov, dia = diaDeLaSemana).values_list('horaFinal', flat=True):
+                                    if(hora <= h):
+                                        #Si entra en este if, la fecha y hora esta validada
+                                        pedidosParaAlmacenar.append({
+                                            "proveedor": prov.id,
+                                            "cliente": request.user.cliente.id,
+                                            "hora": tiempo,
+                                            "fecha": fecha
+
+                                        })
+                                        datosValidados = datosValidados and True
+                                    else:
+                                        datosValidados = datosValidados and False
+                            else:
+                                datosValidados = datosValidados and False
+                    else:  
+                        datosValidados = datosValidados and False
+            if datosValidados == True:
+                request.session['pedidosParaAlmacenar'] = pedidosParaAlmacenar 
+                return redirect('proceder_Checkout')
+            else:
+                print("Datos incorrectos. Vuelva a intentar")
+    print(proveedores)
+    return render(request, "sistemadecompra/verCarrito.html", {"elCarrito": productosAgregados, "losProveedores": proveedores, "total": total, "horarios": horariosProveedor, 'fechaActual': fechaActual})
+
+def verCheckout(request):
+    pagos = MetodoDePago.objects.all().values()
+
+    if (request.method == 'GET'):
+        if 'solicitudRealizarPedido' in request.GET:
+            dic= request.GET # devuelve un diccionario
+            pedidosParaAlmacenar = request.session['pedidosParaAlmacenar']
+            for p in pedidosParaAlmacenar:
+                cliente = Cliente.objects.get(id= p['cliente'])
+                proveedor = Proveedor.objects.get(id= p['proveedor'])
+                if dic['elegirDir'] == 'propia':                  
+                    calleNombre = Cliente.objects.get(id= p['cliente']).calle
+                    calleNumero = Cliente.objects.get(id= p['cliente']).numero
+                    latitud = Cliente.objects.get(id= p['cliente']).latitud
+                    longitud = Cliente.objects.get(id= p['cliente']).longitud
+                else:
+                    calleNombre = dic['nuevaCalle'].replace(" ","+")
+                    calleNumero = dic['nuevaCalleNumero']
+                    #Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
+                    url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + calleNumero + "+" + calleNombre + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
+                    json_url = urlopen(url)
+                    data = json.loads(json_url.read())
+                    latitud = data['results'][0]['geometry']['location']['lat']
+                    longitud = data['results'][0]['geometry']['location']['lng']
+                    
+                    calleNombre = dic['nuevaCalle'].replace("+"," ")
+                pedido = Pedido(confirmado=0,fecha= p['fecha'], hora= p['hora'], calle= calleNombre, numero=calleNumero, latitud= latitud, longitud = longitud, entregado= 0, cliente= cliente, proveedor= proveedor)
+                pedido.save()
+                
+                #Comienza a asociar los productos con el pedido
+                carritoAux = request.session['carrito']
+
+                #traigo todos los productos existentes
+                productosQuerySet = Producto.objects.all()
+                productosAgregados = []
+
+                #guardo los objetos Producto dentro de productosAgregados
+                for producto in productosQuerySet:
+                    if producto.id in carritoAux:
+                        productosAgregados.append(producto)
+                for p in productosAgregados:
+                    pedido.productos.add(p)
+                
+                request.session['carrito'] = []
+                return redirect(reverse_lazy('/'))
+    return render(request, 'sistemadecompra/checkout.html', {'losPagos': pagos})
+
+def verPedidos(request):
+
+    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor)
+    productos = Producto.objects.filter(proveedor = request.user.proveedor)
+    
+    pedidosSinConfirmar_Producto = []
+    pedidosConfirmado_Producto = []
+
+    if (request.method == 'GET'):
+        if 'confirmar' in request.GET:
+            dic=request.GET
+            pedido = Pedido.objects.get(id = dic['confirmar'])
+            pedido.confirmado = 1
+            pedido.save()
+            print(pedido)
+        if 'confirmarEntrega' in request.GET:
+            dic=request.GET
+            pedido = Pedido.objects.get(id = dic['confirmarEntrega'])
+            pedido.entregado = 1
+            pedido.save()
+            print(pedido)
+
+    for p in pedidos:
+        if p.confirmado == 0:
+            pedidosSinConfirmar_Producto.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
+        else:
+            if p.entregado == 0:
+                pedidosConfirmado_Producto.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
+
+    #print(pedidosConfirmado_Producto)
+    return render(request, 'sistemadecompra/pedidos.html',{'pedidosSinConfirmar_Producto': pedidosSinConfirmar_Producto, 'pedidosConfirmado_Producto': pedidosConfirmado_Producto})
+
+def verMapa(request):
+    coordenadas=[]
+    pedidosQuerySet = Pedido.objects.filter(confirmado=1, entregado=0)
+    for p in pedidosQuerySet:
+        latAux = str(p.latitud).replace(',','.')
+        lngAux = str(p.longitud).replace(',','.')
+        coordenadas.append({'latitud': latAux, 'longitud': lngAux})
+
+    destinoYOrigenLatitud = Proveedor.objects.get(id = request.user.proveedor.id).latitud
+    destinoYOrigenLongitud = Proveedor.objects.get(id = request.user.proveedor.id).longitud
+
+    destinoYOrigenLatitud = str(destinoYOrigenLatitud).replace(',','.')
+    destinoYOrigenLongitud = str(destinoYOrigenLongitud).replace(',','.')
+    
+    return render(request, 'sistemadecompra/verMapa.html',{'coordenadas': coordenadas, 'destinoYOrigenLatitud': destinoYOrigenLatitud, 'destinoYOrigenLongitud': destinoYOrigenLongitud})
+
+def verHistorialVentas(request):
+    productos = Producto.objects.filter(proveedor = request.user.proveedor)
+    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, entregado = 1).order_by('-fecha')
+
+    pedidosHistorial = []
+    for p in pedidos:
+        pedidosHistorial.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
+    return render(request, 'sistemadecompra/historialVentas.html',{'pedidosHistorial': pedidosHistorial})

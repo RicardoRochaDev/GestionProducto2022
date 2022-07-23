@@ -1,0 +1,17 @@
+{% extends 'registration/perfil_proveedor.html' %}
+
+
+
+{% block contentProveedor %}
+<a href="{% url 'crear_Producto' %}"> CREAR PRODUCTO</a> <br>
+
+    <h2> LISTA DE PRODUCTOS </h2>
+    
+    {% for it in lista_producto_proveedor %}
+        <h5>Nombre: {{ it.nombre }}     <a href="{% url 'modificar_Producto' it.id %}"> MODIFICAR PRODUCTO</a> ||  <a href="{% url 'eliminar_Producto' it.id %}"> ELIMINAR PRODUCTO</a></h3> 
+        <h5>Marca: {{ it.marca }}</h5>
+        <h5>Tipo: {{ it.tipo }}</h5>
+        <h5>Precio: {{ it.valor }}</h5>
+        <hr>
+    {% endfor %}
+{% endblock %}

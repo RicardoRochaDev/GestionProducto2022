@@ -1,0 +1,28 @@
+{% extends "registration/perfil_proveedor.html" %}
+
+{% block contentProveedor %}
+    <h1>Historial de ventas</h1>
+    <div class="row">
+            <div class="col">
+                    <div class="list-group">
+                        {% for p in pedidosHistorial %}
+                        <div class="list-group-item flex-column align-items-start">
+                          <p class="mb-1">Cliente: {{p.pedido.cliente.user.username}}  {{pedidoProducto.pedido.cliente.user.lastname}}</p>
+                          <p class="mb-1">Dirección: {{p.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
+                          <p class="mb-1">Dia de entrega sugerido: {{p.pedido.fecha}}</p>
+                          <p class="mb-1">Hora de entrega sugerido: {{p.pedido.hora}}</p>
+                          <p class="mb-1">Productos pedidos:</p>
+                          <ul>
+                            {% for producto in p.producto%}
+                            <li>{{producto.nombre}}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                        {% endfor %}
+                        
+                    
+                      </div>
+                </div>
+    </div>    
+
+{% endblock %}

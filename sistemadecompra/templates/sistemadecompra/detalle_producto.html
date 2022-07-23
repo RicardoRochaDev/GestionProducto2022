@@ -1,0 +1,18 @@
+{% extends "sistemadecompra/base.html" %}
+
+{% block title %} Detalle Producto {% endblock %}
+
+{% block content %}
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+
+<p> <b>Proveedor: </b> {{producto.proveedor}}</p>
+<p> <b>Nombre  producto: </b> {{producto.nombre}}</p>
+<p> <b>Descripcion: </b> {{producto.descripcion}}</p>
+<p> <b>Valor: </b> ${{producto.valor}} </p>
+<p> <b>Tipo: </b> {{producto.tipo}}</p>
+
+{% endblock %}
