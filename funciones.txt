@@ -1,0 +1,28 @@
+
+funciones en "sistemadecompra"
+ - catalogo
+ - carrito
+ - mostrar_catalogo_v
+ - detalle_producto_v
+ - mostrar_perfil_proveedor_v
+ - mostrar_perfil_cliente_v
+ - verCarrito
+ - verCheckout
+ - verPedidos
+ - verMapa
+ - verHistorialVentas
+
+funciones en "registracion"
+ - registrar_usuario_proveedor_v
+ - registrar_usuario_cliente_v 
+ - mostrar_perfil_proveedor_v
+ - ver_productos_proveedor
+ - ProductoCreate
+ - ProductoUpdate
+ - ProductoDelete
+ - ClienteUpdate
+ - # RegistrarUsuario
+ - iniciar_sesion_v
+ - InicioSesionView
+ - registrar_usuario_v
+ - Logout_View

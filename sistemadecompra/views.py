@@ -11,7 +11,7 @@ from django.template import loader
 from django.shortcuts import render, redirect
 #from django.views.generic.base import TemplateView
 from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, Pedido, Horario, Cliente
-from .form import ProveedorForm
+#from .form import ProveedorForm
 from datetime import datetime
 import calendar
 from urllib.request import urlopen
@@ -22,7 +22,6 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
 from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto
-from .form import ProveedorForm
 from django.shortcuts import redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -120,20 +119,6 @@ def mostrar_catalogo_v(request):
     # print(proveedor['Proveedor'])
 
     return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 'list_TipoProducto': list_TipoProducto, 'list_id_users_proveedor':list_id_users_proveedor})
-
-
-def iniciar_sesion_v(request):
-    return render(request, 'sistemadecompra/iniciar_sesion.html')
-
-
-class InicioSesionView(TemplateView):
-    template_name = "sistemadecompra/iniciar_sesion.html"
-
-#adsasd
-def registrar_usuario_v(request):
-    formulario_proveedor = ProveedorForm()
-    # print(request.POST)
-    return render(request, 'sistemadecompra/registrar_usuario.html', {'formulario_proveedor': formulario_proveedor})
 
 
 def detalle_producto_v(request, idProducto):

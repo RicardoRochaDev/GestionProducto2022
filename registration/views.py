@@ -2,15 +2,16 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
-from .form import ProveedorUserForm, ClienteUserForm, UserForm
+from .form import ProveedorForm, ProveedorUserForm, ClienteUserForm, UserForm, UserSesionForm
 from django.contrib.auth.forms import UserCreationForm
 from sistemadecompra.models import Proveedor, Cliente, Producto
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth import login
+from django.contrib.auth import login, logout, authenticate
 from urllib.request import urlopen
 import json
 
+from django.views.generic.base import TemplateView
 
 def registrar_usuario_proveedor_v(request):
     print("vista: registrar usuario proveedor v")
@@ -84,8 +85,8 @@ def registrar_usuario_cliente_v(request):
     if request.method == 'POST':
         form_user = UserForm(request.POST)
         form_user_cliente = ClienteUserForm(request.POST)
-        print(form_user.is_valid())
-        print(form_user_cliente.is_valid())
+        print(' user validado? ',form_user.is_valid())
+        print(' cliente validado? ', form_user_cliente.is_valid())
         if form_user.is_valid() and form_user_cliente.is_valid():
             print(request.POST)
             print("entrad")
@@ -128,7 +129,7 @@ def registrar_usuario_cliente_v(request):
             login(request, user)
             return redirect(reverse_lazy('/'))
             
-    else:
+    else: # Entonces es GET
         form_user = UserForm()
         form_user_cliente = ClienteUserForm()
         context = {'form_user': form_user,
@@ -198,3 +199,50 @@ class ClienteUpdate(UpdateView):
 #     template_name= 'registration/regitrar_usuario.html'
 #     form_class = ProveedorUserForm
 #     success_url = reverse_lazy('/')
+
+#def iniciar_sesion_v(request):
+#    return render(request, 'registration/iniciar_sesion.html')
+
+def iniciar_sesion_v(request):
+    print("vista: iniciar sesion v")
+
+    context={}
+    if request.method == 'POST':
+        form_user_sesion = UserSesionForm(request.POST)
+        print(form_user_sesion.is_valid())
+        if form_user_sesion.is_valid():
+
+            print ('ES VALIDO')
+            #username= form_user.cleaned_data['username']
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Redirect to a success page.
+                return redirect(reverse_lazy('/'))
+            else:
+                # Return an 'invalid login' error message.
+                print("error, sesion invalida")
+    else:
+        print('ENTRE AL ELSE')
+        form_user_sesion = UserSesionForm()
+        context = {'form_user_sesion': form_user_sesion}
+
+    return render(request, 'registration/login.html', context)
+
+class InicioSesionView(TemplateView):
+    template_name = "sistemadecompra/iniciar_sesion.html"
+
+#adsasd
+def registrar_usuario_v(request):
+    formulario_proveedor = ProveedorForm()
+    # print(request.POST)
+    return render(request, 'sistemadecompra/registrar_usuario.html', {'formulario_proveedor': formulario_proveedor})
+
+# Desloguea al usuario actual.
+def logout_View(request):
+    logout(request)
+    #return render(request, 'sistemadecompra/mostrar_Catalogo.html')
+    return redirect(reverse_lazy('/'))
+    #return reverse_lazy('mostrar_catalogo_v')
