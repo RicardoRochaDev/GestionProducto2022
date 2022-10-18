@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     {% block head %}
 
     {% endblock %}
@@ -17,7 +16,7 @@
     
 </head>
 
-<body>
+<body style="padding-top: 65px;">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <a class="navbar-brand" href="{% url '/' %}">Inicio</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -28,10 +27,14 @@
             <ul class="navbar-nav mr-auto">
 
                 {% if request.user.is_authenticated %}
-                    {% if request.user.id in list_id_users_proveedor %}
+                    {% if request.user.proveedor %}
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url 'mostrar_Perfil_Proveedor' %}">Perfil</a>
                         </li>
+                    {% comment %} {% if request.user.id in list_id_users_proveedor %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'mostrar_Perfil_Proveedor' %}">Perfil</a>
+                        </li> {% endcomment %}
                     {% else %}
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url 'mostrar_Perfil_Cliente' %}">Perfil</a>
@@ -41,7 +44,13 @@
                         </li>
                     {% endif %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesion</a>
+                        <a class="nav-link" href="{% url 'logout' %}"> <span class="glyphicon glyphicon-print">Cerrar Sesion</a>
+                    </li> 
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#"> {{request.user}} </a>
+                    </li> 
+                    <li class="nav-item active" >
+                        <a class="nav-link" href="#"> {{request.user.id}} </a>
                     </li> 
                 {% else %}
                     <li class="nav-item active">
@@ -62,23 +71,20 @@
             </form> -->
         </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container">
         <div id="main">
             {% block content %}
-
-
-
             {% endblock %}
         </div>
-        <footer>
-            <p>Proyecto 2019
-                <!-- Broma -->
-                <a href="https://i.ibb.co/Y06Nw9b/d85bdc83-df6a-4bdd-a394-976fd7bb8a87.jpg" target="blank"> <img
-                        src="https://cdn.icon-icons.com/icons2/1446/PNG/512/22285snake_98774.png" height="20"
-                        width="20"></a>
-            </p>
-        </footer>
     </div>
+    <footer>
+        <p>Proyecto 2019
+            <!-- Broma -->
+            <a href="https://i.ibb.co/Y06Nw9b/d85bdc83-df6a-4bdd-a394-976fd7bb8a87.jpg" target="blank"> <img
+                    src="https://cdn.icon-icons.com/icons2/1446/PNG/512/22285snake_98774.png" height="20"
+                    width="20"></a>
+        </p>
+    </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -319,3 +319,9 @@ def verHistorialVentas(request):
     for p in pedidos:
         pedidosHistorial.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
     return render(request, 'sistemadecompra/historialVentas.html',{'pedidosHistorial': pedidosHistorial})
+
+
+def verInformacionProveedor(request):
+    proveedor = Proveedor.objects.get(id = request.user.proveedor.id)
+    print('asdasd', proveedor.user.email)
+    return render(request, 'sistemadecompra/informacionProveedor.html',{'proveedor': proveedor})

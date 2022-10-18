@@ -10,6 +10,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth import login, logout, authenticate
 from urllib.request import urlopen
 import json
+from django.contrib import messages
+
 
 from django.views.generic.base import TemplateView
 
@@ -26,7 +28,6 @@ def registrar_usuario_proveedor_v(request):
         print(form_user_proveedor.is_valid())
 
         if form_user.is_valid() and form_user_proveedor.is_valid():
-
             #username= form_user.cleaned_data['username']
             username = request.POST.get('username')
             first_name = request.POST.get('first_name')
@@ -69,8 +70,16 @@ def registrar_usuario_proveedor_v(request):
             login(request, user)
             # return render(request, 'maxproductos/mostrar_Catalogo.html')
             return redirect(reverse_lazy('/'))
+        else:
+            messages.add_message(request, messages.ERROR, form_user.errors.as_data())
+            form_user = UserForm()
+            form_user_proveedor = ProveedorUserForm()
+            context = {'form_user': form_user,
+                   'form_user_proveedor': form_user_proveedor}
+            
     else:
         print('ENTRE AL ELSE')
+        
         form_user = UserForm()
         form_user_proveedor = ProveedorUserForm()
         context = {'form_user': form_user,
@@ -154,13 +163,18 @@ class ProductoCreate(CreateView):
     # hace una busqueda mal('registration/templates/maxproductos/producto_form.html', nada que ver) sino agrego este atributo.
     template_name = 'registration/producto_form.html'
     model = Producto
-    fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor', 'proveedor']
+    fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor']
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(reverse_lazy('login'))
         # print(request.user)
         return super(ProductoCreate, self).dispatch(request, *args, **kwargs)
+
+
+    def form_valid(self, form):
+        form.instance.proveedor = self.request.user.proveedor
+        return super().form_valid(form)
 
     success_url = reverse_lazy('mostrar_Perfil_Proveedor')
 
@@ -204,30 +218,24 @@ class ClienteUpdate(UpdateView):
 #    return render(request, 'registration/iniciar_sesion.html')
 
 def iniciar_sesion_v(request):
-    print("vista: iniciar sesion v")
-
     context={}
     if request.method == 'POST':
         form_user_sesion = UserSesionForm(request.POST)
-        print(form_user_sesion.is_valid())
         if form_user_sesion.is_valid():
-
-            print ('ES VALIDO')
             #username= form_user.cleaned_data['username']
             username = request.POST.get('username')
             password = request.POST.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                # Redirect to a success page.
                 return redirect(reverse_lazy('/'))
             else:
-                # Return an 'invalid login' error message.
-                print("error, sesion invalida")
-    else:
-        print('ENTRE AL ELSE')
-        form_user_sesion = UserSesionForm()
-        context = {'form_user_sesion': form_user_sesion}
+                messages.add_message(request, messages.ERROR, "No se encuentra el usuario y/o la contraseña")
+        else:
+            messages.add_message(request, messages.ERROR, form_user_sesion.errors.as_data())
+    
+    form_user_sesion = UserSesionForm()
+    context = {'form_user_sesion': form_user_sesion}
 
     return render(request, 'registration/login.html', context)
 

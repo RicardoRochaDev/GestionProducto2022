@@ -1,0 +1,24 @@
+{% extends "registration/perfil_proveedor.html" %}
+
+{% block contentProveedor %}
+    <h1>Datos del proveedor</h1>
+    <div class="row">
+        <p>Nombre: {{proveedor.user.username}}</p>
+    </div>
+    <div class="row">
+        <p>first_name: {{proveedor.user.first_name}}</p>
+    </div>
+    <div class="row">
+        <p>last_name: {{proveedor.user.last_name}}</p>
+    </div>
+    <div class="row">
+        <p>password1: {{proveedor.user.password1}}</p>
+    </div>
+    <div class="row">
+        <p>calle: {{proveedor.calle}}</p>
+    </div>
+    <div class="row">
+        <p>numero: {{proveedor.numero}}</p>
+    </div>
+
+{% endblock %}
