@@ -94,12 +94,11 @@ def registrar_usuario_cliente_v(request):
     if request.method == 'POST':
         form_user = UserForm(request.POST)
         form_user_cliente = ClienteUserForm(request.POST)
-        print(' user validado? ',form_user.is_valid())
-        print(' cliente validado? ', form_user_cliente.is_valid())
+        # print(' user validado? ',form_user.is_valid())
+        # print(' cliente validado? ', form_user_cliente.is_valid())
         if form_user.is_valid() and form_user_cliente.is_valid():
-            print(request.POST)
-            print("entrad")
-
+            
+            # Asignamos los datos propios del USUARIO
             #username= form_user.cleaned_data['username']
             username = request.POST.get('username')
             first_name = request.POST.get('first_name')
@@ -108,41 +107,68 @@ def registrar_usuario_cliente_v(request):
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
 
+            # Obtenemos la latidud y longitud en base a la dirección
             calle = request.POST.get('calle')
             numero = request.POST.get('numero')
             
-            telefono = request.POST.get('telefono')
-
-            user = User.objects.create_user(username, email, password1)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
-
-            user = User.objects.last()
-            user_cliente = Cliente()
-            user_cliente.user = user
-            user_cliente.calle = calle
-            user_cliente.numero = numero
-
             calleNombreAux = calle.replace(" ","+")
             calleNumero = numero
+            latitudDesdeJSON = ""
+            longitudDesdeJSON = ""
+
             #Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
             url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + calleNumero + "+" + calleNombreAux + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
             json_url = urlopen(url)
             data = json.loads(json_url.read())
-            user_cliente.latitud = data['results'][0]['geometry']['location']['lat']
-            user_cliente.longitud = data['results'][0]['geometry']['location']['lng']
- 
-            user_cliente.telefono = telefono
-            user_cliente.save()
-            login(request, user)
-            return redirect(reverse_lazy('/'))
             
-    else: # Entonces es GET
+            # Si hay datos en la lista "results" continua. Si no hay datos devuelve un error
+            if data['results']:
+                latitudDesdeJSON = data['results'][0]['geometry']['location']['lat']
+                longitudDesdeJSON = data['results'][0]['geometry']['location']['lng']
+
+                telefono = request.POST.get('telefono')
+
+                # Creamos el objecto User con sus datos y lo guardamos en la base de datos
+                user = User.objects.create_user(username, email, password1)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
+
+                # Una vez creado el usuario, volvemos a obtenerlo, lo asociamos a un obtejo Cliente
+                # y lo guardamos en la base de datos
+                user = User.objects.last()
+                user_cliente = Cliente()
+                user_cliente.user = user
+                user_cliente.calle = calle
+                user_cliente.numero = numero
+                user_cliente.latitud = latitudDesdeJSON
+                user_cliente.longitud = longitudDesdeJSON
+                user_cliente.telefono = telefono
+                user_cliente.save()
+
+                # Una vez finalizado el proceso redirijo al Inicio
+                login(request, user)
+                return redirect(reverse_lazy('/'))
+            else:
+                messages.add_message(request, messages.ERROR, "La dirección ingresada no existe.")
+                form_user = UserForm()
+                form_user_cliente = ClienteUserForm()
+                context = {'form_user': form_user,
+                    'form_user_proveedor': form_user_cliente}
+        else:
+            # Muestro los errores de los formularios si no pudieron ser validados
+            messages.add_message(request, messages.ERROR, form_user.errors.as_data())
+            messages.add_message(request, messages.ERROR, form_user_cliente.errors.as_data())
+            form_user = UserForm()
+            form_user_cliente = ClienteUserForm()
+            context = {'form_user': form_user,
+                'form_user_proveedor': form_user_cliente}
+    else: 
+        # Si es GET envio un formulario User y ClienteUser vacios al template
         form_user = UserForm()
         form_user_cliente = ClienteUserForm()
         context = {'form_user': form_user,
-                   'form_user_cliente': form_user_cliente}
+                'form_user_cliente': form_user_cliente}
 
     return render(request, 'registration/registrar_usuario_cliente.html', context)
 

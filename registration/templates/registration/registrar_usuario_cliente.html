@@ -4,10 +4,14 @@
 {% block title %} Registrar Cliente {% endblock %}
 
 {% block content %}
-<hr>
-<hr>
-<hr>
-<hr>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <form action="" method="POST">
     {% csrf_token %}
