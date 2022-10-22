@@ -11,7 +11,8 @@ urlpatterns = [
     path('RegistrarCliente/', views.registrar_usuario_cliente_v, name='registrar_Cliente'),
     
     
-    path('ModificarProveedor/<int:pk>/', views.ClienteUpdate.as_view(), name='modificar_Proveedor'),
+    path('ModificarProveedor/<int:pk>/', views.ProveedorUpdate.as_view(), name='modificar_Proveedor'),
+    path('ModificarCliente/<int:pk>/', views.ClienteUpdate.as_view(), name='modificar_Cliente'),
 
     path('creacionProducto/', views.ProductoCreate.as_view(), name='crear_Producto'),
     path('modificarProducto/<int:pk>/', views.ProductoUpdate.as_view(), name='modificar_Producto'),

@@ -1,9 +1,8 @@
-{% extends "sistemadecompra/base.html" %}
+{% extends "registration/perfil_proveedor.html" %}
 
+{% block title %} Modificar Proveedor {% endblock %}
 
-{% block title %} Modificar Producto {% endblock %}
-
-{% block content %}
+{% block contentProveedor %}
 
 <form action="" method="POST">
     {% csrf_token %}

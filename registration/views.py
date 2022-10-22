@@ -231,7 +231,19 @@ class ClienteUpdate(UpdateView):
     template_name = 'registration/cliente_update_form.html'
 
     def get_success_url(self):
+        return reverse_lazy('mostrar_Perfil_Cliente')
+
+class ProveedorUpdate(UpdateView):
+    model = User
+    fields = ['username', 'email', 'first_name', 'last_name']
+    #template_name_suffix = '_update_form'
+
+    # lo mismo que ProductoUpdate
+    template_name = 'registration/proveedor_update_form.html'
+
+    def get_success_url(self):
         return reverse_lazy('ver_Produto_Proveedor')
+
 
 
 # class RegistrarUsuario(CreateView):

@@ -4,9 +4,6 @@
 {% block title %} Borrar Producto {% endblock %}
 
 {% block content %}
-<hr>
-<hr>
-<hr>
 
 <form method="POST">{% csrf_token %}
     <p>¿Esta seguro de borrar el item:  "{{ object }}"?</p>
