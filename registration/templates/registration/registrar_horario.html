@@ -1,0 +1,25 @@
+{% extends "sistemadecompra/base.html" %}
+
+
+{% block title %} Registrar Horario {% endblock %}
+
+{% block content %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <table>
+            <h1>Registro Horario</h1>
+        {{ form_horario.as_table }}
+    </table>
+    <input type="submit" value="Guardar">
+</form>
+
+{% endblock %}

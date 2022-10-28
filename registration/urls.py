@@ -19,4 +19,12 @@ urlpatterns = [
     path('eliminarProducto/<int:pk>/', views.ProductoDelete.as_view(), name='eliminar_Producto'),
     
     path('listaProductos/', views.ver_productos_proveedor, name='ver_Produto_Proveedor'),
+
+    path('listaHorarios/', views.ver_horarios_proveedor, name='ver_Horario_Proveedor'),
+    #path('creacionHorario/', views.HorarioCreate.as_view(), name='crear_Horario'),
+
+    path('registrarHorario/', views.registrar_horario, name='registrar_Horario'),
+    path('eliminarHorario/<int:pk>/', views.HorarioDelete.as_view(), name='eliminar_Horario'),
+
+
 ]

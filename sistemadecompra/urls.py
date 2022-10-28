@@ -9,7 +9,11 @@ urlpatterns = [
     path('pedidos/', views.verPedidos, name='ver_Pedidos'),
     path('verMapa/', views.verMapa, name='ver_Mapa'),
     path('historialVentas/', views.verHistorialVentas, name='ver_Historial_Ventas'),
+    path('historialCompras/', views.verHistorialCompras, name='ver_Historial_Compras'),
+    path('comprasPendientes/', views.verComprasPendientes, name='ver_Compras_Pendientes'),
+
     path('informacionProveedor/', views.verInformacionProveedor, name='ver_Informacion_Proveedor'),
+    path('informacionCliente/', views.verInformacionCliente, name='ver_Informacion_Cliente'),
 
 
 

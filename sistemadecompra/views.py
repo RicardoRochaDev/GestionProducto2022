@@ -311,6 +311,7 @@ def verMapa(request):
     
     return render(request, 'sistemadecompra/verMapa.html',{'coordenadas': coordenadas, 'destinoYOrigenLatitud': destinoYOrigenLatitud, 'destinoYOrigenLongitud': destinoYOrigenLongitud})
 
+
 def verHistorialVentas(request):
     productos = Producto.objects.filter(proveedor = request.user.proveedor)
     pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, entregado = 1).order_by('-fecha')
@@ -325,3 +326,25 @@ def verInformacionProveedor(request):
     proveedor = Proveedor.objects.get(id = request.user.proveedor.id)
     print('asdasd', proveedor.user.email)
     return render(request, 'sistemadecompra/informacionProveedor.html',{'proveedor': proveedor})
+
+def verInformacionCliente(request):
+    cliente = Cliente.objects.get(id = request.user.cliente.id)
+    #print('asdasd', proveedor.user.email)
+    return render(request, 'sistemadecompra/informacionCliente.html',{'cliente': cliente})
+
+
+def verHistorialCompras(request):
+    pedidos = Pedido.objects.filter(cliente = request.user.cliente, entregado = 1).order_by('-fecha')
+
+    pedidosHistorial = []
+    for pedido in pedidos:
+        pedidosHistorial.append({"pedido": pedido, "producto": pedido.productos})
+    return render(request, 'sistemadecompra/historialCompras.html',{'pedidosHistorial': pedidosHistorial})
+    
+def verComprasPendientes(request):
+    pedidos = Pedido.objects.filter(cliente = request.user.cliente, entregado = 0).order_by('-fecha')
+
+    pedidosHistorial = []
+    for pedido in pedidos:
+        pedidosHistorial.append({"pedido": pedido, "producto": pedido.productos})
+    return render(request, 'sistemadecompra/comprasPendientes.html',{'pedidosHistorial': pedidosHistorial})

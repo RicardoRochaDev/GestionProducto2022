@@ -1,0 +1,16 @@
+{% extends 'registration/perfil_proveedor.html' %}
+
+{% block contentProveedor %}
+<a href="{% url 'registrar_Horario' %}"> CREAR HORARIO</a> <br>
+
+    <h2> LISTA DE HORARIOS </h2>
+    
+    {% for it in lista_horario_proveedor %}
+        <h5>Dia: {{ it.dia }} </h5> 
+        <h5>Hora Inicio: {{ it.horaInicio }} </h5>
+        <h5>Hora Final: {{ it.horaFinal }} </h5>  
+
+        <a href="{% url 'eliminar_Horario' it.id %}"> Eliminar Horario</a></h3>
+        <hr>
+    {% endfor %}
+{% endblock %}

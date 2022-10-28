@@ -1,0 +1,21 @@
+{% extends "registration/perfil_cliente.html" %}
+
+{% block contentCliente %}
+    <h1>Datos del cliente</h1>
+    <div class="row">
+        <p>Nombre: {{cliente.user.username}}</p>
+    </div>
+    <div class="row">
+        <p>first_name: {{cliente.user.first_name}}</p>
+    </div>
+    <div class="row">
+        <p>last_name: {{cliente.user.last_name}}</p>
+    </div>
+    <div class="row">
+        <p>calle: {{cliente.calle}}</p>
+    </div>
+    <div class="row">
+        <p>numero: {{cliente.numero}}</p>
+    </div>
+
+{% endblock %}

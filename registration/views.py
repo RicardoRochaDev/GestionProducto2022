@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
-from .form import ProveedorForm, ProveedorUserForm, ClienteUserForm, UserForm, UserSesionForm
+
+#from sistemadecompra.models.Horario import Horario
+from .form import ProveedorForm, ProveedorUserForm, ClienteUserForm, UserForm, UserSesionForm, HorarioForm
 from django.contrib.auth.forms import UserCreationForm
-from sistemadecompra.models import Proveedor, Cliente, Producto
+from sistemadecompra.models import Proveedor, Cliente, Producto, Horario
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth import login, logout, authenticate
@@ -23,6 +25,7 @@ def registrar_usuario_proveedor_v(request):
         print('ENTRE AL IF')
         form_user = UserForm(request.POST)
         form_user_proveedor = ProveedorUserForm(request.POST)
+        form_user_horarios 
         print('LLEGA ACA')
         print(form_user.is_valid())
         print(form_user_proveedor.is_valid())
@@ -75,13 +78,13 @@ def registrar_usuario_proveedor_v(request):
             form_user = UserForm()
             form_user_proveedor = ProveedorUserForm()
             context = {'form_user': form_user,
-                   'form_user_proveedor': form_user_proveedor}
-            
+                   'form_user_proveedor': form_user_proveedor}        
     else:
         print('ENTRE AL ELSE')
         
         form_user = UserForm()
         form_user_proveedor = ProveedorUserForm()
+        form_horario = HorarioForm()
         context = {'form_user': form_user,
                    'form_user_proveedor': form_user_proveedor}
 
@@ -181,6 +184,12 @@ def ver_productos_proveedor(request):
         proveedor=request.user.proveedor)
     context = {'lista_producto_proveedor': lista_producto_proveedor}
     return render(request, 'registration/producto_proveedor.html', context)
+
+def ver_horarios_proveedor(request):
+    lista_horario_proveedor = Horario.objects.filter(
+        proveedor=request.user.proveedor)
+    context = {'lista_horario_proveedor': lista_horario_proveedor}
+    return render(request, 'registration/horario_proveedor.html', context)
 
 
 class ProductoCreate(CreateView):
@@ -292,3 +301,141 @@ def logout_View(request):
     #return render(request, 'sistemadecompra/mostrar_Catalogo.html')
     return redirect(reverse_lazy('/'))
     #return reverse_lazy('mostrar_catalogo_v')
+
+#region Horario
+
+class HorarioCreate(CreateView):
+    # hace una busqueda mal('registration/templates/maxproductos/producto_form.html', nada que ver) sino agrego este atributo.
+    template_name = 'registration/horario_form.html'
+    model = Horario
+    fields = ['horaInicio', 'horaFinal', 'dia']
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse_lazy('login'))
+        # print(request.user)
+        return super(HorarioCreate, self).dispatch(request, *args, **kwargs)
+
+
+    def form_valid(self, form):
+        form.instance.proveedor = self.request.user.proveedor
+        return super().form_valid(form)
+
+    success_url = reverse_lazy('mostrar_Perfil_Proveedor')
+
+#endregion Horario
+
+def registrar_usuario_proveedor_v(request):
+    print("vista: registrar usuario proveedor v")
+
+    context={}
+    if request.method == 'POST':
+        print('ENTRE AL IF')
+        form_user = UserForm(request.POST)
+        form_user_proveedor = ProveedorUserForm(request.POST)
+        form_user_horarios 
+        print('LLEGA ACA')
+        print(form_user.is_valid())
+        print(form_user_proveedor.is_valid())
+
+        if form_user.is_valid() and form_user_proveedor.is_valid():
+            #username= form_user.cleaned_data['username']
+            username = request.POST.get('username')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+
+            calle = request.POST.get('calle')
+            numero = request.POST.get('numero')
+            telefono = request.POST.get('telefono')
+            descripcionNegocio = request.POST.get('descripcionNegocio')
+            calificacion = request.POST.get('calificacion')
+
+            user = User.objects.create_user(username, email, password1)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+
+            user = User.objects.last()
+            user_proveedor = Proveedor()
+            user_proveedor.user = user
+            user_proveedor.calle = calle
+            user_proveedor.numero = numero
+
+            calleNombreAux = calle.replace(" ","+")
+            calleNumero = numero
+            #Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
+            url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + calleNumero + "+" + calleNombreAux + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
+            json_url = urlopen(url)
+            data = json.loads(json_url.read())
+            user_proveedor.latitud = data['results'][0]['geometry']['location']['lat']
+            user_proveedor.longitud = data['results'][0]['geometry']['location']['lng']
+
+            user_proveedor.telefono = telefono
+            user_proveedor.descripcionNegocio = descripcionNegocio
+            user_proveedor.calificacion = 0
+            user_proveedor.save()
+            print('USUARIO Y PROVEEDOR CREADO')
+            login(request, user)
+            # return render(request, 'maxproductos/mostrar_Catalogo.html')
+            return redirect(reverse_lazy('/'))
+        else:
+            messages.add_message(request, messages.ERROR, form_user.errors.as_data())
+            form_user = UserForm()
+            form_user_proveedor = ProveedorUserForm()
+            context = {'form_user': form_user,
+                   'form_user_proveedor': form_user_proveedor}        
+    else:
+        print('ENTRE AL ELSE')
+        
+        form_user = UserForm()
+        form_user_proveedor = ProveedorUserForm()
+        form_horario = HorarioForm()
+        context = {'form_user': form_user,
+                   'form_user_proveedor': form_user_proveedor}
+
+    # print(form_user)
+    return render(request, 'registration/registrar_usuario_proveedor.html', context)
+
+
+def registrar_horario(request):
+    context={}
+    if request.method == 'POST':
+        form_horario = HorarioForm(request.POST)
+        # print(' user validado? ',form_user.is_valid())
+        if form_horario.is_valid():
+            
+            # Asignamos los datos propios del USUARIO
+            #username= form_user.cleaned_data['username']
+            hora_Inicio = request.POST.get('horaInicio')
+            hora_Fin = request.POST.get('horaFinal')
+            dia = request.POST.get('dia')  
+
+            horario = Horario()
+            horario.horaInicio = hora_Inicio
+            horario.horaFinal = hora_Fin
+            horario.dia = dia
+            horario.proveedor = request.user.proveedor
+            horario.save()
+
+            #return redirect(reverse_lazy('mostrar_perfil_proveedor_v'))
+            return render(request, 'registration/perfil_proveedor.html')
+        else:
+            # Muestro los errores de los formularios si no pudieron ser validados
+            messages.add_message(request, messages.ERROR, form_horario.errors.as_data())
+            form_horario = HorarioForm()
+            context = {'form_horario': form_horario}
+    else: 
+        # Si es GET envio un formulario Horario vacio al template
+        form_horario = HorarioForm()
+        context = {'form_horario': form_horario}
+
+    return render(request, 'registration/registrar_horario.html', context)
+
+class HorarioDelete(DeleteView):
+    model = Horario
+    # lo mismo que ProductoUpdate
+    template_name = 'registration/horario_confirm_delete.html'
+    success_url = reverse_lazy('mostrar_Perfil_Proveedor')

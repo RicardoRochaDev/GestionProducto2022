@@ -11,6 +11,11 @@ funciones en "sistemadecompra"
  - verPedidos
  - verMapa
  - verHistorialVentas
+ - verInformacionProveedor
+ - verInformacionCliente
+ - verHistorialCompras
+ - verComprasPendientes
+
 
 funciones en "registracion"
  - registrar_usuario_proveedor_v
@@ -26,6 +31,9 @@ funciones en "registracion"
  - InicioSesionView
  - registrar_usuario_v
  - Logout_View
+ - HorarioCreate
+ - registrar_usuario_proveedor_v
+ - registrar_horario
 
 
 https://runebook.dev/es/docs/django/ref/forms/api

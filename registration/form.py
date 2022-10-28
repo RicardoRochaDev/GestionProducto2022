@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from sistemadecompra.models import Proveedor, Cliente
+from sistemadecompra.models import Proveedor, Cliente, Horario
 
 
 class UserForm (UserCreationForm):
@@ -45,3 +45,25 @@ class UserSesionForm(forms.Form):
     #password= forms.CharField(label='Contraseña', required=True)
     #password= forms.PasswordInput(label='pass')
     password = forms.CharField(label='Contraseña', widget=forms.PasswordInput())
+
+
+DIAS = [
+
+    ('Lunes', 'Lunes'),
+    ('Martes', 'Martes'),
+    ('Miercoles', 'Miercoles'),
+    ('Jueves', 'Jueves'),
+    ('Viernes', 'Viernes'),
+    ('Sabado', 'Sabado'),
+    ('Domingo', 'Domingo'),
+]
+
+class HorarioForm(forms.Form):
+    horaInicio = forms.TimeField (label='Hora Inicio', required=True)
+    horaFinal = forms.TimeField (label='Hora Final', required=True)
+    dia= forms.CharField(widget=forms.Select(choices=DIAS))
+
+# class ProveedorUserForm(ModelForm):
+#     class Meta:
+#         model = Horario # ME VIVO AUTO CAGANDOOOOOO
+#         exclude = ['user', 'longitud', 'latitud', 'calificacion']
