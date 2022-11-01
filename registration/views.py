@@ -24,8 +24,7 @@ def registrar_usuario_proveedor_v(request):
     if request.method == 'POST':
         print('ENTRE AL IF')
         form_user = UserForm(request.POST)
-        form_user_proveedor = ProveedorUserForm(request.POST)
-        form_user_horarios 
+        form_user_proveedor = ProveedorUserForm(request.POST) 
         print('LLEGA ACA')
         print(form_user.is_valid())
         print(form_user_proveedor.is_valid())
@@ -84,7 +83,6 @@ def registrar_usuario_proveedor_v(request):
         
         form_user = UserForm()
         form_user_proveedor = ProveedorUserForm()
-        form_horario = HorarioForm()
         context = {'form_user': form_user,
                    'form_user_proveedor': form_user_proveedor}
 
@@ -325,79 +323,79 @@ class HorarioCreate(CreateView):
 
 #endregion Horario
 
-def registrar_usuario_proveedor_v(request):
-    print("vista: registrar usuario proveedor v")
+# def registrar_usuario_proveedor_v(request):
+#     print("vista: registrar usuario proveedor v")
 
-    context={}
-    if request.method == 'POST':
-        print('ENTRE AL IF')
-        form_user = UserForm(request.POST)
-        form_user_proveedor = ProveedorUserForm(request.POST)
-        form_user_horarios 
-        print('LLEGA ACA')
-        print(form_user.is_valid())
-        print(form_user_proveedor.is_valid())
+#     context={}
+#     if request.method == 'POST':
+#         print('ENTRE AL IF')
+#         form_user = UserForm(request.POST)
+#         form_user_proveedor = ProveedorUserForm(request.POST)
+#         form_user_horarios 
+#         print('LLEGA ACA')
+#         print(form_user.is_valid())
+#         print(form_user_proveedor.is_valid())
 
-        if form_user.is_valid() and form_user_proveedor.is_valid():
-            #username= form_user.cleaned_data['username']
-            username = request.POST.get('username')
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            email = request.POST.get('email')
-            password1 = request.POST.get('password1')
-            password2 = request.POST.get('password2')
+#         if form_user.is_valid() and form_user_proveedor.is_valid():
+#             #username= form_user.cleaned_data['username']
+#             username = request.POST.get('username')
+#             first_name = request.POST.get('first_name')
+#             last_name = request.POST.get('last_name')
+#             email = request.POST.get('email')
+#             password1 = request.POST.get('password1')
+#             password2 = request.POST.get('password2')
 
-            calle = request.POST.get('calle')
-            numero = request.POST.get('numero')
-            telefono = request.POST.get('telefono')
-            descripcionNegocio = request.POST.get('descripcionNegocio')
-            calificacion = request.POST.get('calificacion')
+#             calle = request.POST.get('calle')
+#             numero = request.POST.get('numero')
+#             telefono = request.POST.get('telefono')
+#             descripcionNegocio = request.POST.get('descripcionNegocio')
+#             calificacion = request.POST.get('calificacion')
 
-            user = User.objects.create_user(username, email, password1)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
+#             user = User.objects.create_user(username, email, password1)
+#             user.first_name = first_name
+#             user.last_name = last_name
+#             user.save()
 
-            user = User.objects.last()
-            user_proveedor = Proveedor()
-            user_proveedor.user = user
-            user_proveedor.calle = calle
-            user_proveedor.numero = numero
+#             user = User.objects.last()
+#             user_proveedor = Proveedor()
+#             user_proveedor.user = user
+#             user_proveedor.calle = calle
+#             user_proveedor.numero = numero
 
-            calleNombreAux = calle.replace(" ","+")
-            calleNumero = numero
-            #Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
-            url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + calleNumero + "+" + calleNombreAux + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
-            json_url = urlopen(url)
-            data = json.loads(json_url.read())
-            user_proveedor.latitud = data['results'][0]['geometry']['location']['lat']
-            user_proveedor.longitud = data['results'][0]['geometry']['location']['lng']
+#             calleNombreAux = calle.replace(" ","+")
+#             calleNumero = numero
+#             #Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
+#             url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + calleNumero + "+" + calleNombreAux + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
+#             json_url = urlopen(url)
+#             data = json.loads(json_url.read())
+#             user_proveedor.latitud = data['results'][0]['geometry']['location']['lat']
+#             user_proveedor.longitud = data['results'][0]['geometry']['location']['lng']
 
-            user_proveedor.telefono = telefono
-            user_proveedor.descripcionNegocio = descripcionNegocio
-            user_proveedor.calificacion = 0
-            user_proveedor.save()
-            print('USUARIO Y PROVEEDOR CREADO')
-            login(request, user)
-            # return render(request, 'maxproductos/mostrar_Catalogo.html')
-            return redirect(reverse_lazy('/'))
-        else:
-            messages.add_message(request, messages.ERROR, form_user.errors.as_data())
-            form_user = UserForm()
-            form_user_proveedor = ProveedorUserForm()
-            context = {'form_user': form_user,
-                   'form_user_proveedor': form_user_proveedor}        
-    else:
-        print('ENTRE AL ELSE')
+#             user_proveedor.telefono = telefono
+#             user_proveedor.descripcionNegocio = descripcionNegocio
+#             user_proveedor.calificacion = 0
+#             user_proveedor.save()
+#             print('USUARIO Y PROVEEDOR CREADO')
+#             login(request, user)
+#             # return render(request, 'maxproductos/mostrar_Catalogo.html')
+#             return redirect(reverse_lazy('/'))
+#         else:
+#             messages.add_message(request, messages.ERROR, form_user.errors.as_data())
+#             form_user = UserForm()
+#             form_user_proveedor = ProveedorUserForm()
+#             context = {'form_user': form_user,
+#                    'form_user_proveedor': form_user_proveedor}        
+#     else:
+#         print('ENTRE AL ELSE')
         
-        form_user = UserForm()
-        form_user_proveedor = ProveedorUserForm()
-        form_horario = HorarioForm()
-        context = {'form_user': form_user,
-                   'form_user_proveedor': form_user_proveedor}
+#         form_user = UserForm()
+#         form_user_proveedor = ProveedorUserForm()
+#         form_horario = HorarioForm()
+#         context = {'form_user': form_user,
+#                    'form_user_proveedor': form_user_proveedor}
 
-    # print(form_user)
-    return render(request, 'registration/registrar_usuario_proveedor.html', context)
+#     # print(form_user)
+#     return render(request, 'registration/registrar_usuario_proveedor.html', context)
 
 
 def registrar_horario(request):
