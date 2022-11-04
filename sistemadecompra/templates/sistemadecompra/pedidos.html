@@ -1,12 +1,6 @@
-{% extends "registration/perfil_proveedor.html" %}
-
-{% block contentProveedor %}
 <div class="row">
-
-
-
-<div class="col">
-    <div class="list-group">
+  <div class="col col-lg-6">
+    <div class="list-group shadow p-3 mb-5 bg-white rounded">
         <font size=7>
             Pedidos sin confirmar
           </font>
@@ -31,11 +25,10 @@
         
     
       </div>
-</div>
+  </div>
 
-
-<div class="col">
-    <div class="list-group">
+  <div class="col col-lg-6">
+    <div class="list-group shadow p-3 mb-5 bg-white rounded">
       <font size=7>
         Pedidos confirmados
       </font>
@@ -57,8 +50,6 @@
         </a>
         {% endfor %}
       </div>
-</div>
+  </div>
 
 </div>
-
-{% endblock %}

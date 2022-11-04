@@ -4,25 +4,26 @@
 
 {% block content %}
 
-<div class="">
-    <div class="row justify-content-start text-center">
+<div class="text-center">
+    <div class="row justify-content-center">
         <form class="form-signin" action="" method="POST">
             <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
             {% csrf_token %}
-            {% comment %} <table>
+            <table>
                 {{ form_user_sesion.as_table }}
-            </table>  {% endcomment %}
+            </table>
             {% comment %} {% for field in form_user_sesion %}
                 {{ field.label_tag }}<br>
                 {{ field }}
             {% endfor %} {% endcomment %}
 
-            {% for field in form_user_sesion %}
+            {% comment %} {% for field in form_user_sesion %}
                 <label class="sr-only">{{ field.label  }}</label>
-                <input name="{{ field.name }}" class="form-control"  type="{{ field..widget.input_type  }}" value="{{ field.value|default_if_none:'' }}"
+                {{ field.widget  }}
+                <input name="{{ field.name }}" class="form-control"  type="{{ field.widget.input_type  }}" value="{{ field.value|default_if_none:'' }}"
                         placeholder="{{field.field.widget.attrs.placeholder}}">
-            {% endfor %}
+            {% endfor %} {% endcomment %}
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         </form>

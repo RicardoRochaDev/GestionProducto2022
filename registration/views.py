@@ -17,6 +17,13 @@ from django.contrib import messages
 
 from django.views.generic.base import TemplateView
 
+#from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.INFO: ' USUARIO CREADO CON EXITO',
+    50: 'critical',
+}
+
 def registrar_usuario_proveedor_v(request):
     print("vista: registrar usuario proveedor v")
 
@@ -71,6 +78,7 @@ def registrar_usuario_proveedor_v(request):
             print('USUARIO Y PROVEEDOR CREADO')
             login(request, user)
             # return render(request, 'maxproductos/mostrar_Catalogo.html')
+            messages.add_message(request, messages.INFO,"Usuario creado con exito")
             return redirect(reverse_lazy('/'))
         else:
             messages.add_message(request, messages.ERROR, form_user.errors.as_data())
