@@ -21,14 +21,14 @@
     </div>
   </div>
   {% block scripts %}
-    <script type="text/javascript">
+    <script>
       
       // La siguiente linea es para esperar que cargue todos los scripts...HAY QUE REVISAR COMO HACER PARA QUE JQUERY CARGUE ANTES Y ASI PODER USAR $(function()
-      document.addEventListener("DOMContentLoaded", function(event) {
-
+      //document.addEventListener("DOMContentLoaded", function(event) {
+        $(function () {
         // Esperando a que se genere un evento del tipo click en algun "a" que sea hijo de la clase "menuvertical"
-        $('.menuvertical>a').click(function() {
-
+        //$('.menuvertical > a').click(function() {
+        $('body').off('click', '.menuvertical > a').on('click', '.menuvertical > a', function (){
           // Por agregar el listener, el nav con los botones dejo de funcionar como debia... Seteo el boton activo (active) manualmente
           $(".nav").find(".active").removeClass("active");
           $(this).addClass("active");

@@ -7,6 +7,7 @@ urlpatterns = [
     path('verCarrito/', views.verCarrito, name='ver_Carrito'),
     path('procederACheckout/', views.verCheckout, name='proceder_Checkout'),
     path('pedidos/', views.verPedidos, name='ver_Pedidos'),
+    path('pedidosCliente/', views.verPedidosCliente, name='ver_Pedidos_Cliente'),
     path('verMapa/', views.verMapa, name='ver_Mapa'),
     path('historialVentas/', views.verHistorialVentas, name='ver_Historial_Ventas'),
     path('historialCompras/', views.verHistorialCompras, name='ver_Historial_Compras'),

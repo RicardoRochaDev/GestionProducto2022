@@ -21,7 +21,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
-from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto
+from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto, Notificacion
 from django.shortcuts import redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -275,6 +275,12 @@ def verPedidos(request):
         if 'confirmar' in request.GET:
             dic=request.GET
             pedido = Pedido.objects.get(id = dic['confirmar'])
+            
+            notificacion_nueva= Notificacion()
+            notificacion_nueva.pedido = pedido
+            notificacion_nueva.leido= False
+            notificacion_nueva.save()
+
             pedido.confirmado = 1
             pedido.save()
             print(pedido)
@@ -348,3 +354,39 @@ def verComprasPendientes(request):
     for pedido in pedidos:
         pedidosHistorial.append({"pedido": pedido, "producto": pedido.productos})
     return render(request, 'sistemadecompra/comprasPendientes.html',{'pedidosHistorial': pedidosHistorial})
+
+def verPedidosCliente(request):
+
+    pedidos = Pedido.objects.filter(cliente = request.user.cliente)
+    
+    pedidosSinConfirmar_Producto = []
+    pedidosConfirmado_Producto = []
+
+    if (request.method == 'GET'):
+        if 'confirmar' in request.GET:
+            dic=request.GET
+            pedido = Pedido.objects.get(id = dic['confirmar'])
+            pedido.confirmado = 1
+            pedido.save()
+            print(pedido)
+        if 'confirmarEntrega' in request.GET:
+            dic=request.GET
+            pedido = Pedido.objects.get(id = dic['confirmarEntrega'])
+            pedido.entregado = 1
+            pedido.save()
+            print(pedido)
+
+    for p in pedidos:
+        if p.confirmado == 0:
+            print(p.productos)
+            print(p.cliente)
+            pedidosSinConfirmar_Producto.append({"pedido": p})
+        else:
+            if p.entregado == 0:
+                print(p.productos)
+
+                pedidosConfirmado_Producto.append({"pedido": p})
+    #print(pedidosSinConfirmar_Producto[0].productos)
+    #print(pedidosConfirmado_Producto)
+    print("hola?")
+    return render(request, 'sistemadecompra/pedidosCliente.html',{'pedidosSinConfirmar_Producto': pedidosSinConfirmar_Producto, 'pedidosConfirmado_Producto': pedidosConfirmado_Producto})

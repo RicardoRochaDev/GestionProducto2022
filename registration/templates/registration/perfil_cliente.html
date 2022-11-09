@@ -1,31 +1,57 @@
 {% extends "sistemadecompra/base.html" %}
 
-{% block title %} PERFIL CLIENTE {% endblock %}
+{% block title %} Perfil {% endblock %}
 
 {% block content %}
 
 <div class="row">
-    <h1>BIENVENIDO : {{request.user.username}}</h1>
-
-</div>
-
-<!-- <h4><a href="{% url 'mostrar_Perfil_Cliente' %}"> Inicio Perfil</a> </h4> <br>  -->
-
-<div class="row">
-    <div class="col-2">
-        <div class="btn-group-vertical">
-            <button type="button" class="btn btn-primary"> <a style="color: white;" href="{% url 'ver_Informacion_Cliente' %}">Informacion</a> </button>
-            <button type="button" class="btn btn-primary"> <a style="color: white;" href="{% url 'ver_Historial_Compras' %}">Historial de Compras</a> </button>
-            <button type="button" class="btn btn-primary"> <a style="color: white;" href="{% url 'ver_Compras_Pendientes' %}">Pedidos</a> </button>
-            <button type="button" class="btn btn-primary"> <a style="color: white;" href="{% url 'modificar_Cliente' request.user.id %}">Modificar datos</a> </button>
-        </div>
+    <div class="col col-lg-2">
+      <div class="nav flex-column nav-pills menuvertical" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="{% url 'ver_Informacion_Cliente' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">Información</a>
+        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="{% url 'ver_Historial_Compras' %}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Historial de Compras</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="{% url 'ver_Pedidos_Cliente' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Pedidos</a>
+        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'modificar_Cliente' request.user.id %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Modificar datos</a>
+      </div>
+    </div> 
+    <div class="col col-lg-10" id="contenido">
+      
     </div>
-    <div class="col">
-        {% block contentCliente %} 
-        
+  </div>
+  {% block scripts %}
+    <script>
+      
+      // La siguiente linea es para esperar que cargue todos los scripts...HAY QUE REVISAR COMO HACER PARA QUE JQUERY CARGUE ANTES Y ASI PODER USAR $(function()
+      //document.addEventListener("DOMContentLoaded", function(event) {
+        $(function () {
+        // Esperando a que se genere un evento del tipo click en algun "a" que sea hijo de la clase "menuvertical"
+        //$('.menuvertical > a').click(function() {
+        $('body').off('click', '.menuvertical > a').on('click', '.menuvertical > a', function (){
+          // Por agregar el listener, el nav con los botones dejo de funcionar como debia... Seteo el boton activo (active) manualmente
+          $(".nav").find(".active").removeClass("active");
+          $(this).addClass("active");
 
-        {% endblock %}  
-    </div>
-</div>
+          // Obtengo la url del template que quiero llamar
+          var href = $(this).attr('href');
 
+          // Por si hay que agregar un gif mientras se carga...
+          // $('#subcategory_detail').html(my_cool_loading_gif_html)
+
+          // Llamo mediante ajax a la vista solicitada
+          $.ajax(href, {
+            success: function(response) {
+              // Si el llamado fue exitoso cargo dentro del div "contenido" el html que me devolvio la vista
+              console.log("response")
+              $('#contenido').html(response)
+            },
+            error: function(response) {
+                // Si hubo un error lo informo
+                alert("OCURRIO UN ERROR AL CARGAR LA VISTA")
+            }
+          })
+          return false;
+        });
+      });
+      
+      </script>
+  {% endblock %}
 {% endblock %}

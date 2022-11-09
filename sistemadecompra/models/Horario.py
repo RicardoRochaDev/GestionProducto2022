@@ -8,6 +8,6 @@ class Horario(models.Model):
     proveedor = models.ForeignKey(
         Proveedor,
         on_delete=models.CASCADE)
-
+    
     def __str__(self):
         return str(self.horaInicio)

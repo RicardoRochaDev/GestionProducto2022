@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col col-lg-6">
+      <div class="list-group shadow p-3 mb-5 bg-white rounded">
+          <font size=6>
+              Pedidos sin confirmar
+            </font>
+          {% for pedidoProducto in pedidosSinConfirmar_Producto %}
+          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            <p class="mb-1">Proveedor: {{pedidoProducto.pedido.proveedor.user.username}}  {{pedidoProducto.pedido.proveedor.user.lastname}}</p>
+            <p class="mb-1">Dia de entrega elegido: {{pedidoProducto.pedido.fecha}}</p>
+            <p class="mb-1">Hora de entrega elegido: {{pedidoProducto.pedido.hora}}</p>
+            <p class="mb-1">Productos pedidos:</p>
+            <ul>
+              {% for producto in pedidoProducto.producto%}
+              <li>{{producto.nombre}}</li>
+              {% endfor %}
+            </ul>
+            <form action="{% url 'ver_Pedidos_Cliente' %}" method="GET">
+              <button type="submit" name="confirmar" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Pedido</button>
+            </form>
+          </a>
+  
+          {% endfor %}
+          
+      
+        </div>
+    </div>
+  
+    <div class="col col-lg-6">
+      <div class="list-group shadow p-3 mb-5 bg-white rounded">
+        <font size=6>
+          Pedidos confirmados
+        </font>
+          {% for pedidoProducto in pedidosConfirmado_Producto %}
+          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            <p class="mb-1">Cliente: {{pedidoProducto.pedido.cliente.user.username}}  {{pedidoProducto.pedido.cliente.user.lastname}}</p>
+            <p class="mb-1">Dirección: {{pedidoProducto.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
+            <p class="mb-1">Dia de entrega sugerido: {{pedidoProducto.pedido.fecha}}</p>
+            <p class="mb-1">Hora de entrega sugerido: {{pedidoProducto.pedido.hora}}</p>
+            <p class="mb-1">Productos pedidos:</p>
+            <ul>
+              {% for producto in pedidoProducto.producto%}
+              <li>{{producto.nombre}}</li>
+              {% endfor %}
+            </ul>
+            <form action="{% url 'ver_Pedidos_Cliente' %}" method="GET">
+              <button type="submit" name="confirmarEntrega" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Entrega</button>
+            </form>
+          </a>
+          {% endfor %}
+        </div>
+    </div>
+  
+  </div>
+  

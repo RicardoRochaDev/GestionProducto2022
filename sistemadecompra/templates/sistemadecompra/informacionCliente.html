@@ -1,21 +1,37 @@
-{% extends "registration/perfil_cliente.html" %}
+<div class="row">
+    <div class="col col-lg-12">
+        <h5>Información Personal</h5>
+        <hr>
+    </div>
+    <div class="col col-lg-4">
+        <h6>Nombre</h6>
+        <p>{{cliente.user.first_name}}</p>
+    </div>
+    <div class="col col-lg-4">
+        <h6>Apellido</h6>
+        <p>{{cliente.user.last_name}}</p>
+    </div>
+    <div class="col col-lg-4">
+        <h6>Dirección</h6>
+        <p>{{cliente.calle}} {{cliente.numero}}</p>
+    </div>
+</div>
 
-{% block contentCliente %}
-    <h1>Datos del cliente</h1>
-    <div class="row">
-        <p>Nombre: {{cliente.user.username}}</p>
+<div class="row">
+    <div class="col col-lg-12">
+        <h5>Información Contacto</h5>
+        <hr>
     </div>
-    <div class="row">
-        <p>first_name: {{cliente.user.first_name}}</p>
+    <div class="col col-lg-4">
+        <h6>Teléfono</h6>
+        <p>{{cliente.telefono}}</p>
     </div>
-    <div class="row">
-        <p>last_name: {{cliente.user.last_name}}</p>
+    <div class="col col-lg-4">
+        <h6>Mail</h6>
+        <p>{{cliente.user.email}}</p>
     </div>
-    <div class="row">
-        <p>calle: {{cliente.calle}}</p>
+    <div class="col col-lg-4">
+        <h6>RELLENO</h6>
+        <p>{{cliente.calle}} {{cliente.numero}}</p>
     </div>
-    <div class="row">
-        <p>numero: {{cliente.numero}}</p>
-    </div>
-
-{% endblock %}
+</div>
