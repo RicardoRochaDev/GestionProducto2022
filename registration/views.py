@@ -218,6 +218,7 @@ class ProductoCreate(CreateView):
         return super().form_valid(form)
 
     success_url = reverse_lazy('mostrar_Perfil_Proveedor')
+    #success_url = render('registration/perfil_proveedor.html', {'tab': 'pedidos'})
 
 
 class ProductoUpdate(UpdateView):

@@ -7,6 +7,8 @@ from .models import Cliente
 from .models import Horario
 from .models import Pedido
 from .models import MetodoDePago
+from .models import Notificacion
+
 
 
 admin.site.register(Producto)
@@ -16,4 +18,4 @@ admin.site.register(Cliente)
 admin.site.register(Horario)
 admin.site.register(Pedido)
 admin.site.register(MetodoDePago)
-
+admin.site.register(Notificacion)

@@ -35,10 +35,6 @@
                             <li class="nav-item active">
                                 <a class="nav-link" href="{% url 'mostrar_Perfil_Proveedor' %}">Perfil</a>
                             </li>
-                        {% comment %} {% if request.user.id in list_id_users_proveedor %}
-                            <li class="nav-item active">
-                                <a class="nav-link" href="{% url 'mostrar_Perfil_Proveedor' %}">Perfil</a>
-                            </li> {% endcomment %}
                         {% else %}
                             <li class="nav-item active">
                                 <a class="nav-link" href="{% url 'mostrar_Perfil_Cliente' %}">Perfil</a>
@@ -74,10 +70,10 @@
 
                         <div class="dropdown">
                             <button class="dropdown-toggle btn btn-primary " type="button" data-toggle="dropdown" aria-expanded="false">
-                                Notifications <span class="badge badge-light">5</span>
+                                Notifications <span class="badge badge-light">{{contadorNotificacion}}</span>
                               </button>
                             <div class="dropdown-menu">
-                                {% for notificacion in list_notificacion %}
+                                {% for notificacion in list_notificacion_user_actual %}   
                                     <p class="dropdown-item">{{notificacion.pedido.cliente.user.username}}</p>
                                 {% endfor %}
                             </div>
@@ -120,7 +116,7 @@
                 {% endblock %}
             </div>
         </div>
-        <p> esto sirve: {{list_notificacion}} </p>
+        <p> esto sirve: {{notificacion}} </p>
         <footer>
             <p>Proyecto 2019
                 <!-- Broma -->

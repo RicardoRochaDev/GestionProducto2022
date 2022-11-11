@@ -3,13 +3,14 @@
 {% block title %} Perfil {% endblock %}
 
 {% block content %}
-
+  <input type="hidden" name="tabHidden" id="tabHidden" value="{{tab}}">
+  {{tab}}
   <div class="row">
     <div class="col col-lg-2">
       <div class="nav flex-column nav-pills menuvertical" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="{% url 'ver_Informacion_Proveedor' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">Información</a>
         <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="{% url 'ver_Historial_Ventas' %}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Historial de Ventas</a>
-        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="{% url 'ver_Pedidos' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Pedidos</a>
+        <a class="nav-link" id="tabPedidos" data-toggle="pill" href="{% url 'ver_Pedidos' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Pedidos</a>
         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'ver_Produto_Proveedor' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Productos</a>
         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'ver_Horario_Proveedor' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Horarios</a>
         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'ver_Mapa' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Mapa</a>
@@ -26,32 +27,48 @@
       // La siguiente linea es para esperar que cargue todos los scripts...HAY QUE REVISAR COMO HACER PARA QUE JQUERY CARGUE ANTES Y ASI PODER USAR $(function()
       //document.addEventListener("DOMContentLoaded", function(event) {
         $(function () {
-        // Esperando a que se genere un evento del tipo click en algun "a" que sea hijo de la clase "menuvertical"
-        //$('.menuvertical > a').click(function() {
-        $('body').off('click', '.menuvertical > a').on('click', '.menuvertical > a', function (){
-          // Por agregar el listener, el nav con los botones dejo de funcionar como debia... Seteo el boton activo (active) manualmente
-          $(".nav").find(".active").removeClass("active");
-          $(this).addClass("active");
-
-          // Obtengo la url del template que quiero llamar
-          var href = $(this).attr('href');
-
-          // Por si hay que agregar un gif mientras se carga...
-          // $('#subcategory_detail').html(my_cool_loading_gif_html)
-
-          // Llamo mediante ajax a la vista solicitada
-          $.ajax(href, {
-            success: function(response) {
-              // Si el llamado fue exitoso cargo dentro del div "contenido" el html que me devolvio la vista
-              $('#contenido').html(response)
-            },
-            error: function(response) {
-                // Si hubo un error lo informo
-                alert("OCURRIO UN ERROR AL CARGAR LA VISTA")
+          console.log($("#tabHidden").val());
+          
+          if ($("#tabHidden").val() != ""){
+            if ($("#tabHidden").val() == "pedidos"){
+              $(".nav").find(".active").removeClass("active");
+              $("#tabPedidos").addClass("active");
+              var href = $("#tabPedidos").attr('href');
+              cargarVista(href);
             }
-          })
-          return false;
-        });
+
+          }
+
+          // Esperando a que se genere un evento del tipo click en algun "a" que sea hijo de la clase "menuvertical"
+          //$('.menuvertical > a').click(function() {
+          $('body').off('click', '.menuvertical > a').on('click', '.menuvertical > a', function (){
+            // Por agregar el listener, el nav con los botones dejo de funcionar como debia... Seteo el boton activo (active) manualmente
+            $(".nav").find(".active").removeClass("active");
+            $(this).addClass("active");
+
+            // Obtengo la url del template que quiero llamar
+            var href = $(this).attr('href');
+
+            // Por si hay que agregar un gif mientras se carga...
+            // $('#subcategory_detail').html(my_cool_loading_gif_html)
+
+            // Llamo mediante ajax a la vista solicitada
+            cargarVista(href);
+            return false;
+          });
+
+          function cargarVista(href){
+            $.ajax(href, {
+              success: function(response) {
+                // Si el llamado fue exitoso cargo dentro del div "contenido" el html que me devolvio la vista
+                $('#contenido').html(response)
+              },
+              error: function(response) {
+                  // Si hubo un error lo informo
+                  alert("OCURRIO UN ERROR AL CARGAR LA VISTA")
+              }
+            });
+          }
       });
       
       </script>

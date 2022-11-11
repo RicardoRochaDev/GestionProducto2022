@@ -27,3 +27,6 @@ class Pedido(models.Model):
 
     productos = models.ManyToManyField(
         Producto)
+
+    def __str__(self):
+        return self.cliente.user.username

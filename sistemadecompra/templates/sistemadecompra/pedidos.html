@@ -16,13 +16,15 @@
             <li>{{producto.nombre}}</li>
             {% endfor %}
           </ul>
-          <form action="{% url 'ver_Pedidos' %}" method="GET">
+          <form action="{% url 'ver_Pedidos' %}" method="POST">
+            {% csrf_token %}
+
             <button type="submit" name="confirmar" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Pedido</button>
           </form>
         </a>
 
         {% endfor %}
-        
+    
     
       </div>
   </div>
@@ -44,7 +46,9 @@
             <li>{{producto.nombre}}</li>
             {% endfor %}
           </ul>
-          <form action="{% url 'ver_Pedidos' %}" method="GET">
+          <form action="{% url 'ver_Pedidos' %}" method="POST">
+            {% csrf_token %}
+
             <button type="submit" name="confirmarEntrega" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Entrega</button>
           </form>
         </a>

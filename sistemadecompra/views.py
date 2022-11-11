@@ -271,9 +271,9 @@ def verPedidos(request):
     pedidosSinConfirmar_Producto = []
     pedidosConfirmado_Producto = []
 
-    if (request.method == 'GET'):
-        if 'confirmar' in request.GET:
-            dic=request.GET
+    if (request.method == 'POST'):
+        if 'confirmar' in request.POST:
+            dic=request.POST
             pedido = Pedido.objects.get(id = dic['confirmar'])
             
             notificacion_nueva= Notificacion()
@@ -284,12 +284,14 @@ def verPedidos(request):
             pedido.confirmado = 1
             pedido.save()
             print(pedido)
-        if 'confirmarEntrega' in request.GET:
-            dic=request.GET
+        if 'confirmarEntrega' in request.POST:
+            dic=request.POST
             pedido = Pedido.objects.get(id = dic['confirmarEntrega'])
             pedido.entregado = 1
             pedido.save()
             print(pedido)
+
+        return render(request, 'registration/perfil_proveedor.html', {'tab': 'pedidos',})
 
     for p in pedidos:
         if p.confirmado == 0:
