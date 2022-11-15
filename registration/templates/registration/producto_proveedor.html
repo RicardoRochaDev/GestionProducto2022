@@ -1,12 +1,31 @@
-
-<a href="{% url 'crear_Producto' %}"> CREAR PRODUCTO</a> <br>
-
-<h2> LISTA DE PRODUCTOS </h2>
+<div class="row">
+    <div class="col col-lg-12">
+        <a class="btn btn-primary btn-block" href="{% url 'crear_Producto' %}"> Crear</a> <br>
+    </div>
+</div>
+<hr>
 
 {% for it in lista_producto_proveedor %}
-    <h5>Nombre: {{ it.nombre }}     <a href="{% url 'modificar_Producto' it.id %}"> MODIFICAR PRODUCTO</a> ||  <a href="{% url 'eliminar_Producto' it.id %}"> ELIMINAR PRODUCTO</a></h3> 
-    <h5>Marca: {{ it.marca }}</h5>
-    <h5>Tipo: {{ it.tipo }}</h5>
-    <h5>Precio: {{ it.valor }}</h5>
-    <hr>
+<div class="row">
+    <div class="col col-lg-4">
+        <h6>Nombre</h6>
+        <p>{{it.nombre}}</p>
+    </div>
+    <div class="col col-lg-4">
+        <h6>Marca</h6>
+        <p>{{ it.marca }}</p>
+    </div>
+    <div class="col col-lg-4">
+        <h6>Tipo</h6>
+        <p>{{it.tipo}} </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-lg-12">
+        <a class="btn btn-warning btn-sm" href="{% url 'modificar_Producto' it.id %}"> Modificar</a>
+        <a  class="btn btn-danger btn-sm" href="{% url 'eliminar_Producto' it.id %}"> Eliminar</a>
+    </div>
+</div>
+<hr>
 {% endfor %}
+

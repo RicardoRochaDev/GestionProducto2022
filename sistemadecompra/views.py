@@ -276,9 +276,11 @@ def verPedidos(request):
             dic=request.POST
             pedido = Pedido.objects.get(id = dic['confirmar'])
             
+            user_proveedor= request.user.username
             notificacion_nueva= Notificacion()
-            notificacion_nueva.pedido = pedido
+            notificacion_nueva.user = pedido.cliente.user
             notificacion_nueva.leido= False
+            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + "ha confirmado su compra" 
             notificacion_nueva.save()
 
             pedido.confirmado = 1
@@ -392,3 +394,14 @@ def verPedidosCliente(request):
     #print(pedidosConfirmado_Producto)
     print("hola?")
     return render(request, 'sistemadecompra/pedidosCliente.html',{'pedidosSinConfirmar_Producto': pedidosSinConfirmar_Producto, 'pedidosConfirmado_Producto': pedidosConfirmado_Producto})
+
+def actualizar_mensaje_leido(request):
+    #list_notificacion= Notificacion.objects.all()
+
+    list_notificacion= Notificacion.objects.filter(user = request.user.id)
+    for n in list_notificacion:
+        if request.user.id == n.user:
+            n.leido = True
+            n.save() 
+    return HttpResponse(request)
+

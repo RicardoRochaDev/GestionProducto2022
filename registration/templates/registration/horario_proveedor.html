@@ -1,4 +1,4 @@
-
+{% comment %} 
 <a href="{% url 'registrar_Horario' %}"> CREAR HORARIO</a> <br>
 
 <h2> LISTA DE HORARIOS </h2>
@@ -10,4 +10,34 @@
 
     <a href="{% url 'eliminar_Horario' it.id %}"> Eliminar Horario</a></h3>
     <hr>
+{% endfor %} {% endcomment %}
+
+<div class="row">
+    <div class="col col-lg-12">
+        <a class="btn btn-primary btn-block" href="{% url 'registrar_Horario' %}"> Crear</a> <br>
+    </div>
+</div>
+<hr>
+
+{% for it in lista_horario_proveedor %}
+<div class="row">
+    <div class="col col-lg-4">
+        <h6>Día</h6>
+        <p>{{it.dia}}</p>
+    </div>
+    <div class="col col-lg-4">
+        <h6>Hora Inicio</h6>
+        <p>{{ it.horaInicio }}</p>
+    </div>
+    <div class="col col-lg-4">
+        <h6>Hora Final</h6>
+        <p>{{it.horaFinal}} </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-lg-12">
+        <a  class="btn btn-danger btn-sm" href="{% url 'eliminar_Horario' it.id %}"> Eliminar</a>
+    </div>
+</div>
+<hr>
 {% endfor %}

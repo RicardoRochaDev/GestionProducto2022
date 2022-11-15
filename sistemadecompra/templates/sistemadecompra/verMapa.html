@@ -1,4 +1,3 @@
-
 {% block head %}
 <style>
   #map {
@@ -13,88 +12,88 @@
 Mapa
 {% endblock %}
 
-
-
-
-
   <div id="map">
    
   </div>
 
-
-
-
-
-
+  <div class="row">
+    <div class="col col-md-12">
+      <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps">Abrir Google Maps</a>
+    </div>
+  </div>
 {% block scripts %}
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script>
- <script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script>
+  <script>
     var data;
     var map;
     var directionsService;
     var directionsRenderer;
 
-      function iniciarMapa() {
-        directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer();
-        map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 13,
-          center: { lat: -54.8, lng: -68.3 }
-        });
-        directionsRenderer.setMap(map);
-        /*
-        //Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
-        url = "https://maps.googleapis.com/maps/api/geocode/json?address=2134+Gobernador+PAz&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
-        $.getJSON(url, function (json) {
-          latitud = json.results[0].geometry.location.lat;
-          longitud = json.results[0].geometry.location.lng;
-
-          punto = { lat: latitud, lng: longitud };
-          var marker = new google.maps.Marker({ position: punto, map: map });
-        }
-        );
-        */
-        
-        var punto;
-        var waypts = [];
-
-        punto = {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}};
-        var marker = new google.maps.Marker({ position: punto, map: map});
- 
-        {% for c in coordenadas %}
-
-          punto = {lat: {{c.latitud}}, lng: {{c.longitud}}};
-          var marker = new google.maps.Marker({ position: punto, map: map});
-  
-          waypts.push({
-            location: {lat: {{c.latitud}}, lng:{{c.longitud}}},
-            stopover: true
-          });
-
-        {% endfor %}
-        
-        var request = {
-          origin: {lat: {{destinoYOrigenLatitud}}, lng:{{destinoYOrigenLongitud}}},
-          destination: {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}},
-          waypoints: waypts,
-          optimizeWaypoints: true,
-          travelMode: 'DRIVING'
-        };
-        directionsService.route(request, function(result, status) {
-          if (status == 'OK') {
-            directionsRenderer.setDirections(result);
-            directionsRenderer.setOptions({
-              suppressMarkers: true
-            });
-          }
-        });
-
-
-      }
-
-     
-        
+    function iniciarMapa() {
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer();
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        center: { lat: -54.8, lng: -68.3 }
+      });
     
-    </script>
+      directionsRenderer.setMap(map);
+            /*
+            //Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
+            url = "https://maps.googleapis.com/maps/api/geocode/json?address=2134+Gobernador+PAz&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
+            $.getJSON(url, function (json) {
+              latitud = json.results[0].geometry.location.lat;
+              longitud = json.results[0].geometry.location.lng;
+
+              punto = { lat: latitud, lng: longitud };
+              var marker = new google.maps.Marker({ position: punto, map: map });
+            }
+            );
+            */
+            
+      var punto;
+      var waypts = [];
+
+      punto = {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}};
+      var marker = new google.maps.Marker({ position: punto, map: map});
+
+      {% for c in coordenadas %}
+
+        punto = {lat: {{c.latitud}}, lng: {{c.longitud}}};
+        var marker = new google.maps.Marker({ position: punto, map: map});
+
+        waypts.push({
+          location: {lat: {{c.latitud}}, lng:{{c.longitud}}},
+          stopover: true
+        });
+
+      {% endfor %}
+            
+      
+
+      var request = {
+        origin: {lat: {{destinoYOrigenLatitud}}, lng:{{destinoYOrigenLongitud}}},
+        destination: {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}},
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: 'DRIVING'
+      };
+      directionsService.route(request, function(result, status) {
+        if (status == 'OK') {
+          directionsRenderer.setDirections(result);
+          directionsRenderer.setOptions({
+            suppressMarkers: true
+          });
+        }
+      });
+
+      // Armo la url para insertarla en el boton de redirecc|default_if_none:
+      var urlAppMaps = "https://www.google.com/maps/dir/?api=1&origin="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}};
+      for (var i = 0; i < waypts.length; i++) {
+        
+      }
+      const elem = document.getElementById('btnAbrirGoogleMaps');
+      elem.href=urlAppMaps; 
+    } 
+  </script>
 {% endblock %}

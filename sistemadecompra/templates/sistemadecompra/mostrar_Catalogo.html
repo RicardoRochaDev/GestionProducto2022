@@ -217,21 +217,23 @@
                     <p>Proveedor: {{it.proveedor.user.username}}</p>
 
                   
-                    <a class="btn btn-primary" href="{% url 'detalle_Producto' it.id %}" role="button">Mas informacion
+                    <a class="btn btn-secondary" href="{% url 'detalle_Producto' it.id %}" role="button">Mas informacion
                     &raquo;</a>
                     {% if request.user.is_authenticated %}
                         {% if not request.user.id in list_id_users_proveedor %}
                             <form action="{% url '/' %}" method="GET">
                                 {% csrf_token %}
-                                <button type="submit" name="elId" value="{{it.id}}" class="btn btn-success">Agregar al
-                                    carro</button>
+                                <button type="submit" name="elId" value="{{it.id}}" class="btn btn-primary">
+                                    Agregar al carro
+                                </button>
                             </form>
                         {% endif %}
                     {% else %}
                         <form action="{% url '/' %}" method="GET">
                             {% csrf_token %}
-                            <button type="submit" name="elId" value="{{it.id}}" class="btn btn-success">Agregar al
-                                carro</button>
+                            <button type="submit" name="elId" value="{{it.id}}" class="btn btn-primary">
+                                Agregar al carro
+                            </button>
                         </form>        
                     {% endif %}        
                 </div>

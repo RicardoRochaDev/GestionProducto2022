@@ -20,6 +20,9 @@ urlpatterns = [
 
     path('perfilProveedor/', views.mostrar_perfil_proveedor_v, name='mostrar_Perfil_Proveedor'),
     path('perfilCliente/', views.mostrar_perfil_cliente_v, name='mostrar_Perfil_Cliente'),
+
+    path('actualizarMensajeLeido/', views.actualizar_mensaje_leido, name='actualizar_mensaje_leido'),
+    
     
     #path('perfilProveedor/<int:idProveedor>/', views.mostrar_perfil_proveedor_v, name='mostrar_Perfil_Proveedor'),
     
