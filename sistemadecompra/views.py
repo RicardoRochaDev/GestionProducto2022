@@ -398,6 +398,8 @@ def verPedidosCliente(request):
 def actualizar_mensaje_leido(request):
     #list_notificacion= Notificacion.objects.all()
 
+    #PROBANDOOO
+    print("PROBANDO")
     list_notificacion= Notificacion.objects.filter(user = request.user.id)
     for n in list_notificacion:
         if request.user.id == n.user:
