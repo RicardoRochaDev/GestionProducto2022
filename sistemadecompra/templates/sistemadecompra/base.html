@@ -41,7 +41,7 @@
                                 <a class="navbar-brand" href="{% url 'mostrar_Perfil_Cliente' %}">Perfil</a>
                             </li>
                             <li class="nav-item active">
-                                <a class="navbar-brand" href="{% url 'ver_Carrito' %}"><i class="bi bi-cart"></i> <span class="badge badge-light">{{cantidad_items_carrito}}</span></a>
+                                <a class="navbar-brand" href="{% url 'ver_Carrito' %}"><i class="bi bi-cart"></i> <span class="badge badge-light {% if cantidad_items_carrito > 0 %}bg-danger text-white {% endif %}">{{cantidad_items_carrito}}</span></a>
                             </li>
                         {% endif %}
                         
