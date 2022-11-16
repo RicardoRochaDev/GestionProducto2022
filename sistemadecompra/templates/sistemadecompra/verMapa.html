@@ -11,18 +11,39 @@
 {% block title %}
 Mapa
 {% endblock %}
-
-  <div id="map">
+  <div class="row">
+    <div class="col col-lg-12">
+      <div id="map">
    
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col col-lg-12">
+      <div id="floating-panel">
+        <b>Mode of Travel: </b>
+        <select id="mode">
+          <option value="DRIVING">Driving</option>
+          <option value="WALKING">Walking</option>
+          <option value="BICYCLING">Bicycling</option>
+          <option value="TRANSIT">Transit</option>
+        </select>
+      </div>
+      <div id="mapDirections">
+   
+      </div>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col col-md-12">
+    <div class="col col-lg-12">
       <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps">Abrir Google Maps</a>
     </div>
   </div>
 {% block scripts %}
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script>
+  {% comment %} <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapaDirections"></script> {% endcomment %}
+
   <script>
     var data;
     var map;
@@ -88,12 +109,27 @@ Mapa
       });
 
       // Armo la url para insertarla en el boton de redirecc|default_if_none:
-      var urlAppMaps = "https://www.google.com/maps/dir/?api=1&origin="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}};
+      var urlAppMaps = "https://www.google.com/maps/dir/?api=1&origin="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}} + "&waypoints=";
       for (var i = 0; i < waypts.length; i++) {
-        
+        //urlAppMaps += waypts[i]
+        //console.log(waypts[i].location.lat);
+        urlAppMaps += waypts[i].location.lat + "," + waypts[i].location.lng + "|";
       }
+      urlAppMaps += "&destination="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}};
+      urlAppMaps += "&travelMode=DRIVING";
       const elem = document.getElementById('btnAbrirGoogleMaps');
       elem.href=urlAppMaps; 
     } 
+
+    function iniciarMapaDirections(){
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer();
+      map = new google.maps.Map(document.getElementById("masp"), {
+        zoom: 13,
+        center: { lat: -54.8, lng: -68.3 }
+      });
+
+      directionsRenderer.setMap(map);
+    }
   </script>
 {% endblock %}

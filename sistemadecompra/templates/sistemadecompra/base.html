@@ -34,14 +34,14 @@
                     {% if request.user.is_authenticated %}
                         {% if request.user.proveedor %}
                             <li class="nav-item active">
-                                <a class="nav-link" href="{% url 'mostrar_Perfil_Proveedor' %}">Perfil</a>
+                                <a class="navbar-brand" href="{% url 'mostrar_Perfil_Proveedor' %}">Perfil</a>
                             </li>
                         {% else %}
                             <li class="nav-item active">
-                                <a class="nav-link" href="{% url 'mostrar_Perfil_Cliente' %}">Perfil</a>
+                                <a class="navbar-brand" href="{% url 'mostrar_Perfil_Cliente' %}">Perfil</a>
                             </li>
                             <li class="nav-item active">
-                                <a class="nav-link" href="{% url 'ver_Carrito' %}">Carrito</a>
+                                <a class="navbar-brand" href="{% url 'ver_Carrito' %}"><i class="bi bi-cart"></i> <span class="badge badge-light">{{cantidad_items_carrito}}</span></a>
                             </li>
                         {% endif %}
                         
@@ -72,17 +72,15 @@
 
                         <div class="dropdown">
                             <button id="botonNotificacion" class="dropdown-toggle btn btn-primary " type="button" data-toggle="dropdown" aria-expanded="false">
-                                Notifications <span id="spanContador" class="badge badge-light">{{contadorNotificacion}}</span>
-                              </button>
+                                <i class="bi bi-bell"></i>  <span id="spanContador" class="badge badge-light">{{contadorNotificacion}}</span>
+                            </button>
                             <div class="dropdown-menu">
                                 {% for notificacion in list_notificacion_user_actual %}
-                                            <div class="dropdown-item">  
-                                                {% comment %} <p><a class="btn badge badge-light" href="{% url 'actualizar_mensaje_leido' notificacion.id %}" ><i class="bi bi-check-square"></i></a></p>    {% endcomment %}
-                                                <p >El proveedor "{{notificacion.pedido.proveedor.user.username}}" ha confirmado tu compra </p> 
-                                                {% comment %} {{funcioon}} {% endcomment %}
-
-                                            </div>
-                                            {% comment %} <p class="dropdown-item">{{notificacion.pedido.cliente.user.username}}</p> {% endcomment %}
+                                    <div class="dropdown-item">  
+                                        {% comment %} <p><a class="btn badge badge-light" href="{% url 'actualizar_mensaje_leido' notificacion.id %}" ><i class="bi bi-check-square"></i></a></p>    {% endcomment %}
+                                        <p >{{notificacion.mensaje}}</p> 
+                                    </div>
+                                    {% comment %} <p class="dropdown-item">{{notificacion.pedido.cliente.user.username}}</p> {% endcomment %}
                                 {% endfor %}
 
                             </div>
@@ -125,7 +123,12 @@
                 {% endblock %}
             </div>
         </div>
-        <p> esto sirve: {{notificacion}} </p>
+        <p>  esto sirve: {{notificacion}} </p>
+        <p>  request.user          =  {{request.user}} </p>
+        <p>  request.user.username =  {{request.user.username}} </p>
+        <p>  request.user.id       =  {{request.user.id}} </p>
+
+
         <footer>
             <p>Proyecto 2019-2022
                 <!-- Broma -->

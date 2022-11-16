@@ -202,10 +202,10 @@
   ================================================== -->
     <!-- Wrap the rest of the page in another container to center all the content. -->
 
-    <div class="container marketing">
+    {% comment %} <div class="container marketing"> {% endcomment %}
 
         <!-- Three columns of text below the carousel -->
-        <div class="row">
+        <div class="row justify-content-md-center">
             {% for it in objproducto %}
 
             <div class="card" style="width: 18rem;">
@@ -237,7 +237,7 @@
                         </form>        
                     {% endif %}        
                 </div>
-              </div>
+            </div>
 
             {% comment %} <div class="col-lg-4">
                 <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
