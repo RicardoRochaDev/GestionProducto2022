@@ -1,7 +1,7 @@
 ## ESTOS ERAN NUESTROS IMPORTS QUE METIMOS AHORA
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Producto
+#from .models import Producto
 from django.template import loader
 
 
@@ -243,6 +243,13 @@ def verCheckout(request):
                     
                     calleNombre = dic['nuevaCalle'].replace("+"," ")
                 pedido = Pedido(confirmado=0,fecha= p['fecha'], hora= p['hora'], calle= calleNombre, numero=calleNumero, latitud= latitud, longitud = longitud, entregado= 0, cliente= cliente, proveedor= proveedor)
+                
+                print("entre al checkout")
+                notificacion_nueva= Notificacion()
+                notificacion_nueva.user = pedido.proveedor.user
+                notificacion_nueva.leido= False
+                notificacion_nueva.mensaje= "El cliente " + request.user.username + " le ha realizado un pedido" 
+                notificacion_nueva.save()  
                 pedido.save()
                 
                 #Comienza a asociar los productos con el pedido
@@ -280,7 +287,7 @@ def verPedidos(request):
             notificacion_nueva= Notificacion()
             notificacion_nueva.user = pedido.cliente.user
             notificacion_nueva.leido= False
-            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + "ha confirmado su compra" 
+            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " le ha confirmado su compra" 
             notificacion_nueva.save()
 
             pedido.confirmado = 1
@@ -404,7 +411,7 @@ def actualizar_mensaje_leido(request):
 
     list_notificacion= Notificacion.objects.filter(user = request.user.id)
     for n in list_notificacion:
-        if request.user.id == n.user:
+        if request.user.id == n.user.id:
             n.leido = True
             n.save() 
     return HttpResponse(request)
