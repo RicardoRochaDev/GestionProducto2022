@@ -1,9 +1,12 @@
+<font size=6>
+  COMPRAS
+</font>
 <div class="row">
   <div class="col">
           <div class="list-group">
               {% for p in pedidosHistorial %}
               <div class="list-group-item flex-column align-items-start">
-                <p class="mb-1">Proveedor: {{p.pedido.proveedor.user.username}}  {{pedidoProducto.pedido.cliente.user.lastname}}</p>
+                <p class="mb-1">Proveedor: {{p.pedido.proveedor.user.username}}</p>
                 <p class="mb-1">Dirección: {{p.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
                 <p class="mb-1">Productos pedidos:</p>
                 <ul>

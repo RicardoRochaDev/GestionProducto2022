@@ -7,3 +7,4 @@ from .Producto import Producto
 from .Proveedor import Proveedor
 from .TipoProducto import TipoProducto
 from .Notificacion import Notificacion
+from .Calificacion import Calificacion

@@ -11,13 +11,13 @@
 {% block title %}
 Mapa
 {% endblock %}
-  <div class="row">
+  {% comment %} <div class="row">
     <div class="col col-lg-12">
       <div id="map">
    
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
   <div class="row">
     <div class="col col-lg-12">
       <div id="floating-panel">
@@ -29,7 +29,9 @@ Mapa
           <option value="TRANSIT">Transit</option>
         </select>
       </div>
-      <div id="mapDirections">
+      <div id="mapDirections" style="flex-basis: 0;
+      flex-grow: 4;
+      height: 100%;">
    
       </div>
     </div>
@@ -41,8 +43,8 @@ Mapa
     </div>
   </div>
 {% block scripts %}
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script>
-  {% comment %} <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapaDirections"></script> {% endcomment %}
+  {% comment %} <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script> {% endcomment %}
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapaDirections&v=weekly"></script>
 
   <script>
     var data;
@@ -121,15 +123,52 @@ Mapa
       elem.href=urlAppMaps; 
     } 
 
+
+    // Funcion para iniciar el nuevo mapa que ofrece indicaciones para realizar la entrega
     function iniciarMapaDirections(){
       directionsService = new google.maps.DirectionsService();
       directionsRenderer = new google.maps.DirectionsRenderer();
-      map = new google.maps.Map(document.getElementById("masp"), {
+      const map = new google.maps.Map(document.getElementById("mapDirections"), {
         zoom: 13,
         center: { lat: -54.8, lng: -68.3 }
       });
 
       directionsRenderer.setMap(map);
+
+      var punto;
+      var waypts = [];
+
+      punto = {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}};
+      var marker = new google.maps.Marker({ position: punto, map: map});
+
+      {% for c in coordenadas %}
+
+        punto = {lat: {{c.latitud}}, lng: {{c.longitud}}};
+        var marker = new google.maps.Marker({ position: punto, map: map});
+
+        waypts.push({
+          location: {lat: {{c.latitud}}, lng:{{c.longitud}}},
+          stopover: true
+        });
+
+      {% endfor %}
+
+      var request = {
+        origin: {lat: {{destinoYOrigenLatitud}}, lng:{{destinoYOrigenLongitud}}},
+        destination: {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}},
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: 'DRIVING'
+      };
+
+      directionsService.route(request, function(result, status) {
+        if (status == 'OK') {
+          directionsRenderer.setDirections(result);
+          directionsRenderer.setOptions({
+            suppressMarkers: true
+          });
+        }
+      });
     }
   </script>
 {% endblock %}
