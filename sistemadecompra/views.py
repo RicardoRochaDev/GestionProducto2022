@@ -29,7 +29,7 @@ from django.contrib.auth.models import User
 # Create your views here.
 ## ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
 
-def catalogo(request):
+def catalogo(request): #NO ESTA EN USO.
     lista_productos = Producto.objects.all()
 
     template = loader.get_template('sistemadecompra/catalogo.html')
@@ -65,10 +65,14 @@ def carrito(request):
     }
     return render(request, 'sistemadecompra/carrito.html', context)
 
-    ## FIN ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
+## FIN ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
 
 def mostrar_catalogo_v(request):
-    print("mostrar catalogo v")
+    #print("mostrar catalogo v")
+
+    list_producto_nuevos= Producto.objects.all().order_by('id')[:3]
+    print(list_producto_nuevos)
+
     list_Producto = Producto.objects.all()
     list_TipoProducto = TipoProducto.objects.all()
     list_proveedor =  Proveedor.objects.all()
@@ -109,7 +113,7 @@ def mostrar_catalogo_v(request):
         #     dic = request.GET
         #     if dic['clasificacion'] == "1":
         #         p = Producto.objects.get(id=1)
-            return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto})            
+            return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, "list_producto_nuevos":list_producto_nuevos})            
 
 
     #tipoProductos = TipoProducto.objects.all()
@@ -118,7 +122,7 @@ def mostrar_catalogo_v(request):
     #proveedor = Proveedor.objects.all()
     # print(proveedor['Proveedor'])
 
-    return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 'list_TipoProducto': list_TipoProducto, 'list_id_users_proveedor':list_id_users_proveedor})
+    return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 'list_TipoProducto': list_TipoProducto, 'list_id_users_proveedor':list_id_users_proveedor, "list_producto_nuevos":list_producto_nuevos})
 
 
 def detalle_producto_v(request, idProducto):
