@@ -18,8 +18,10 @@
           </ul>
           <form action="{% url 'ver_Pedidos' %}" method="POST">
             {% csrf_token %}
-
             <button type="submit" name="confirmar" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Pedido</button>
+            <button type="submit" name="cancelar" value="{{pedidoProducto.pedido.id}}" class="btn btn-danger">Cancelar Pedido</button>
+            <button type="submit" name="cambio" value="{{pedidoProducto.pedido.id}}" class="btn btn-warning">Cambiar Fecha</button>
+
           </form>
         </a>
 

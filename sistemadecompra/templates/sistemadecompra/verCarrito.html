@@ -40,7 +40,12 @@ Carrito
                     <ul>
                         {% for producto in elCarrito %}
                             {% if prov == producto.proveedor %}
-                            <li>{{producto.nombre}}  ${{producto.valor}}</li>
+                                <li>
+                                    {{producto.nombre}}  ${{producto.valor}} 
+                                    <button type="submit" name="borrarItemProducto" value="{{producto.id}}" class="btn btn-danger">
+                                        <i class="bi bi-trash3"></i>
+                                    </button> 
+                                </li>
                             {% endif %}
                         {% endfor %}
                     </ul>

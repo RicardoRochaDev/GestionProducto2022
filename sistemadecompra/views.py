@@ -217,6 +217,17 @@ def verCarrito(request):
                 return redirect('proceder_Checkout')
             else:
                 print("Datos incorrectos. Vuelva a intentar")
+        if 'borrarItemProducto' in request.GET:
+            dic= request.GET
+            id= dic['borrarItemProducto']
+            id= int(id)
+            print('EL ID:', id)
+            carritoAux= request.session['carrito']
+            print ('CARRITOOO: ',carritoAux)
+            carritoAux.remove(id)
+            request.session['carrito']= carritoAux  
+            return redirect('ver_Carrito')
+
     print(proveedores)
     return render(request, "sistemadecompra/verCarrito.html", {"elCarrito": productosAgregados, "losProveedores": proveedores, "total": total, "horarios": horariosProveedor, 'fechaActual': fechaActual})
 
@@ -277,7 +288,7 @@ def verCheckout(request):
 def verPedidos(request):
 
     pedidos = Pedido.objects.filter(proveedor = request.user.proveedor)
-    productos = Producto.objects.filter(proveedor = request.user.proveedor)
+    productos = Producto.objects.filter(proveedor = request.user.proveedor) # Se usa?
     
     pedidosSinConfirmar_Producto = []
     pedidosConfirmado_Producto = []
@@ -289,7 +300,7 @@ def verPedidos(request):
             
             user_proveedor= request.user.username
             notificacion_nueva= Notificacion()
-            notificacion_nueva.user = pedido.cliente.user
+            notificacion_nueva.user= pedido.cliente.user
             notificacion_nueva.leido= False
             notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " le ha confirmado su compra" 
             notificacion_nueva.save()
@@ -303,6 +314,21 @@ def verPedidos(request):
             pedido.entregado = 1
             pedido.save()
             print(pedido)
+
+        if 'cancelar' in request.POST:
+            dic=request.POST
+            pedido = Pedido.objects.get(id = dic['cancelar'])
+
+            user_proveedor= request.user.username
+            notificacion_nueva= Notificacion()
+            notificacion_nueva.user= pedido.cliente.user
+            notificacion_nueva.leido= False
+            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha cancelado su compra" 
+            notificacion_nueva.save()
+
+            pedido.delete()
+            print(pedido)
+            return render(request, 'registration/perfil_proveedor.html') 
 
         return render(request, 'registration/perfil_proveedor.html', {'tab': 'pedidos',})
 
