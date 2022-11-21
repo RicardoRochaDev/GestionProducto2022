@@ -75,10 +75,10 @@
                                 <i class="bi bi-bell"></i>  <span id="spanContador" class="badge badge-light">{{contadorNotificacion}}</span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                {% for notificacion in list_notificacion_user_actual %}
+                                {% for item in list_notificacion_user_actual %}
                                     <div class="dropdown-item">  
                                         {% comment %} <p><a class="btn badge badge-light" href="{% url 'actualizar_mensaje_leido' notificacion.id %}" ><i class="bi bi-check-square"></i></a></p>    {% endcomment %}
-                                        <p >{{notificacion.mensaje}}</p> 
+                                        <p >{{item.notificacionObjeto.mensaje}} - {{item.fechaCalculada}}</p> 
                                     </div>
                                     {% comment %} <p class="dropdown-item">{{notificacion.pedido.cliente.user.username}}</p> {% endcomment %}
                                 {% endfor %}
@@ -145,7 +145,7 @@
                 console.log(url)
                 $(document).on('click', '#botonNotificacion', function (){
                   // Por agregar el listener, el nav con los botones dejo de funcionar como debia... Seteo el boton activo (active) manualmente
-                  
+                  /*
                   $.ajax("{% url 'actualizar_mensaje_leido' %}", {
                     success: function(response) {
                       $("#spanContador").text("0");
@@ -155,6 +155,7 @@
                     }
                   });
                   return false;
+                  */
                 });
               });
         

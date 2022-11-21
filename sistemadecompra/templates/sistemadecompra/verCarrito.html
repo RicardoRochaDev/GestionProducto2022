@@ -23,10 +23,9 @@ Carrito
         
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             {% for prov in losProveedores %}
-
-            <li class="nav-item">
-                <a class="nav-link" id="home-tab" data-toggle="tab" href="#{{prov.user.username}}" role="tab" aria-controls="home" aria-selected="true">{{prov.user.username}}</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ forloop.first|yesno:"active," }}" id="home-tab" data-toggle="tab" href="#{{prov.user.username}}" role="tab" aria-controls="home" aria-selected="true">{{prov.user.username}}</a>
+                </li>
             {% endfor %}
         </ul>
         {% comment %}
@@ -35,7 +34,7 @@ Carrito
         <form action="{% url 'ver_Carrito' %}" method="GET">
             <div class="tab-content" id="myTabContent">
                 {% for prov in losProveedores %}
-                <div class="tab-pane fade" id="{{prov.user.username}}" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade {{ forloop.first|yesno:"show active," }}" id="{{prov.user.username}}" role="tabpanel" aria-labelledby="home-tab">
                     <p>Productos agregados:</p>
                     <ul>
                         {% for producto in elCarrito %}

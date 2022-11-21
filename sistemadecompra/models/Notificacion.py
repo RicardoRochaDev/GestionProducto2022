@@ -6,5 +6,6 @@ class Notificacion(models.Model):
     user= models.ForeignKey(User, on_delete=models.PROTECT, null=True) 
     leido= models.BooleanField(default= False)
     mensaje= models.CharField(max_length=200, null=True)
+    fecha= models.DateTimeField(auto_now_add=True)
     
 

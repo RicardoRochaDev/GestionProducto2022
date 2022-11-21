@@ -11,14 +11,14 @@
 {% block title %}
 Mapa
 {% endblock %}
-  {% comment %} <div class="row">
+  <div class="row">
     <div class="col col-lg-12">
       <div id="map">
    
       </div>
     </div>
-  </div> {% endcomment %}
-  <div class="row">
+  </div> 
+  {% comment %} <div class="row">
     <div class="col col-lg-12">
       <div id="floating-panel">
         <b>Mode of Travel: </b>
@@ -34,8 +34,12 @@ Mapa
       height: 100%;">
    
       </div>
+      <div id="sidebar">
+        <p>Total Distance: <span id="total"></span></p>
+        <div id="panel"></div>
+      </div>
     </div>
-  </div>
+  </div> {% endcomment %}
 
   <div class="row">
     <div class="col col-lg-12">
@@ -43,8 +47,8 @@ Mapa
     </div>
   </div>
 {% block scripts %}
-  {% comment %} <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script> {% endcomment %}
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapaDirections&v=weekly"></script>
+ <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script> 
+  {% comment %} <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapaDirections&v=weekly"></script> {% endcomment %}
 
   <script>
     var data;
@@ -127,10 +131,22 @@ Mapa
     // Funcion para iniciar el nuevo mapa que ofrece indicaciones para realizar la entrega
     function iniciarMapaDirections(){
       directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer();
+      directionsRenderer = new google.maps.DirectionsRenderer({
+        draggable: true,
+        map,
+        panel: document.getElementById("panel") as HTMLElement,
+      });
       const map = new google.maps.Map(document.getElementById("mapDirections"), {
         zoom: 13,
         center: { lat: -54.8, lng: -68.3 }
+      });
+
+      directionsRenderer.addListener("directions_changed", () => {
+        const directions = directionsRenderer.getDirections();
+    
+        if (directions) {
+          computeTotalDistance(directions);
+        }
       });
 
       directionsRenderer.setMap(map);
@@ -169,6 +185,22 @@ Mapa
           });
         }
       });
+    }
+
+    function computeTotalDistance(result: google.maps.DirectionsResult) {
+      let total = 0;
+      const myroute = result.routes[0];
+    
+      if (!myroute) {
+        return;
+      }
+    
+      for (let i = 0; i < myroute.legs.length; i++) {
+        total += myroute.legs[i]!.distance!.value;
+      }
+    
+      total = total / 1000;
+      (document.getElementById("total") as HTMLElement).innerHTML = total + " km";
     }
   </script>
 {% endblock %}

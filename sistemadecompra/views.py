@@ -328,7 +328,7 @@ def verPedidos(request):
 
             pedido.delete()
             print(pedido)
-            return render(request, 'registration/perfil_proveedor.html') 
+            ##return render(request, 'registration/perfil_proveedor.html') 
 
         return render(request, 'registration/perfil_proveedor.html', {'tab': 'pedidos',})
 

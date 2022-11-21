@@ -124,60 +124,34 @@
 {% block content %}
 
 <main role="main">
-    {% for it in list_producto_nuevos %}
+    {% comment %} {% for it in list_producto_nuevos %}
         <h1> {{it}} </h1>
     {% endfor%}
-    <h1> {{list_producto_nuevos}} </h1>
-    
+    <h1> {{list_producto_nuevos.0}} </h1>
+     {% endcomment %}
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
+            {% comment %} Usamos un for para iterar en la lista de los ultimos 3 productos creados y poder configurar cuantos itemss va a tener el carrousel {% endcomment %}
+            {% for it in list_producto_nuevos %}
+                <li data-target="#myCarousel" data-slide-to="{{forloop.counter0}}" class="{{ forloop.first|yesno:"active," }}"></li>
+            {% endfor%}
         </ol>
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
-                    <rect width="100%" height="1000" fill="#777" /></svg>
-                <div class="container">
-                    <div class="carousel-caption text-left">
-                        <h1>Producto nuevo.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
-                            gravida at eget
-                            metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Agregar al carrito</a></p>
+            {% comment %} Usamos un for para iterar en la lista de los ultimos y mostrar los productos en el carrousel {% endcomment %}
+            {% for it in list_producto_nuevos %}
+                <div class="carousel-item {{ forloop.first|yesno:"active," }}">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                        preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+                        <rect width="100%" height="1000" fill="#777" /></svg>
+                    <div class="container">
+                        <div class="carousel-caption text-left">
+                            <h1>{{it.nombre}}.</h1>
+                            <p>{{it.descripcion}}.</p>
+                            <p><a class="btn btn-lg btn-primary" href="#" role="button">Agregar al carrito</a></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="carousel-item">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
-                    <rect width="100%" height="100%" fill="#777" /></svg>
-                <div class="container">
-                    <div class="carousel-caption">
-                        <h1>Producto nuevo.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
-                            gravida at eget
-                            metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Agregar al carrito</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
-                    <rect width="100%" height="100%" fill="#777" /></svg>
-                <div class="container">
-                    <div class="carousel-caption text-right">
-                        <h1>Producto nuevo.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
-                            gravida at eget
-                            metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Agregar al carrito</a></p>
-                    </div>
-                </div>
-            </div>
+            {% endfor%}
         </div>
         <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
