@@ -329,6 +329,13 @@ def verPedidos(request):
             pedido.delete()
             print(pedido)
             ##return render(request, 'registration/perfil_proveedor.html') 
+        
+        if 'cambioFecha' in request.POST:
+            notificacion_nueva= Notificacion()
+            notificacion_nueva.user= pedido.cliente.user
+            notificacion_nueva.leido= False
+            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha rechazado el fecha. Solicite otra en su menu de pedidos." 
+            notificacion_nueva.save()
 
         return render(request, 'registration/perfil_proveedor.html', {'tab': 'pedidos',})
 
@@ -398,39 +405,13 @@ def verComprasPendientes(request):
 
 def verPedidosCliente(request):
 
-    pedidos = Pedido.objects.filter(cliente = request.user.cliente)
-    
-    pedidosSinConfirmar_Producto = []
-    pedidosConfirmado_Producto = []
+    #misPedidosSinConfirmar_Producto = []
+    #pedidosConfirmado_Producto = []
+    misPedidos= Pedido.objects.filter(cliente = request.user.cliente)
 
-    if (request.method == 'GET'):
-        if 'confirmar' in request.GET:
-            dic=request.GET
-            pedido = Pedido.objects.get(id = dic['confirmar'])
-            pedido.confirmado = 1
-            pedido.save()
-            print(pedido)
-        if 'confirmarEntrega' in request.GET:
-            dic=request.GET
-            pedido = Pedido.objects.get(id = dic['confirmarEntrega'])
-            pedido.entregado = 1
-            pedido.save()
-            print(pedido)
-
-    for p in pedidos:
-        if p.confirmado == 0:
-            print(p.productos)
-            print(p.cliente)
-            pedidosSinConfirmar_Producto.append({"pedido": p})
-        else:
-            if p.entregado == 0:
-                print(p.productos)
-
-                pedidosConfirmado_Producto.append({"pedido": p})
     #print(pedidosSinConfirmar_Producto[0].productos)
     #print(pedidosConfirmado_Producto)
-    print("hola?")
-    return render(request, 'sistemadecompra/pedidosCliente.html',{'pedidosSinConfirmar_Producto': pedidosSinConfirmar_Producto, 'pedidosConfirmado_Producto': pedidosConfirmado_Producto})
+    return render(request, 'sistemadecompra/pedidosCliente.html',{'misPedidos': misPedidos})
 
 def actualizar_mensaje_leido(request):
     #list_notificacion= Notificacion.objects.all()

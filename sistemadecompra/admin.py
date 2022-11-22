@@ -8,6 +8,7 @@ from .models import Horario
 from .models import Pedido
 from .models import MetodoDePago
 from .models import Notificacion
+from .models import Calificacion
 
 
 
@@ -19,3 +20,5 @@ admin.site.register(Horario)
 admin.site.register(Pedido)
 admin.site.register(MetodoDePago)
 admin.site.register(Notificacion)
+admin.site.register(Calificacion)
+
