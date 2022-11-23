@@ -2,11 +2,11 @@ from django.db import models
 from .Cliente import Cliente
 from .Proveedor import Proveedor
 from .Producto import Producto 
+from .EstadoPedido import EstadoPedido
 
 class Pedido(models.Model):
     #tiene una lista de productos
     
-    confirmado = models.BooleanField()
     #cuando confirmado = true, el pedido pasa a la lista de pedidos para entregar
     
     cliente = models.ForeignKey(
@@ -23,10 +23,12 @@ class Pedido(models.Model):
     latitud = models.DecimalField(max_digits=20, decimal_places=10)
     longitud = models.DecimalField(max_digits=20, decimal_places=10)
 
-    entregado = models.BooleanField()
-
     productos = models.ManyToManyField(
         Producto)
+
+    estado = models.ForeignKey(
+        EstadoPedido, 
+        on_delete=models.CASCADE)
 
     def __str__(self):
         return self.cliente.user.username

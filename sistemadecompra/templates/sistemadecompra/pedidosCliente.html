@@ -10,15 +10,19 @@
 					<p class="mb-1">Dia de entrega elegido: {{pedido.fecha}}</p>
 					<p class="mb-1">Hora de entrega elegido: {{pedido.hora}}</p>
 					<p class="mb-1">Productos pedidos:</p>
-					{% comment %} <ul>
-						{% for producto in pedido.productos %}
+					<ul>
+						{% for producto in pedido.producto %}
 							<li>{{producto.nombre}}</li>
 						{% endfor %}
-					</ul> {% endcomment %}
-					<p class="mb-1">ESTADO: {{pedido.confirmado}}</p>
+					</ul> 
+					<p class="mb-1">ESTADO: <b> {{pedido.estado.nombre}} </b></p>
 					<form action="{% url 'ver_Pedidos_Cliente' %}" method="GET">
-						<button type="submit" name="confirmar" value="{{pedido.pedido.id}}" class="btn btn-success">Calificar</button>
-						<button type="submit" name="confirmar" value="{{pedido.pedido.id}}" class="btn btn-success">No deseo calificar</button>
+						{% if pedido.estado.nombre == 'Creado' %}
+							<button type="submit" name="CancelarCompraCliente" value="{{pedido.pedido.id}}" class="btn btn-success">Cancelar Compra</button>
+						{% endif %}
+						{% if pedido.estado.nombre == 'Cambio Fecha' %}		
+							<button type="submit" name="CambioFechaCliente" value="{{pedido.pedido.id}}" class="btn btn-success">Cambiar Fecha</button>
+						{% endif %}
 					</form>
 				</div>
 			{% endfor %}

@@ -11,9 +11,12 @@
                 <p class="mb-1">Productos pedidos:</p>
                 <ul>
                   {% for producto in p.producto.all%}
-                  <li>{{producto.nombre}}</li>
+                    <li>{{producto.nombre}}</li>
                   {% endfor %}
                 </ul>
+                {% if pedido.estado.nombre == 'Entregado' %}
+                
+                {% endif %}
               </div>
               {% endfor %}
             </div>

@@ -21,7 +21,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
-from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto, Notificacion
+from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto, Notificacion, EstadoPedido
 from django.shortcuts import redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -257,9 +257,21 @@ def verCheckout(request):
                     longitud = data['results'][0]['geometry']['location']['lng']
                     
                     calleNombre = dic['nuevaCalle'].replace("+"," ")
-                pedido = Pedido(confirmado=0,fecha= p['fecha'], hora= p['hora'], calle= calleNombre, numero=calleNumero, latitud= latitud, longitud = longitud, entregado= 0, cliente= cliente, proveedor= proveedor)
                 
-                print("entre al checkout")
+                estadoCreado = EstadoPedido.objects.get(nombre="Creado")
+                print(estadoCreado)
+                pedido = Pedido(
+                    fecha= p['fecha'],
+                    hora= p['hora'], 
+                    calle= calleNombre, 
+                    numero=calleNumero, 
+                    latitud= latitud, 
+                    longitud = longitud,
+                    cliente= cliente, 
+                    proveedor= proveedor,
+                    estado = estadoCreado
+                )
+                
                 notificacion_nueva= Notificacion()
                 notificacion_nueva.user = pedido.proveedor.user
                 notificacion_nueva.leido= False
@@ -267,6 +279,8 @@ def verCheckout(request):
                 notificacion_nueva.save()  
                 pedido.save()
                 
+                print("Se creo bien el pedido")
+
                 #Comienza a asociar los productos con el pedido
                 carritoAux = request.session['carrito']
 
@@ -296,24 +310,33 @@ def verPedidos(request):
     if (request.method == 'POST'):
         if 'confirmar' in request.POST:
             dic=request.POST
+
             pedido = Pedido.objects.get(id = dic['confirmar'])
-            
             user_proveedor= request.user.username
+
+            # Creo la Notificacion
             notificacion_nueva= Notificacion()
             notificacion_nueva.user= pedido.cliente.user
             notificacion_nueva.leido= False
             notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " le ha confirmado su compra" 
             notificacion_nueva.save()
 
-            pedido.confirmado = 1
+            # Le asigno el estado Confirmado al Pedido
+            estadoConfirmado = EstadoPedido.objects.get(nombre="Confirmado")
+            pedido.estado = estadoConfirmado
+
             pedido.save()
-            print(pedido)
+
+        # Cuando se clickea en Confirmar Entrega se cambia de estado a Entregado
         if 'confirmarEntrega' in request.POST:
+
             dic=request.POST
             pedido = Pedido.objects.get(id = dic['confirmarEntrega'])
-            pedido.entregado = 1
+
+            # Le asigno el estado Entregado al Pedido
+            pedido.estado = EstadoPedido.objects.get(nombre="Entregado")
+
             pedido.save()
-            print(pedido)
 
         if 'cancelar' in request.POST:
             dic=request.POST
@@ -331,19 +354,29 @@ def verPedidos(request):
             ##return render(request, 'registration/perfil_proveedor.html') 
         
         if 'cambioFecha' in request.POST:
+            dic=request.POST
+            pedido = Pedido.objects.get(id = dic['cambioFecha'])
+            user_proveedor= request.user.username
+
+            # Creo la Notificacion
             notificacion_nueva= Notificacion()
             notificacion_nueva.user= pedido.cliente.user
             notificacion_nueva.leido= False
             notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha rechazado el fecha. Solicite otra en su menu de pedidos." 
             notificacion_nueva.save()
+            
+
+            # Le asigno el estado Cambio Fecha al Pedido
+            pedido.estado = EstadoPedido.objects.get(nombre="Cambio Fecha")
+            pedido.save()
 
         return render(request, 'registration/perfil_proveedor.html', {'tab': 'pedidos',})
 
     for p in pedidos:
-        if p.confirmado == 0:
+        if p.estado.nombre == "Creado":
             pedidosSinConfirmar_Producto.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
         else:
-            if p.entregado == 0:
+            if p.estado.nombre == "Confirmado":
                 pedidosConfirmado_Producto.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
 
     #print(pedidosConfirmado_Producto)
@@ -408,7 +441,8 @@ def verPedidosCliente(request):
     #misPedidosSinConfirmar_Producto = []
     #pedidosConfirmado_Producto = []
     misPedidos= Pedido.objects.filter(cliente = request.user.cliente)
-
+    for p in misPedidos.productos:
+        print(p)
     #print(pedidosSinConfirmar_Producto[0].productos)
     #print(pedidosConfirmado_Producto)
     return render(request, 'sistemadecompra/pedidosCliente.html',{'misPedidos': misPedidos})
