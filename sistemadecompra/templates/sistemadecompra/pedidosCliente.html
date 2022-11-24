@@ -4,24 +4,51 @@
           	<font size=6>
             	Estado de mis Pedidos:
           	</font>
-			{% for pedido in misPedidos %}
+			{% for dic in misPedidos %}
 				<div class="list-group-item list-group-item-action flex-column align-items-start">
-					<p class="mb-1">Proveedor: {{pedido.proveedor.user.username}}</p>
-					<p class="mb-1">Dia de entrega elegido: {{pedido.fecha}}</p>
-					<p class="mb-1">Hora de entrega elegido: {{pedido.hora}}</p>
+					<p class="mb-1">Proveedor: {{dic.pedido.proveedor.user.username}}</p>
+					<p class="mb-1">Dia de entrega elegido: {{dic.pedido.fecha}}</p>
+					<p class="mb-1">Hora de entrega elegido: {{dic.pedido.hora}}</p>
 					<p class="mb-1">Productos pedidos:</p>
 					<ul>
-						{% for producto in pedido.producto %}
+						{% for producto in dic.producto %}
 							<li>{{producto.nombre}}</li>
 						{% endfor %}
-					</ul> 
-					<p class="mb-1">ESTADO: <b> {{pedido.estado.nombre}} </b></p>
+					</ul>  
+					<p class="mb-1">ESTADO: <b> {{dic.pedido.estado.nombre}} </b></p>
 					<form action="{% url 'ver_Pedidos_Cliente' %}" method="GET">
-						{% if pedido.estado.nombre == 'Creado' %}
-							<button type="submit" name="CancelarCompraCliente" value="{{pedido.pedido.id}}" class="btn btn-success">Cancelar Compra</button>
+						{% if dic.pedido.estado.nombre == 'Creado' %}
+							<button type="submit" name="CancelarCompraCliente" value="{{pedido.pedido.id}}" class="btn btn-danger">Cancelar Compra</button>
 						{% endif %}
-						{% if pedido.estado.nombre == 'Cambio Fecha' %}		
-							<button type="submit" name="CambioFechaCliente" value="{{pedido.pedido.id}}" class="btn btn-success">Cambiar Fecha</button>
+						{% if dic.pedido.estado.nombre == 'Cambio Fecha' %}		
+							{% comment %} <button type="submit" name="CambioFechaCliente" value="{{pedido.pedido.id}}" class="btn btn-warning">Cambiar Fecha</button> {% endcomment %}
+
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalCambioFecha{{dic.pedido.id}}">
+								Cambiar Fecha
+							</button>
+							<!-- Modal -->
+							<div class="modal fade" id="modalCambioFecha{{dic.pedido.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Cancelar Pedido</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											¿Esta seguro de cancelar la compra?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											{% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+											<button type="submit" name="cancelar" value="{{pedidoProducto.pedido.id}}" class="btn btn-danger">Cancelar Pedido</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
 						{% endif %}
 					</form>
 				</div>

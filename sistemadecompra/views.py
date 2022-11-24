@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 #from .models import Producto
 from django.template import loader
+from django.db.models import Q
 
 
 ###############################################
@@ -440,9 +441,14 @@ def verPedidosCliente(request):
 
     #misPedidosSinConfirmar_Producto = []
     #pedidosConfirmado_Producto = []
-    misPedidos= Pedido.objects.filter(cliente = request.user.cliente)
-    for p in misPedidos.productos:
-        print(p)
+    auxPedidos= Pedido.objects.filter(cliente = request.user.cliente)
+    misPedidos= []
+    # for p in misPedidos.productos:
+    #     print(p)
+    
+    for pedido in auxPedidos:
+        misPedidos.append({"pedido": pedido, "producto": Producto.objects.filter(pedido= pedido)})
+
     #print(pedidosSinConfirmar_Producto[0].productos)
     #print(pedidosConfirmado_Producto)
     return render(request, 'sistemadecompra/pedidosCliente.html',{'misPedidos': misPedidos})
@@ -451,8 +457,6 @@ def actualizar_mensaje_leido(request):
     #list_notificacion= Notificacion.objects.all()
 
     #PROBANDOOO
-    print("PROBANDO")
-    print("PROBANDOOOOOOOOOOOOOO")
 
     list_notificacion= Notificacion.objects.filter(user = request.user.id)
     for n in list_notificacion:

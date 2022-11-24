@@ -3,6 +3,8 @@ from .Cliente import Cliente
 from .Proveedor import Proveedor
 from .Producto import Producto 
 from .EstadoPedido import EstadoPedido
+from .Calificacion import Calificacion
+
 
 class Pedido(models.Model):
     #tiene una lista de productos
@@ -29,6 +31,8 @@ class Pedido(models.Model):
     estado = models.ForeignKey(
         EstadoPedido, 
         on_delete=models.CASCADE)
+    
+    calificacion = models.OneToOneField(Calificacion, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.cliente.user.username
