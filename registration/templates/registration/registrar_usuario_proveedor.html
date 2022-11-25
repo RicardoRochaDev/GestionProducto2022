@@ -18,10 +18,10 @@
     {% csrf_token %}
     <table>
             <h1>Registro Proveedor</h1>
-        {{ form_user.as_table }}
-        {{ form_user_proveedor.as_table }}
+        {{ form_user }}
+        {{ form_user_proveedor }}
     </table>
-    <input type="submit" value="Registrar">
+    <input type="submit" class="btn btn-primary" type="button" value="Registrar">
 </form>
 
 {% endblock %}
