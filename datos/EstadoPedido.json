@@ -1,0 +1,17 @@
+[
+    {
+        "Nombre": "Creado"
+    },
+    {
+        "Nombre": "Confirmado"
+    },
+    {
+        "Nombre": "Entregado"
+    },
+    {
+        "Nombre": "Cancelado"
+    },
+    {
+        "Nombre": "Cambio Fecha"
+    }
+]
