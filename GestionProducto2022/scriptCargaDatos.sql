@@ -5,7 +5,7 @@ VALUES
 	('Bebida'),
     ('Comida'),
 	('Bazar'),
-    ('Comestico')
+    ('Cosmetico')
 
 -- Inserto los EstadosPedidos
 INSERT INTO `gestionproductos2022db`.`sistemadecompra_estadopedido`

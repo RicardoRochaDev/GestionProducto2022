@@ -1,0 +1,41 @@
+[
+    {
+        "Nombre": "Ricardo",
+        "Apellido": "Rocha",
+        "Calle": "Provincia Grande",
+        "Numero": 260,
+        "Latitud": -54.81791009351998,
+        "Longitud": -68.34110891534431,
+        "Telefono": 15417928,
+        "Email": "fede-l-@hotmail.com",
+        "NombreUsuario": "ricardoProveedor",
+        "Contrasenia": "monitor2022",
+        "DescripcionNegocio": "Venta de bebidas"
+    },
+    {
+        "Nombre": "Federico",
+        "Apellido": "Liborio",
+        "Calle": "Gobernador Paz",
+        "Numero": 200,
+        "Latitud": -54.81380240063463,
+        "Longitud": -68.32624133287537,
+        "Telefono": 11223344,
+        "Email": "fede-l-@hotmail.com",
+        "NombreUsuario": "DrakenProveedor",
+        "Contrasenia": "monitor2022",
+        "DescripcionNegocio": "Venta de quimicos"
+    },
+    {
+        "Nombre": "Alexis",
+        "Apellido": "Zapana",
+        "Calle": "12 de octubre",
+        "Numero": 169,
+        "Latitud": 0,
+        "Longitud": 0,
+        "Telefono": 112234344,
+        "Email": "fede-l-@hotmail.com",
+        "NombreUsuario": "Draken",
+        "Contrasenia": "monitor2022",
+        "DescripcionNegocio": "Venta de titulos falsos"
+    }
+]

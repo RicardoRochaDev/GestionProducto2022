@@ -1,0 +1,50 @@
+[
+    {
+        "Nombre": "Gaseosa",
+        "Marca": "Cocacola",
+        "Tipo": "Bebida",
+        "Descripcion": "bebida con gas",
+        "Valor": 80,
+        "Proveedor": "Ricardo"
+    },
+    {
+        "Nombre": "Agua",
+        "Marca":"La anonima",
+        "Tipo": "Bebida",
+        "Descripcion": " bebida sin gas",
+        "Valor": 50,
+        "Proveedor": "Ricardo"
+    },
+    {
+        "Nombre": "Agua",
+        "Marca":"Ser",
+        "Tipo": "Bebida",
+        "Descripcion": " bebida sin gas",
+        "Valor": 50,
+        "Proveedor": "Ricardo"
+    },
+    {
+        "Nombre": "Notebook",
+        "Marca":"Asus",
+        "Tipo": "Informatica",
+        "Descripcion": " 14 pulgadas i7",
+        "Valor": 60000,
+        "Proveedor": "Federico"
+    },
+    {
+        "Nombre": "Teclado",
+        "Marca":"Genius",
+        "Tipo": "Informatica",
+        "Descripcion": " Mecanico",
+        "Valor": 6000,
+        "Proveedor": "Federico"
+    },
+    {
+        "Nombre": "Campera",
+        "Marca":"Rebook",
+        "Tipo": "Ropa",
+        "Descripcion": " baratillo",
+        "Valor": 20000,
+        "Proveedor": "Federico"
+    }
+]
