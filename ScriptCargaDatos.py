@@ -4,6 +4,8 @@ import json
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GestionProducto2022.settings')
 django.setup()
+django.core.management.execute_from_command_line(['manage.py', 'migrate']) #Ejecuta el comando: py manage.py migrate
+
 
 from sistemadecompra.models.Producto import Producto
 from sistemadecompra.models.TipoProducto import TipoProducto
@@ -12,6 +14,8 @@ from sistemadecompra.models.EstadoPedido import EstadoPedido
 from django.contrib.auth.models import User
 
 from urllib.request import urlopen
+#from django.db import migrations
+
 
 with open('datos/TipoProducto.json', 'r') as archivoTipoProducto:
     tipoProducto = archivoTipoProducto.read()
@@ -51,18 +55,32 @@ for estado_pedido in listaEstadoPedido:
     estado_pedido_new.save()
 
 for proveedor in listaProveedor:
-    
+    #Creo el usuario(Instancia User)
     user_new = User.objects.create_user(proveedor['NombreUsuario'], proveedor['Email'], proveedor['Contrasenia'])
     user_new.first_name = proveedor['Nombre']
     user_new.last_name = proveedor['Apellido']
     user_new.save()
     user_new = User.objects.last()
 
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + proveedor['Numero'] + "+" + calleNombreAux + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
+    #Obtengo coordenadas de la direccion pasada por json
+    #print("CALLEEE")
+    calle = proveedor['Calle'].replace(" ","+") #Reemplaza los espacios por "+"
+    #print(calle)
+    numero = proveedor['Numero']
+    #print("NUMEROOOOOO")
+    numero = str(numero)
+    #print(numero)
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + numero + "+" + calle + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
     json_url = urlopen(url)
+    #print("JSON_URL:")
+    #print(json_url)
+    #print("DATAAAAAA")
     data = json.loads(json_url.read())
+    #print(data)
 
+    #Creo la instancia Proveedor y lo relaciono con el User.
     proveedor_new = Proveedor()
+    proveedor_new.user = user_new
     proveedor_new.calle = proveedor['Calle']
     proveedor_new.numero = proveedor['Numero']
     proveedor_new.latitud = data['results'][0]['geometry']['location']['lat']
@@ -93,3 +111,5 @@ for proveedor in listaProveedor:
 
 
 print('TERMINADO')
+
+django.core.management.execute_from_command_line(['manage.py', 'runserver']) #Ejecuta el comando: py manage.py migrate
