@@ -1,5 +1,5 @@
 from sistemadecompra.models import Notificacion
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 def notificaciones(request):
     list_notificacion_user_actual= []
@@ -17,10 +17,12 @@ def notificaciones(request):
             for n in list_notificacion:
                 #print("AQUI ESTOY: ", n.pedido.cliente.id)
                 #print("que hay aqui? ", request.user.id)
+
+                #print(mostrarTiempoDesde(fechaHoy - n.fecha))
                 if request.user.id == n.user.id:
                     if n.leido == False:
                         ##list_notificacion_user_actual.append(n)
-                        list_notificacion_user_actual.append({'notificacionObjeto': n, 'fechaCalculada': str(fechaHoy - n.fecha)})
+                        list_notificacion_user_actual.append({'notificacionObjeto': n, 'fechaCalculada': mostrarTiempoDesde(fechaHoy - n.fecha)})
                         contador_mensajes_no_leidos+= 1
 
             
@@ -30,10 +32,12 @@ def notificaciones(request):
                           
         if hasattr(request.user, 'proveedor'):
             for n in list_notificacion:
+                #print(mostrarTiempoDesde(fechaHoy - n.fecha))
+
                 if request.user.id == n.user.id:
                     if n.leido == False:
                         #list_notificacion_user_actual.append(n)
-                        list_notificacion_user_actual.append({'notificacionObjeto': n, 'fechaCalculada': str(fechaHoy - n.fecha)})
+                        list_notificacion_user_actual.append({'notificacionObjeto': n, 'fechaCalculada': mostrarTiempoDesde(fechaHoy - n.fecha)})
                         contador_mensajes_no_leidos+= 1 
     
     #print(list_notificacion_user_actual)
@@ -41,3 +45,14 @@ def notificaciones(request):
                 'contadorNotificacion':contador_mensajes_no_leidos,
                 'cantidad_items_carrito':cantidad_items_carrito}
     return contexto  
+
+def mostrarTiempoDesde(tiempo):
+    if (tiempo < timedelta(minutes=1)):
+        return "hace un momento"
+    elif (tiempo < timedelta(minutes=60)):
+        return "hace " + str((tiempo.seconds // 60) % 60) + "m"
+    elif (tiempo < timedelta(hours=24)):
+        return "hace " + str(tiempo.seconds // 3600) + "h"
+    else:
+        return "hace " + str(tiempo.days) + "d"
+    

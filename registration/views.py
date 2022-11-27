@@ -64,10 +64,18 @@ def registrar_usuario_proveedor_v(request):
 
             calleNombreAux = calle.replace(" ","+")
             calleNumero = numero
+            print("callenombreaux")
+            print(calleNombreAux)
+            print("callenumero")
+            print(calleNumero)
             #Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
             url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + calleNumero + "+" + calleNombreAux + "&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
             json_url = urlopen(url)
+            print("json_url")
+            print(json_url)
+            print("data")
             data = json.loads(json_url.read())
+            print(data)
             user_proveedor.latitud = data['results'][0]['geometry']['location']['lat']
             user_proveedor.longitud = data['results'][0]['geometry']['location']['lng']
 

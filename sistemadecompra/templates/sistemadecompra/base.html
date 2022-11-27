@@ -69,8 +69,12 @@
                                 {% for item in list_notificacion_user_actual %}
                                     <div class="dropdown-item">  
                                         {% comment %} <p><a class="btn badge badge-light" href="{% url 'actualizar_mensaje_leido' notificacion.id %}" ><i class="bi bi-check-square"></i></a></p>    {% endcomment %}
-                                        <p >{{item.notificacionObjeto.mensaje}} - {{item.fechaCalculada}}</p> 
+                                        <p >{{item.notificacionObjeto.mensaje}}</p>
+                                        <span style="float: right;">{{item.fechaCalculada}}</span> 
                                     </div>
+                                    {% if forloop.last is False %}
+                                        <hr>
+                                    {% endif %}
                                     {% comment %} <p class="dropdown-item">{{notificacion.pedido.cliente.user.username}}</p> {% endcomment %}
                                 {% endfor %}
                             </div>
