@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 class Cliente(models.Model):
 
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'cliente', null=True, blank=True)
     calle= models.CharField(max_length=100)
     numero= models.IntegerField()
