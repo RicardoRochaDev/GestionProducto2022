@@ -4,7 +4,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Cancelar Pedido</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Cambio de horario</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -22,7 +22,7 @@
 	</div>
 {% endfor %}
 
-{% for dic in misPedidos %}
+{% comment %} {% for dic in misPedidos %}
 	<!-- Modal -->
 	<div class="modal fade" id="modalCambioFecha{{dic.pedido.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -38,13 +38,12 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					{% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
 					<button type="submit" name="cancelar" value="{{pedidoProducto.pedido.id}}" class="btn btn-danger">Cancelar Pedido</button>
 				</div>
 			</div>
 		</div>
 	</div>
-{% endfor %}
+{% endfor %} {% endcomment %}
 
 <div class="row">
     <div class="col col-lg-12">
