@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import User
 
 #from sistemadecompra.models.Horario import Horario
-from .form import ProveedorForm, ProveedorUserForm, ClienteUserForm, UserForm, UserSesionForm, HorarioForm
+from .form import ProductoForm, ProveedorForm, ProveedorUserForm, ClienteUserForm, UserForm, UserSesionForm, HorarioForm
 from django.contrib.auth.forms import UserCreationForm
 from sistemadecompra.models import Proveedor, Cliente, Producto, Horario
 from django.contrib.auth.views import LoginView
@@ -204,7 +204,8 @@ class ProductoCreate(CreateView):
     # hace una busqueda mal('registration/templates/maxproductos/producto_form.html', nada que ver) sino agrego este atributo.
     template_name = 'registration/producto_form.html'
     model = Producto
-    fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor']
+    form_class = ProductoForm
+    ##fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor']
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -315,7 +316,7 @@ class HorarioCreate(CreateView):
     # hace una busqueda mal('registration/templates/maxproductos/producto_form.html', nada que ver) sino agrego este atributo.
     template_name = 'registration/horario_form.html'
     model = Horario
-    fields = ['horaInicio', 'horaFinal', 'dia']
+    form_class = HorarioForm
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:

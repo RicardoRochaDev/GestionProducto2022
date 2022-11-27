@@ -5,12 +5,16 @@
 
 {% block content %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Crear">
-</form>
+<div class="row">
+    <div class="col col-lg-12">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <table>
+                {{ form }}
+            </table>
+            <input type="submit" class="btn btn-primary" type="button" value="Crear">
+        </form>
+    </div>
+</div>
 
 {% endblock %}
