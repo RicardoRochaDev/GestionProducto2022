@@ -1,0 +1,14 @@
+[
+    {
+        "HoraInicio": "12:00:00",
+        "HoraFinal": "18:00:00",
+        "Dia": "Lunes",
+        "Proveedor": "DrakenProveedor"
+    },
+    {
+        "HoraInicio": "15:00:00",
+        "HoraFinal": "20:00:00",
+        "Dia": "Martes",
+        "Proveedor": "DrakenProveedor"
+    }
+]

@@ -16,7 +16,7 @@
         "Nombre": "Federico",
         "Apellido": "Liborio",
         "Calle": "Gobernador Paz",
-        "Numero": 200,
+        "Numero": 2134,
         "Latitud": -54.81380240063463,
         "Longitud": -68.32624133287537,
         "Telefono": 11223344,
@@ -28,13 +28,13 @@
     {
         "Nombre": "Alexis",
         "Apellido": "Zapana",
-        "Calle": "12 de octubre",
-        "Numero": 169,
+        "Calle": "Provincia Grande",
+        "Numero": 519,
         "Latitud": 0,
         "Longitud": 0,
         "Telefono": 112234344,
         "Email": "fede-l-@hotmail.com",
-        "NombreUsuario": "Draken",
+        "NombreUsuario": "AleProveedor",
         "Contrasenia": "monitor2022",
         "DescripcionNegocio": "Venta de titulos falsos"
     }

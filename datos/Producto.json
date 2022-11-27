@@ -5,7 +5,7 @@
         "Tipo": "Bebida",
         "Descripcion": "bebida con gas",
         "Valor": 80,
-        "Proveedor": "Ricardo"
+        "Proveedor": "ricardoProveedor"
     },
     {
         "Nombre": "Agua",
@@ -13,7 +13,7 @@
         "Tipo": "Bebida",
         "Descripcion": " bebida sin gas",
         "Valor": 50,
-        "Proveedor": "Ricardo"
+        "Proveedor": "ricardoProveedor"
     },
     {
         "Nombre": "Agua",
@@ -21,7 +21,7 @@
         "Tipo": "Bebida",
         "Descripcion": " bebida sin gas",
         "Valor": 50,
-        "Proveedor": "Ricardo"
+        "Proveedor": "DrakenProveedor"
     },
     {
         "Nombre": "Notebook",
@@ -29,7 +29,7 @@
         "Tipo": "Informatica",
         "Descripcion": " 14 pulgadas i7",
         "Valor": 60000,
-        "Proveedor": "Federico"
+        "Proveedor": "DrakenProveedor"
     },
     {
         "Nombre": "Teclado",
@@ -37,7 +37,7 @@
         "Tipo": "Informatica",
         "Descripcion": " Mecanico",
         "Valor": 6000,
-        "Proveedor": "Federico"
+        "Proveedor": "DrakenProveedor"
     },
     {
         "Nombre": "Campera",
@@ -45,6 +45,6 @@
         "Tipo": "Ropa",
         "Descripcion": " baratillo",
         "Valor": 20000,
-        "Proveedor": "Federico"
+        "Proveedor": "AleProveedor"
     }
 ]

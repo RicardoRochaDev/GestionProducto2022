@@ -1,0 +1,26 @@
+[
+    {
+        "Nombre": "Ricardo",
+        "Apellido": "Rocha",
+        "Calle": "Gobernador Paz",
+        "Numero": 1599,
+        "Latitud": -54.81791009351998,
+        "Longitud": -68.34110891534431,
+        "Telefono": 15417928,
+        "Email": "rocha_095@hotmail.com",
+        "NombreUsuario": "ricardoCliente",
+        "Contrasenia": "monitor2022"
+    },
+    {
+        "Nombre": "Federico",
+        "Apellido": "Liborio",
+        "Calle": "Gobernador Paz",
+        "Numero": 2134,
+        "Latitud": -54.81380240063463,
+        "Longitud": -68.32624133287537,
+        "Telefono": 11223344,
+        "Email": "rocha_095@hotmail.com",
+        "NombreUsuario": "DrakenCliente",
+        "Contrasenia": "monitor2022"
+    }
+]
