@@ -1,22 +1,55 @@
+{% for pedido in pedidosHistorial %}
+	<!-- Modal -->
+	<div class="modal fade" id="modalCalificacion{{pedido.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Calificacion</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="{% url 'ver_Historial_Compras' %}" id="formCalificacion{{pedido.id}}" method="POST">
+					<div class="modal-body">
+							<p> Calificar al vendedor </p>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Comentario:</label>
+                <textarea class="form-control" id="message-text"></textarea>
+              </div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" name="Calificacion" value="{{pedido.id}}" class="btn btn-danger">Calificar</button>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endfor %}
+
+
 <font size=6>
   COMPRAS
 </font>
 <div class="row">
   <div class="col">
           <div class="list-group">
-              {% for p in pedidosHistorial %}
+              {% for pedido in pedidosHistorial %}
               <div class="list-group-item flex-column align-items-start">
-                <p class="mb-1">Proveedor: {{p.pedido.proveedor.user.username}}</p>
-                <p class="mb-1">Dirección: {{p.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
+                <p class="mb-1">Proveedor: {{pedido.pedido.proveedor.user.username}}</p>
+                <p class="mb-1">Dirección: {{pedido.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
                 <p class="mb-1">Productos pedidos:</p>
                 <ul>
-                  {% for producto in p.producto.all%}
+                  {% for producto in pedido.producto.all%}
                     <li>{{producto.nombre}}</li>
                   {% endfor %}
                 </ul>
-                {% if pedido.estado.nombre == 'Entregado' %}
-                
-                {% endif %}
+                {% comment %} {% if pedido.estado.nombre == 'Entregado' %}
+                {% endif %} {% endcomment %}
+                <button type="button" name="CambioFecha" class="btn btn-primary" data-toggle="modal" data-target="#modalCalificacion{{pedido.id}}">
+                  Calificar al proveedor
+                </button>
               </div>
               {% endfor %}
             </div>

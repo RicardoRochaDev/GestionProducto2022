@@ -11,7 +11,7 @@ from django.db.models import Q
 
 from django.shortcuts import render, redirect
 #from django.views.generic.base import TemplateView
-from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, Pedido, Horario, Cliente
+from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, Pedido, Horario, Cliente, Calificacion
 #from .form import ProveedorForm
 from datetime import datetime
 import calendar
@@ -425,6 +425,22 @@ def verInformacionCliente(request):
 def verHistorialCompras(request):
     pedidos = Pedido.objects.filter(cliente = request.user.cliente).order_by('-fecha')
 
+    if (request.method == 'POST'):
+        if 'Calificacion' in request.POST:
+            dic=request.POST
+            pedido = Pedido.objects.get(id= dic['Calificacion'])
+
+            calificacion_new = Calificacion()
+            calificacion_new.puntaje
+            calificacion_new.comentario
+            #calificacion_new.fecha
+            
+            calificacion_new.save()
+            calificacion = Calificacion.objects.last()
+
+            pedido.calificacion = calificacion_new
+            pedido.save()
+    
     pedidosHistorial = []
     for pedido in pedidos:
         if pedido.estado.nombre != "Creado" and pedido.estado.nombre != "Cambio Fecha":

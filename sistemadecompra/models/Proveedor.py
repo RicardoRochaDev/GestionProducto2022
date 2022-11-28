@@ -12,7 +12,6 @@ class Proveedor(models.Model):
 
 
     descripcionNegocio = models.CharField(max_length=200)
-    calificacion = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username
