@@ -35,4 +35,4 @@ class Pedido(models.Model):
     calificacion = models.OneToOneField(Calificacion, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.cliente.user.username
+        return "Cliente: " + self.cliente.user.username + " - Proveedor: " + self.proveedor.user.username

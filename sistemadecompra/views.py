@@ -384,8 +384,9 @@ def verPedidos(request):
     return render(request, 'sistemadecompra/pedidos.html',{'pedidosSinConfirmar_Producto': pedidosSinConfirmar_Producto, 'pedidosConfirmado_Producto': pedidosConfirmado_Producto})
 
 def verMapa(request):
+    estadoConfirmado = EstadoPedido.objects.get(nombre="Confirmado")
     coordenadas=[]
-    pedidosQuerySet = Pedido.objects.filter(confirmado=1, entregado=0)
+    pedidosQuerySet = Pedido.objects.filter(estado = estadoConfirmado)
     for p in pedidosQuerySet:
         latAux = str(p.latitud).replace(',','.')
         lngAux = str(p.longitud).replace(',','.')
@@ -422,11 +423,12 @@ def verInformacionCliente(request):
 
 
 def verHistorialCompras(request):
-    pedidos = Pedido.objects.filter(cliente = request.user.cliente, entregado = 1).order_by('-fecha')
+    pedidos = Pedido.objects.filter(cliente = request.user.cliente).order_by('-fecha')
 
     pedidosHistorial = []
     for pedido in pedidos:
-        pedidosHistorial.append({"pedido": pedido, "producto": pedido.productos})
+        if pedido.estado.nombre != "Creado" and pedido.estado.nombre != "Cambio Fecha":
+            pedidosHistorial.append({"pedido": pedido, "producto": pedido.productos})
     return render(request, 'sistemadecompra/historialCompras.html',{'pedidosHistorial': pedidosHistorial})
     
 def verComprasPendientes(request):
@@ -443,11 +445,12 @@ def verPedidosCliente(request):
     #pedidosConfirmado_Producto = []
     auxPedidos= Pedido.objects.filter(cliente = request.user.cliente)
     misPedidos= []
-    # for p in misPedidos.productos:
-    #     print(p)
     
     for pedido in auxPedidos:
-        misPedidos.append({"pedido": pedido, "producto": Producto.objects.filter(pedido= pedido)})
+        if pedido.estado.nombre == "Creado" or pedido.estado.nombre == "Cambio Fecha":
+            print ("HORARIOSSSS: ", pedido.proveedor.horario_set.all())
+            
+            misPedidos.append({"pedido": pedido, "producto": Producto.objects.filter(pedido= pedido)})
 
     #print(pedidosSinConfirmar_Producto[0].productos)
     #print(pedidosConfirmado_Producto)

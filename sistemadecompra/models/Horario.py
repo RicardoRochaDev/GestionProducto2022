@@ -10,4 +10,4 @@ class Horario(models.Model):
         on_delete=models.CASCADE)
     
     def __str__(self):
-        return str(self.horaInicio)
+        return str(str(self.horaInicio) + " - " + str(self.horaFinal))

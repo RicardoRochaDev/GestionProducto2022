@@ -9,14 +9,23 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">
-					¿Esta seguro de cancelar la compra?
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					{% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
-					<button type="submit" name="cancelar" value="{{pedidoProducto.pedido.id}}" class="btn btn-danger">Cancelar Pedido</button>
-				</div>
+				<form action="{% url 'ver_Pedidos_Cliente' %}" id="formCambio{{dic.pedido.id}}" method="GET">
+					<div class="modal-body">
+							<p> Horarios Disponibles: </p>
+							{% for horario in dic.pedido.proveedor.horario_set.all %}
+								<li>{{horario.dia}} - {{horario.horaInicio}}hs a {{horario.horaFinal}}hs</li>
+							{% endfor %}
+							<br>
+							<p> Ingrese nuevo horario: </p>
+							<input type="date"  name="fecha" min="{% now "d/m/Y" %}" value="{% now "d/m/Y" %}" required>
+
+							<input type="time"  name="tiempo"  value="00:00"required>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" name="CambioFecha" value="{{dic.pedido.id}}" class="btn btn-danger">Confirmar</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

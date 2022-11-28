@@ -9,4 +9,5 @@ class Calificacion(models.Model):
     comentario= models.CharField(max_length=500) 
     fecha= models.DateField()
 
-    
+    def __str__(self):
+        return self.puntaje
