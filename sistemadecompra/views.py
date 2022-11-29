@@ -128,11 +128,21 @@ def mostrar_catalogo_v(request):
 
 def detalle_producto_v(request, idProducto):
     producto = Producto.objects.get(id=idProducto)
-    #producto= Producto.objects.filter(id=id)
+    
+    proveedor = producto.proveedor
+    pedidos= Pedido.objects.filter(proveedor= proveedor)
+    puntaje= 0
+    comentarios= []
+    for pedido in pedidos:
+        if pedido.calificacion is not None:
+            puntaje= puntaje + pedido.calificacion.puntaje
+            comentarios.append(pedido.calificacion.comentario)
 
     return render(request, 'sistemadecompra/detalle_producto.html', {
         'producto': producto,
-        'carrito': request.session['carrito']
+        'carrito': request.session['carrito'],
+        'puntaje': puntaje,
+        'comentarios': comentarios
     })
 
 def mostrar_perfil_proveedor_v(request):
@@ -436,17 +446,17 @@ def verHistorialCompras(request):
             #print ('calificacion:   ', dic['Calificacion'])
             pedido = Pedido.objects.get(id = dic['Calificacion'])
 
-            #calificacion_new = Calificacion()
-            print (dic)
-            #calificacion_new.puntaje =
-            #calificacion_new.comentario
+            #print (dic)
+            calificacion_new = Calificacion()
+            calificacion_new.puntaje = int(dic['exampleRadios'])
+            calificacion_new.comentario = dic['message-text']
             #calificacion_new.fecha
             
-            # calificacion_new.save()
-            # calificacion = Calificacion.objects.last()
+            calificacion_new.save()
+            calificacion = Calificacion.objects.last()
 
-            # pedido.calificacion = calificacion_new
-            # pedido.save()
+            pedido.calificacion = calificacion
+            pedido.save()
         return render(request, 'registration/perfil_cliente.html', {'tab': 'historialCompra',})
     
     pedidosHistorial = []

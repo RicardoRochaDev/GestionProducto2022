@@ -7,7 +7,7 @@ class Calificacion(models.Model):
     #pedido= models.OneToOneField(Pedido, on_delete=models.CASCADE)
     puntaje= models.IntegerField(default=0)
     comentario= models.CharField(max_length=500) 
-    fecha= models.DateField()
+    fecha= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.puntaje
