@@ -1,0 +1,33 @@
+{% extends "sistemadecompra/base.html" %}
+
+
+{% block title %} Cambio de Fecha {% endblock %}
+
+{% block content %}
+
+    <p class="mb-1">Dia de entrega elegido: {{pedido.fecha}}</p>
+    <p class="mb-1">Hora de entrega elegido: {{pedido.hora}}</p>
+    <p class="mb-1">Productos pedidos:</p>
+    <ul>
+        {% for producto in pedido.producto_set.all %}
+            <li>{{producto.nombre}}</li>
+        {% endfor %}
+    </ul>  
+    <p>Ingrese una fecha y horario dentro dentro del siguiente rango de dias y horarios: </p>
+    
+    <ul>
+        {% for horario in proveedor.horario_set.all %}
+            <li>{{horario.dia}} - {{horario.horaInicio}}hs a {{horario.horaFinal}}hs</li>
+        {% endfor %}
+    </ul>
+    {% now "d/m/Y" %}
+    <form action="" id="formPrincipal" method="POST">
+        {% csrf_token %}
+        <input type="date"  name="fecha" min="{% now "d/m/Y" %}" value="{% now "d/m/Y" %}" required>
+
+        <input type="time"  name="tiempo" required>
+        <input type="submit" class="btn btn-primary" type="button" value="Cambiar">
+    </form>
+    
+
+{% endblock %}

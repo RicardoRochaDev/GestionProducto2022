@@ -400,6 +400,10 @@ def verMapa(request):
     
     return render(request, 'sistemadecompra/verMapa.html',{'coordenadas': coordenadas, 'destinoYOrigenLatitud': destinoYOrigenLatitud, 'destinoYOrigenLongitud': destinoYOrigenLongitud})
 
+def cambioDeFecha(request, idPedido):
+    pedido = Pedido.objects.get(id = idPedido)
+    proveedor = pedido.proveedor
+    return render(request, 'sistemadecompra/cambioDeFecha.html', {'pedido': pedido, 'proveedor': proveedor})
 
 def verHistorialVentas(request):
     productos = Producto.objects.filter(proveedor = request.user.proveedor)
@@ -428,18 +432,22 @@ def verHistorialCompras(request):
     if (request.method == 'POST'):
         if 'Calificacion' in request.POST:
             dic=request.POST
-            pedido = Pedido.objects.get(id= dic['Calificacion'])
+            #print ('ENTREEE ')
+            #print ('calificacion:   ', dic['Calificacion'])
+            pedido = Pedido.objects.get(id = dic['Calificacion'])
 
-            calificacion_new = Calificacion()
-            calificacion_new.puntaje
-            calificacion_new.comentario
+            #calificacion_new = Calificacion()
+            print (dic)
+            #calificacion_new.puntaje =
+            #calificacion_new.comentario
             #calificacion_new.fecha
             
-            calificacion_new.save()
-            calificacion = Calificacion.objects.last()
+            # calificacion_new.save()
+            # calificacion = Calificacion.objects.last()
 
-            pedido.calificacion = calificacion_new
-            pedido.save()
+            # pedido.calificacion = calificacion_new
+            # pedido.save()
+        return render(request, 'registration/perfil_cliente.html', {'tab': 'historialCompra',})
     
     pedidosHistorial = []
     for pedido in pedidos:

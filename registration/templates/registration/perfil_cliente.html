@@ -4,11 +4,13 @@
 
 {% block content %}
 
+<input type="hidden" name="tabHidden" id="tabHidden" value="{{tab}}">
+
 <div class="row">
     <div class="col col-lg-2">
       <div class="nav flex-column nav-pills menuvertical" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="{% url 'ver_Informacion_Cliente' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">Información</a>
-        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="{% url 'ver_Historial_Compras' %}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Historial de Compras</a>
+        <a class="nav-link" id="tabHistorialCompras" data-toggle="pill" href="{% url 'ver_Historial_Compras' %}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Historial de Compras</a>
         <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="{% url 'ver_Pedidos_Cliente' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Pedidos</a>
         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'modificar_Cliente' request.user.id %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Modificar datos</a>
       </div>
@@ -23,6 +25,30 @@
       // La siguiente linea es para esperar que cargue todos los scripts...HAY QUE REVISAR COMO HACER PARA QUE JQUERY CARGUE ANTES Y ASI PODER USAR $(function()
       //document.addEventListener("DOMContentLoaded", function(event) {
         $(function () {
+
+          if ($("#tabHidden").val() != ""){
+            if ($("#tabHidden").val() == "historialCompra"){
+              $(".nav").find(".active").removeClass("active");
+              $("#tabHistorialCompras").addClass("active");
+              var href = $("#tabHistorialCompras").attr('href');
+              cargarVista(href);
+            }
+
+          }
+          
+          function cargarVista(href){
+            $.ajax(href, {
+              success: function(response) {
+                // Si el llamado fue exitoso cargo dentro del div "contenido" el html que me devolvio la vista
+                $('#contenido').html(response)
+              },
+              error: function(response) {
+                  // Si hubo un error lo informo
+                  alert("OCURRIO UN ERROR AL CARGAR LA VISTA")
+              }
+            });
+          }
+
         // Esperando a que se genere un evento del tipo click en algun "a" que sea hijo de la clase "menuvertical"
         //$('.menuvertical > a').click(function() {
         $('body').off('click', '.menuvertical > a').on('click', '.menuvertical > a', function (){

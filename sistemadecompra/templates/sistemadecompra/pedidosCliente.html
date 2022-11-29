@@ -80,9 +80,10 @@
 							</button>
 						{% endif %}
 						{% if dic.pedido.estado.nombre == 'Cambio Fecha' %}		
-							<button type="button" name="CambioFecha" class="btn btn-warning" data-toggle="modal" data-target="#modalCambioFecha{{dic.pedido.id}}">
+							{% comment %} <button type="button" name="CambioFecha" class="btn btn-warning" data-toggle="modal" data-target="#modalCambioFecha{{dic.pedido.id}}">
 								Cambiar Fecha
-							</button>
+							</button> {% endcomment %}
+							<a class="btn btn-warning" href="{% url 'cambio_De_Fecha' dic.pedido.id %}" role="button">Cambiar Fecha
 						{% endif %}
 					</form>
 				</div>

@@ -12,6 +12,7 @@ urlpatterns = [
     path('historialVentas/', views.verHistorialVentas, name='ver_Historial_Ventas'),
     path('historialCompras/', views.verHistorialCompras, name='ver_Historial_Compras'),
     path('comprasPendientes/', views.verComprasPendientes, name='ver_Compras_Pendientes'),
+    path('cambioDeFecha/<int:idPedido>', views.cambioDeFecha, name='cambio_De_Fecha'),
 
     path('informacionProveedor/', views.verInformacionProveedor, name='ver_Informacion_Proveedor'),
     path('informacionCliente/', views.verInformacionCliente, name='ver_Informacion_Cliente'),
