@@ -4,6 +4,7 @@ from django.http import HttpResponse
 #from .models import Producto
 from django.template import loader
 from django.db.models import Q
+import calendar
 
 
 ###############################################
@@ -131,17 +132,21 @@ def detalle_producto_v(request, idProducto):
     
     proveedor = producto.proveedor
     pedidos= Pedido.objects.filter(proveedor= proveedor)
+    cantidad= 0
     puntaje= 0
     comentarios= []
     for pedido in pedidos:
         if pedido.calificacion is not None:
             puntaje= puntaje + pedido.calificacion.puntaje
+            cantidad=+ 1
             comentarios.append(pedido.calificacion.comentario)
-
+   
+    puntajePromedio= puntaje / cantidad
+    
     return render(request, 'sistemadecompra/detalle_producto.html', {
         'producto': producto,
         'carrito': request.session['carrito'],
-        'puntaje': puntaje,
+        'puntajePromedio': puntajePromedio,
         'comentarios': comentarios
     })
 
@@ -411,8 +416,51 @@ def verMapa(request):
     return render(request, 'sistemadecompra/verMapa.html',{'coordenadas': coordenadas, 'destinoYOrigenLatitud': destinoYOrigenLatitud, 'destinoYOrigenLongitud': destinoYOrigenLongitud})
 
 def cambioDeFecha(request, idPedido):
+    diasDeLaSemana = {0: 'Lunes', 1: 'Martes', 2: 'Miercoles', 3: 'Jueves', 4: 'Viernes', 5: 'Sabado', 6: 'Domingo'}
+
     pedido = Pedido.objects.get(id = idPedido)
     proveedor = pedido.proveedor
+
+    if (request.method == 'POST'):
+        datosValidados = True
+
+        dic= request.POST
+        fecha = dic['fecha']
+        tiempo = dic['tiempo']
+        
+        diaDeLaSemana = datetime.strptime(fecha, '%Y-%m-%d').date().weekday()
+        diaDeLaSemana = diasDeLaSemana.get(diaDeLaSemana)
+
+        hora = datetime.strptime(tiempo, '%H:%M').time()
+
+        if diaDeLaSemana in proveedor.horario_set.all().values_list('dia', flat=True):
+            for h in Horario.objects.filter(proveedor = proveedor, dia = diaDeLaSemana).values_list('horaInicio', flat=True):
+                if(hora >= h):
+                    for h in Horario.objects.filter(proveedor = proveedor, dia = diaDeLaSemana).values_list('horaFinal', flat=True):
+                        if(hora <= h):
+                            pedido.fecha = fecha
+                            pedido.hora = tiempo
+
+                            estadoCreado = EstadoPedido.objects.get(nombre="Creado")
+                            pedido.estado = estadoCreado
+
+                            pedido.save()
+
+                            return render(request, 'registration/perfil_cliente.html', {'tab': 'pedidos',})
+
+
+                            datosValidados = datosValidados and True
+                        else:
+                            datosValidados = datosValidados and False
+                else:
+                    datosValidados = datosValidados and False
+        else:  
+            datosValidados = datosValidados and False
+
+        if datosValidados == True:
+            print("todo bien")
+        else:
+            print("Datos incorrectos. Vuelva a intentar")
     return render(request, 'sistemadecompra/cambioDeFecha.html', {'pedido': pedido, 'proveedor': proveedor})
 
 def verHistorialVentas(request):
@@ -463,6 +511,7 @@ def verHistorialCompras(request):
     for pedido in pedidos:
         if pedido.estado.nombre != "Creado" and pedido.estado.nombre != "Cambio Fecha":
             pedidosHistorial.append({"pedido": pedido, "producto": pedido.productos})
+            #print('CALIFICAION:', pedido.calificacion.puntaje)
     return render(request, 'sistemadecompra/historialCompras.html',{'pedidosHistorial': pedidosHistorial})
     
 def verComprasPendientes(request):

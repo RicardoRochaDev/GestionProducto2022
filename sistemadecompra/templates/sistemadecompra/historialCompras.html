@@ -69,18 +69,19 @@
               {% for pedido in pedidosHistorial %}
               <div class="list-group-item flex-column align-items-start">
                 <p class="mb-1">Proveedor: {{pedido.pedido.proveedor.user.username}}</p>
-                <p class="mb-1">Dirección: {{pedido.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
+                <p class="mb-1">Dirección: {{pedido.pedido.calle}} {{pedido.pedido.numero}}</p>
                 <p class="mb-1">Productos pedidos:</p>
                 <ul>
                   {% for producto in pedido.producto.all%}
                     <li>{{producto.nombre}}</li>
                   {% endfor %}
                 </ul>
-                {% comment %} {% if pedido.estado.nombre == 'Entregado' %}
-                {% endif %} {% endcomment %}
-                <button type="button" name="CambioFecha" class="btn btn-primary" data-toggle="modal" data-target="#modalCalificacion{{pedido.pedido.id}}">
-                  Calificar al proveedor
-                </button>
+                {% if pedido.pedido.calificacion is None %}
+                  <button type="button" name="CambioFecha" class="btn btn-primary" data-toggle="modal" data-target="#modalCalificacion{{pedido.pedido.id}}">
+                    Calificar al proveedor
+                  </button>        
+                {% endif %} 
+        
               </div>
               {% endfor %}
             </div>
