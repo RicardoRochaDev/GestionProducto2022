@@ -112,6 +112,7 @@ for producto in listaProducto:
     producto_new.tipo = TipoProducto.objects.get(nombre= producto['Tipo'])
     producto_new.descripcion = producto['Descripcion']
     producto_new.valor = producto['Valor']
+    producto_new.imagenUrl = producto['imagenUrl'] 
 
     user= User.objects.get(username= producto['Proveedor'])
     producto_new.proveedor = user.proveedor

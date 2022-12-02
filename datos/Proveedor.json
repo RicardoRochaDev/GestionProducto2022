@@ -1,29 +1,29 @@
 [
     {
-        "Nombre": "Ricardo",
-        "Apellido": "Rocha",
+        "Nombre": "Jose",
+        "Apellido": "Tapia",
         "Calle": "Provincia Grande",
         "Numero": 260,
         "Latitud": -54.81791009351998,
         "Longitud": -68.34110891534431,
         "Telefono": 15417928,
         "Email": "fede-l-@hotmail.com",
-        "NombreUsuario": "ricardoProveedor",
+        "NombreUsuario": "La pronto",
         "Contrasenia": "monitor2022",
-        "DescripcionNegocio": "Venta de bebidas"
+        "DescripcionNegocio": "Kiosco"
     },
     {
-        "Nombre": "Federico",
-        "Apellido": "Liborio",
+        "Nombre": "Tony",
+        "Apellido": "Stark",
         "Calle": "Gobernador Paz",
         "Numero": 2134,
         "Latitud": -54.81380240063463,
         "Longitud": -68.32624133287537,
         "Telefono": 11223344,
         "Email": "fede-l-@hotmail.com",
-        "NombreUsuario": "DrakenProveedor",
+        "NombreUsuario": "Eureka",
         "Contrasenia": "monitor2022",
-        "DescripcionNegocio": "Venta de quimicos"
+        "DescripcionNegocio": "Panaderia"
     },
     {
         "Nombre": "Alexis",
@@ -34,8 +34,8 @@
         "Longitud": 0,
         "Telefono": 112234344,
         "Email": "fede-l-@hotmail.com",
-        "NombreUsuario": "AleProveedor",
+        "NombreUsuario": "Agua Aiken",
         "Contrasenia": "monitor2022",
-        "DescripcionNegocio": "Venta de titulos falsos"
+        "DescripcionNegocio": "Distribuidora de agua"
     }
 ]

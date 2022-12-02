@@ -14,9 +14,14 @@
           </button>
         </div>
         <div class="modal-body">
-            {% for comentario in comentarios %}
-                <p> {{comentario}} </p>
-            {% endfor %}
+            {% if comentarios %}
+                {% for comentario in comentarios %}
+                    <p> {{comentario}} </p>
+                    <hr>
+                {% endfor %}
+            {% else %}
+                <p> El proveedor aun no tiene comentarios </p>            
+            {% endif %}
         </div>
       </div>
     </div>
@@ -48,8 +53,6 @@
                                     <i class="fa fa-shopping-cart"></i>
                                 </button>
                             </form>        
-                            <h4 class="box-title mt-5">Proveedor</h4>
-                            <p>{{producto.proveedor}}</p>
                         </div>
                     </div>
                 </div>
@@ -59,7 +62,11 @@
             <h4>Proveedor</h4>
             <p>{{producto.proveedor}}</p>
             <h5>Puntaje</h5>
-            <p>{{puntajePromedio}}</p>
+            {% if puntajePromedio == 0 %}
+                <p> Sin puntaje aun. </p>
+            {% else %}
+                <p>{{puntajePromedio}}</p>
+            {% endif %}            
             <button type="button" data-toggle="modal" data-target="#staticBackdrop">
                 Comentarios
             </button>

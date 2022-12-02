@@ -69,7 +69,7 @@ def carrito(request):
 
 ## FIN ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
 
-def mostrar_catalogo_v(request):
+def mostrar_catalogo_v(request): #Paso un parametro adicional con el valor del indice. (request, indice)
     #print("mostrar catalogo v")
 
     list_producto_nuevos= Producto.objects.all().order_by('id')[:3]
@@ -78,6 +78,27 @@ def mostrar_catalogo_v(request):
     list_Producto = Producto.objects.all()
     list_TipoProducto = TipoProducto.objects.all()
     list_proveedor =  Proveedor.objects.all()
+
+    #Una lista en la que cada posicion va a ser una lista de 6 posiciones y menos
+    # ||<><><><><><>
+    # ||<><><><><><>
+    # ||<><><><><><>
+    # ||<><><><><><>
+    # ||<><><><><><>
+    # ||<><><><>
+
+    list_producto_paginado= []
+    list_paginacion= []
+    lista_indice= []
+    cont= 1
+    for producto in list_Producto:
+        lista= []
+        for i in range(6):
+            if producto is not None:
+                lista.append(producto)
+        list_paginacion.append(lista)
+    
+
 
     list_id_users_proveedor= []
     for it in list_proveedor:
@@ -88,16 +109,19 @@ def mostrar_catalogo_v(request):
         request.session['carrito'] = []
 
     
-    if 'clasificacion' in request.GET:
-        tipoElegido = request.GET.get('clasificacion') 
+    if 'clasificacion' in request.GET: # AAGREGAR CODIGO DE PAGINACION AQUI TAMBIEN
+        tipoElegido = request.GET.get('Tipo') 
         print('tipoElegido: ', tipoElegido)
 
-        if (tipoElegido != 'Seleccione...'):
-            #print (type(tipoElegido))
-            tipoElegido= int(tipoElegido)
-            #print(type(tipoElegido))
-            list_Producto = Producto.objects.filter(tipo = tipoElegido)
-            #print ('NO 0')
+        #print (type(tipoElegido))
+        tipoElegido= int(tipoElegido)
+        #print(type(tipoElegido))
+        list_Producto = Producto.objects.filter(tipo = tipoElegido)
+        #print ('NO 0')
+    
+    if 'BorrarFiltro' in request.GET:
+        list_Producto = Producto.objects.all()
+
 
     if (request.method == 'GET'):
         if 'elId' in request.GET:
@@ -115,7 +139,8 @@ def mostrar_catalogo_v(request):
         #     dic = request.GET
         #     if dic['clasificacion'] == "1":
         #         p = Producto.objects.get(id=1)
-            return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, "list_producto_nuevos":list_producto_nuevos})            
+            return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 
+                                                                            "list_producto_nuevos":list_producto_nuevos})            
 
 
     #tipoProductos = TipoProducto.objects.all()
@@ -124,7 +149,10 @@ def mostrar_catalogo_v(request):
     #proveedor = Proveedor.objects.all()
     # print(proveedor['Proveedor'])
 
-    return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 'list_TipoProducto': list_TipoProducto, 'list_id_users_proveedor':list_id_users_proveedor, "list_producto_nuevos":list_producto_nuevos})
+    return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 
+                                                                    'list_TipoProducto': list_TipoProducto, 
+                                                                    'list_id_users_proveedor':list_id_users_proveedor, 
+                                                                    "list_producto_nuevos":list_producto_nuevos})
 
 
 def detalle_producto_v(request, idProducto):
@@ -132,16 +160,18 @@ def detalle_producto_v(request, idProducto):
     
     proveedor = producto.proveedor
     pedidos= Pedido.objects.filter(proveedor= proveedor)
-    cantidad= 0
-    puntaje= 0
+    cantidadCalifacion= 0
+    sumaPuntaje= 0
+    puntajePromedio= 0
     comentarios= []
     for pedido in pedidos:
         if pedido.calificacion is not None:
-            puntaje= puntaje + pedido.calificacion.puntaje
-            cantidad=+ 1
+            sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
+            cantidadCalifacion=+ 1
             comentarios.append(pedido.calificacion.comentario)
    
-    puntajePromedio= puntaje / cantidad
+    if cantidadCalifacion > 1:
+        puntajePromedio= sumaPuntaje / cantidadCalifacion
     
     return render(request, 'sistemadecompra/detalle_producto.html', {
         'producto': producto,
@@ -362,7 +392,7 @@ def verPedidos(request):
             notificacion_nueva= Notificacion()
             notificacion_nueva.user= pedido.cliente.user
             notificacion_nueva.leido= False
-            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha cancelado su compra" 
+            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha cancelado su compra por falta de stock" 
             notificacion_nueva.save()
 
             pedido.delete()
@@ -467,7 +497,8 @@ def cambioDeFecha(request, idPedido):
 
 def verHistorialVentas(request):
     productos = Producto.objects.filter(proveedor = request.user.proveedor)
-    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, entregado = 1).order_by('-fecha')
+    estado_entregado= EstadoPedido.objects.get(nombre='Entregado')
+    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, estado = estado_entregado).order_by('-fecha')
 
     pedidosHistorial = []
     for p in pedidos:
@@ -477,8 +508,26 @@ def verHistorialVentas(request):
 
 def verInformacionProveedor(request):
     proveedor = Proveedor.objects.get(id = request.user.proveedor.id)
-    print('asdasd', proveedor.user.email)
-    return render(request, 'sistemadecompra/informacionProveedor.html',{'proveedor': proveedor})
+
+    pedidos= Pedido.objects.filter(proveedor= proveedor)
+    cantidadCalifacion= 0
+    sumaPuntaje= 0
+    puntajePromedio= 0
+    comentarios= []
+    for pedido in pedidos:
+        if pedido.calificacion is not None:
+            sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
+            cantidadCalifacion=+ 1
+            comentarios.append(pedido.calificacion.comentario)
+   
+    if cantidadCalifacion > 1:
+        puntajePromedio= sumaPuntaje / cantidadCalifacion
+
+
+    return render(request, 'sistemadecompra/informacionProveedor.html',{'proveedor': proveedor,
+                                                                        'puntajePromedio':puntajePromedio,
+                                                                        'comentarios':comentarios,
+                                                                        'cantidadCalifacion':cantidadCalifacion})
 
 def verInformacionCliente(request):
     cliente = Cliente.objects.get(id = request.user.cliente.id)
