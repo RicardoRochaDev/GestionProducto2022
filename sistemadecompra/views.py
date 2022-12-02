@@ -408,7 +408,7 @@ def verPedidos(request):
             notificacion_nueva= Notificacion()
             notificacion_nueva.user= pedido.cliente.user
             notificacion_nueva.leido= False
-            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha rechazado el fecha. Solicite otra en su menu de pedidos." 
+            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha rechazado la fecha. Solicite otra en su menu de pedidos." 
             notificacion_nueva.save()
             
 
@@ -583,7 +583,7 @@ def verPedidosCliente(request):
     misPedidos= []
     
     for pedido in auxPedidos:
-        if pedido.estado.nombre == "Creado" or pedido.estado.nombre == "Cambio Fecha":
+        if pedido.estado.nombre == "Creado" or pedido.estado.nombre == "Cambio Fecha" or pedido.estado.nombre == "Confirmado":
             print ("HORARIOSSSS: ", pedido.proveedor.horario_set.all())
             
             misPedidos.append({"pedido": pedido, "producto": Producto.objects.filter(pedido= pedido)})

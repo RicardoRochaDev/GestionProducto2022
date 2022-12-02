@@ -187,8 +187,7 @@
                 var url= "{% url 'actualizar_mensaje_leido' %}"
                 console.log(url)
                 $(document).on('click', '#botonNotificacion', function (){
-                  // Por agregar el listener, el nav con los botones dejo de funcionar como debia... Seteo el boton activo (active) manualmente
-                  /*
+                  
                   $.ajax("{% url 'actualizar_mensaje_leido' %}", {
                     success: function(response) {
                       $("#spanContador").text("0");
@@ -198,7 +197,7 @@
                     }
                   });
                   return false;
-                  */
+                  
                 });
               });
         
