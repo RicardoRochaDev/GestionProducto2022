@@ -1,54 +1,77 @@
 {% block head %}
 <style>
-  #map {
-    width: 70vw;
-    height: 80vh;
+  #mapDirections {
+    flex-basis: 0;
+    flex-grow: 4;
+    height: 90%;
+  }
+
+  #sidebar {
+    flex-basis: 15rem;
+    flex-grow: 1;
+    padding: 1rem;
+    max-width: 30rem;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+  #container {
+    height: 100%;
+    display: flex;
   }
 </style>
 
 {% endblock %}
 
 {% block title %}
-Mapa
+Mapas
 {% endblock %}
-  <div class="row">
-    <div class="col col-lg-12">
-      <div id="map">
-   
-      </div>
+{% comment %} <div class="row">
+  <div class="col col-lg-10">
+    <div id="floating-panel">
+      <b>Modo de Viaje: </b>
+      <select id="modoViaje">
+        <option value="DRIVING">En Auto</option>
+        <option value="WALKING">Caminando</option>
+        <option value="BICYCLING">En Bicicleta</option>
+        <option value="TRANSIT">Bus?</option>
+      </select>
     </div>
-  </div> 
-  {% comment %} <div class="row">
-    <div class="col col-lg-12">
-      <div id="floating-panel">
-        <b>Mode of Travel: </b>
-        <select id="mode">
-          <option value="DRIVING">Driving</option>
-          <option value="WALKING">Walking</option>
-          <option value="BICYCLING">Bicycling</option>
-          <option value="TRANSIT">Transit</option>
-        </select>
-      </div>
-      <div id="mapDirections" style="flex-basis: 0;
+    <div id="mapDirections" style="flex-basis: 0;
       flex-grow: 4;
       height: 100%;">
-   
-      </div>
-      <div id="sidebar">
-        <p>Total Distance: <span id="total"></span></p>
-        <div id="panel"></div>
-      </div>
-    </div>
-  </div> {% endcomment %}
-
-  <div class="row">
-    <div class="col col-lg-12">
-      <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps">Abrir Google Maps</a>
+    </div>  
+  </div>
+  <div class="col col-lg-2">
+    <div id="sidebar">
+      <p>Distancia Total: <span id="total"></span></p>
+      <div id="panel"></div>
     </div>
   </div>
+</div> {% endcomment %}
+<div id="floating-panel">
+      <b>Modo de Viaje: </b>
+      <select id="modoViaje">
+        <option value="DRIVING">En Auto</option>
+        <option value="WALKING">Caminando</option>
+        <option value="BICYCLING">En Bicicleta</option>
+        {% comment %} <option value="TRANSIT">Bus?</option> {% endcomment %}
+      </select>
+    </div>
+<div id="container">
+  <div id="mapDirections"></div>
+  <div id="sidebar">
+    <p>Total Distance: <span id="total"></span></p>
+    <div id="panel"></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col col-lg-12">
+    <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps">Abrir Google Maps</a>
+  </div>
+</div>
 {% block scripts %}
- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script> 
-  {% comment %} <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapaDirections&v=weekly"></script> {% endcomment %}
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script> 
 
   <script>
     var data;
@@ -56,101 +79,42 @@ Mapa
     var directionsService;
     var directionsRenderer;
 
+    // Inicializa el mapa
     function iniciarMapa() {
-      directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer();
-      map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 13,
-        center: { lat: -54.8, lng: -68.3 }
-      });
-    
-      directionsRenderer.setMap(map);
-            /*
-            //Se envia una direccion por la url y se recibe un json con varios datos, entre ellos la latitud y longitud
-            url = "https://maps.googleapis.com/maps/api/geocode/json?address=2134+Gobernador+PAz&key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y"
-            $.getJSON(url, function (json) {
-              latitud = json.results[0].geometry.location.lat;
-              longitud = json.results[0].geometry.location.lng;
-
-              punto = { lat: latitud, lng: longitud };
-              var marker = new google.maps.Marker({ position: punto, map: map });
-            }
-            );
-            */
-            
-      var punto;
-      var waypts = [];
-
-      punto = {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}};
-      var marker = new google.maps.Marker({ position: punto, map: map});
-
-      {% for c in coordenadas %}
-
-        punto = {lat: {{c.latitud}}, lng: {{c.longitud}}};
-        var marker = new google.maps.Marker({ position: punto, map: map});
-
-        waypts.push({
-          location: {lat: {{c.latitud}}, lng:{{c.longitud}}},
-          stopover: true
-        });
-
-      {% endfor %}
-            
-      
-
-      var request = {
-        origin: {lat: {{destinoYOrigenLatitud}}, lng:{{destinoYOrigenLongitud}}},
-        destination: {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}},
-        waypoints: waypts,
-        optimizeWaypoints: true,
-        travelMode: 'DRIVING'
-      };
-      directionsService.route(request, function(result, status) {
-        if (status == 'OK') {
-          directionsRenderer.setDirections(result);
-          directionsRenderer.setOptions({
-            suppressMarkers: true
-          });
-        }
-      });
-
-      // Armo la url para insertarla en el boton de redirecc|default_if_none:
-      var urlAppMaps = "https://www.google.com/maps/dir/?api=1&origin="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}} + "&waypoints=";
-      for (var i = 0; i < waypts.length; i++) {
-        //urlAppMaps += waypts[i]
-        //console.log(waypts[i].location.lat);
-        urlAppMaps += waypts[i].location.lat + "," + waypts[i].location.lng + "|";
-      }
-      urlAppMaps += "&destination="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}};
-      urlAppMaps += "&travelMode=DRIVING";
-      const elem = document.getElementById('btnAbrirGoogleMaps');
-      elem.href=urlAppMaps; 
-    } 
-
-
-    // Funcion para iniciar el nuevo mapa que ofrece indicaciones para realizar la entrega
-    function iniciarMapaDirections(){
-      directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer({
-        draggable: true,
-        map,
-        panel: document.getElementById("panel") as HTMLElement,
-      });
+      // Declaro el mapa
       const map = new google.maps.Map(document.getElementById("mapDirections"), {
         zoom: 13,
-        center: { lat: -54.8, lng: -68.3 }
+          center: { lat: -54.8, lng: -68.3 }
       });
-
+      const directionsService = new google.maps.DirectionsService();
+      const directionsRenderer = new google.maps.DirectionsRenderer({
+        draggable: true,
+        map,
+        panel: document.getElementById("panel"),
+      });
+    
       directionsRenderer.addListener("directions_changed", () => {
         const directions = directionsRenderer.getDirections();
     
         if (directions) {
-          computeTotalDistance(directions);
+          calcularTotalRuta(directions);
         }
       });
+      
+      // Dibuja la ruta en el mapa para el primer modo de viaje
+      calcularYMostrarRuta(
+        directionsService,
+        directionsRenderer
+      );
 
-      directionsRenderer.setMap(map);
+      // Agrego un listener que redibuja la linea cada vez que se cambia el modo
+      document.getElementById("modoViaje").addEventListener("change", () => {
+        calcularYMostrarRuta(directionsService, directionsRenderer);
+      });
+    }
 
+    function calcularYMostrarRuta(directionsService, directionsRenderer) {
+      const modoSeleccionado = document.getElementById("modoViaje").value;
       var punto;
       var waypts = [];
 
@@ -169,38 +133,35 @@ Mapa
 
       {% endfor %}
 
-      var request = {
-        origin: {lat: {{destinoYOrigenLatitud}}, lng:{{destinoYOrigenLongitud}}},
-        destination: {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}},
-        waypoints: waypts,
-        optimizeWaypoints: true,
-        travelMode: 'DRIVING'
-      };
-
-      directionsService.route(request, function(result, status) {
-        if (status == 'OK') {
-          directionsRenderer.setDirections(result);
-          directionsRenderer.setOptions({
-            suppressMarkers: true
-          });
-        }
-      });
+      directionsService
+        .route({
+          origin: {lat: {{destinoYOrigenLatitud}}, lng:{{destinoYOrigenLongitud}}},
+          destination: {lat: {{destinoYOrigenLatitud}}, lng:{{destinoYOrigenLongitud}}},
+          waypoints: waypts,
+          travelMode: google.maps.TravelMode[modoSeleccionado],
+        })
+        .then((response) => {
+          directionsRenderer.setDirections(response);
+        })
+        .catch((e) => window.alert("Directions request failed due to " + status));
     }
-
-    function computeTotalDistance(result: google.maps.DirectionsResult) {
+  
+    // Calcula el total de la kilometros de la ruta
+    function calcularTotalRuta(result) {
       let total = 0;
-      const myroute = result.routes[0];
+      const miRuta = result.routes[0];
     
-      if (!myroute) {
+      if (!miRuta) {
         return;
       }
     
-      for (let i = 0; i < myroute.legs.length; i++) {
-        total += myroute.legs[i]!.distance!.value;
+      for (let i = 0; i < miRuta.legs.length; i++) {
+        total += miRuta.legs[i].distance.value;
       }
     
       total = total / 1000;
-      (document.getElementById("total") as HTMLElement).innerHTML = total + " km";
+      document.getElementById("total").innerHTML = total + " km";
     }
+  
   </script>
 {% endblock %}

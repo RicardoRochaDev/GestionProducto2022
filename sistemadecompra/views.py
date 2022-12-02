@@ -402,6 +402,8 @@ def verMapa(request):
     estadoConfirmado = EstadoPedido.objects.get(nombre="Confirmado")
     coordenadas=[]
     pedidosQuerySet = Pedido.objects.filter(estado = estadoConfirmado)
+    print("pedidos:")
+    print(pedidosQuerySet)
     for p in pedidosQuerySet:
         latAux = str(p.latitud).replace(',','.')
         lngAux = str(p.longitud).replace(',','.')
@@ -412,7 +414,7 @@ def verMapa(request):
 
     destinoYOrigenLatitud = str(destinoYOrigenLatitud).replace(',','.')
     destinoYOrigenLongitud = str(destinoYOrigenLongitud).replace(',','.')
-    
+    print(coordenadas)
     return render(request, 'sistemadecompra/verMapa.html',{'coordenadas': coordenadas, 'destinoYOrigenLatitud': destinoYOrigenLatitud, 'destinoYOrigenLongitud': destinoYOrigenLongitud})
 
 def cambioDeFecha(request, idPedido):
