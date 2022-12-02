@@ -10,8 +10,13 @@ Carrito
         Si el carrito esta vacio se muestra una mensaje
     {% endcomment %}
     {% if not elCarrito %}
+        
         <br> <br>
-        <p>Tu carrito está vacio. Vamo a comprar</p>
+        <figure class="figure">
+            <img src="https://previews.123rf.com/images/boygointer/boygointer1408/boygointer140800262/31041017-el-carro-vac%C3%ADo-imagen.jpg" class="figure-img img-fluid rounded" alt="..." height="350" width="350">
+            <figcaption class="figure-caption text-right"><h3><b>Tu carrito está vacio. Vamo a comprar</b></h3></figcaption>
+        </figure>
+        
     
     {% comment %}
         Si el carrito no esta vacio se muestran los productos separados por proveedor
@@ -35,6 +40,7 @@ Carrito
             <div class="tab-content" id="myTabContent">
                 {% for prov in losProveedores %}
                 <div class="tab-pane fade {{ forloop.first|yesno:"show active," }}" id="{{prov.user.username}}" role="tabpanel" aria-labelledby="home-tab">
+                    <br>
                     <p>Productos agregados:</p>
                     <ul>
                         {% for producto in elCarrito %}

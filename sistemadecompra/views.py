@@ -519,6 +519,8 @@ def verInformacionProveedor(request):
             sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
             cantidadCalifacion=+ 1
             comentarios.append(pedido.calificacion.comentario)
+            #comentarios.append({'comentario': pedido.calificacion.comentario, 'cliente': pedido.cliente.user.username})
+
    
     if cantidadCalifacion > 1:
         puntajePromedio= sumaPuntaje / cantidadCalifacion
