@@ -1,50 +1,74 @@
 [
     {
-        "Nombre": "Gaseosa",
+        "Nombre": "Gaseosa 2.5L",
         "Marca": "Cocacola",
         "Tipo": "Bebida",
-        "Descripcion": "bebida con gas",
-        "Valor": 80,
-        "Proveedor": "ricardoProveedor"
+        "Descripcion": "Bebida con gas",
+        "Valor": 500,
+        "imagenUrl" : "http://www.mojitos.com.ar/images/fotos/prd/10_Coca-Cola-2.5l.jpg",
+        "Proveedor": "La pronto"
     },
     {
-        "Nombre": "Agua",
+        "Nombre": "Agua 1.5L",
         "Marca":"La anonima",
         "Tipo": "Bebida",
-        "Descripcion": " bebida sin gas",
-        "Valor": 50,
-        "Proveedor": "ricardoProveedor"
+        "Descripcion": " Bebida sin gas",
+        "Valor": 200,
+        "imagenUrl" : "https://d1on8qs0xdu5jz.cloudfront.net/webapp/images/productos/b/0000001000/1002.jpg",
+        "Proveedor": "La pronto"
     },
     {
-        "Nombre": "Agua",
+        "Nombre": "Agua 2.5L",
         "Marca":"Ser",
         "Tipo": "Bebida",
-        "Descripcion": " bebida sin gas",
-        "Valor": 50,
-        "Proveedor": "DrakenProveedor"
+        "Descripcion": " Bebida sin gas",
+        "Valor": 300,
+        "imagenUrl" : "https://http2.mlstatic.com/D_NQ_NP_861910-MLA46946865742_082021-O.webp",
+        "Proveedor": "La pronto"
     },
     {
-        "Nombre": "Notebook",
-        "Marca":"Asus",
-        "Tipo": "Informatica",
-        "Descripcion": " 14 pulgadas i7",
-        "Valor": 60000,
-        "Proveedor": "DrakenProveedor"
+        "Nombre": "Pan",
+        "Marca":"---",
+        "Tipo": "Comida",
+        "Descripcion": " Pan Tradicional",
+        "Valor": 500,
+        "imagenUrl" : "https://okdiario.com/img/recetas/2017/06/14/pan-blanco-amish.jpg",
+        "Proveedor": "Eureka"
     },
     {
-        "Nombre": "Teclado",
-        "Marca":"Genius",
-        "Tipo": "Informatica",
-        "Descripcion": " Mecanico",
-        "Valor": 6000,
-        "Proveedor": "DrakenProveedor"
+        "Nombre": "Factura",
+        "Marca":"---",
+        "Tipo": "Comida",
+        "Descripcion": " Factura con dulce de leche",
+        "Valor": 400,
+        "imagenUrl" : "https://scontent.frga2-1.fna.fbcdn.net/v/t1.18169-9/19366461_1628980787164134_4588121400643945772_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=9267fe&_nc_eui2=AeHZOG2ilomxNQ4IyyMDgaJgIvIHBYB2oxIi8gcFgHajEv8mZD7w6bM0UgZuIJuIjZQ&_nc_ohc=4F9ethINDhkAX_Wr0tz&_nc_ht=scontent.frga2-1.fna&oh=00_AfBDeiI2R85WxWtjIXOv_QhXprOaNPhh0UlaG6d2YIBu7A&oe=63B0DE1F",
+        "Proveedor": "Eureka"
     },
     {
-        "Nombre": "Campera",
-        "Marca":"Rebook",
-        "Tipo": "Ropa",
-        "Descripcion": " baratillo",
-        "Valor": 20000,
-        "Proveedor": "AleProveedor"
+        "Nombre": "Torta",
+        "Marca":"---",
+        "Tipo": "Comida",
+        "Descripcion": " Torta de chocolate con frutilla",
+        "Valor": 4000,
+        "imagenUrl" : "https://cocinerosargentinos.com/content/recipes/500x500/recipes.12520.jpeg",
+        "Proveedor": "Eureka"
+    },
+    {
+        "Nombre": "Bidon 20L",
+        "Marca":"---",
+        "Tipo": "Bebida",
+        "Descripcion": " Agua embotellada sin gas",
+        "Valor": 400,
+        "imagenUrl" : "https://static.wixstatic.com/media/a65053_6afdb492651e403fabbff1f7af678b98~mv2.jpg/v1/fill/w_1571,h_2437,al_c,q_85/a65053_6afdb492651e403fabbff1f7af678b98~mv2.jpg",
+        "Proveedor": "Agua Aiken"
+    },
+    {
+        "Nombre": "Bidon 10 L",
+        "Marca":"---",
+        "Tipo": "Bebida",
+        "Descripcion": " Agua embotellada sin gas",
+        "Valor": 4000,
+        "imagenUrl" : "https://wasserkraft.com.ar/wp-content/uploads/2020/06/Pet-10L.jpg",
+        "Proveedor": "Agua Aiken"
     }
 ]

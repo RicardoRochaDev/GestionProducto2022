@@ -110,15 +110,18 @@ def mostrar_catalogo_v(request): #Paso un parametro adicional con el valor del i
 
     
     if 'clasificacion' in request.GET: # AAGREGAR CODIGO DE PAGINACION AQUI TAMBIEN
-        tipoElegido = request.GET.get('clasificacion') 
+        tipoElegido = request.GET.get('Tipo') 
         print('tipoElegido: ', tipoElegido)
 
-        if (tipoElegido != 'Seleccione...'):
-            #print (type(tipoElegido))
-            tipoElegido= int(tipoElegido)
-            #print(type(tipoElegido))
-            list_Producto = Producto.objects.filter(tipo = tipoElegido)
-            #print ('NO 0')
+        #print (type(tipoElegido))
+        tipoElegido= int(tipoElegido)
+        #print(type(tipoElegido))
+        list_Producto = Producto.objects.filter(tipo = tipoElegido)
+        #print ('NO 0')
+    
+    if 'BorrarFiltro' in request.GET:
+        list_Producto = Producto.objects.all()
+
 
     if (request.method == 'GET'):
         if 'elId' in request.GET:
@@ -389,7 +392,7 @@ def verPedidos(request):
             notificacion_nueva= Notificacion()
             notificacion_nueva.user= pedido.cliente.user
             notificacion_nueva.leido= False
-            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha cancelado su compra" 
+            notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha cancelado su compra por falta de stock" 
             notificacion_nueva.save()
 
             pedido.delete()
@@ -492,7 +495,8 @@ def cambioDeFecha(request, idPedido):
 
 def verHistorialVentas(request):
     productos = Producto.objects.filter(proveedor = request.user.proveedor)
-    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, entregado = 1).order_by('-fecha')
+    estado_entregado= EstadoPedido.objects.get(nombre='Entregado')
+    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, estado = estado_entregado).order_by('-fecha')
 
     pedidosHistorial = []
     for p in pedidos:
@@ -502,8 +506,26 @@ def verHistorialVentas(request):
 
 def verInformacionProveedor(request):
     proveedor = Proveedor.objects.get(id = request.user.proveedor.id)
-    print('asdasd', proveedor.user.email)
-    return render(request, 'sistemadecompra/informacionProveedor.html',{'proveedor': proveedor})
+
+    pedidos= Pedido.objects.filter(proveedor= proveedor)
+    cantidadCalifacion= 0
+    sumaPuntaje= 0
+    puntajePromedio= 0
+    comentarios= []
+    for pedido in pedidos:
+        if pedido.calificacion is not None:
+            sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
+            cantidadCalifacion=+ 1
+            comentarios.append(pedido.calificacion.comentario)
+   
+    if cantidadCalifacion > 1:
+        puntajePromedio= sumaPuntaje / cantidadCalifacion
+
+
+    return render(request, 'sistemadecompra/informacionProveedor.html',{'proveedor': proveedor,
+                                                                        'puntajePromedio':puntajePromedio,
+                                                                        'comentarios':comentarios,
+                                                                        'cantidadCalifacion':cantidadCalifacion})
 
 def verInformacionCliente(request):
     cliente = Cliente.objects.get(id = request.user.cliente.id)

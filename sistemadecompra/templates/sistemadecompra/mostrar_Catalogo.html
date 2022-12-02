@@ -147,7 +147,16 @@
                         <div class="carousel-caption text-left">
                             <h1>{{it.nombre}}.</h1>
                             <p>{{it.descripcion}}.</p>
-                            <p><a class="btn btn-lg btn-primary" href="#" role="button">Agregar al carrito</a></p>
+                            {% if request.user.is_authenticated %}
+                                {% if not request.user.id in list_id_users_proveedor %}
+                                    <form action="{% url '/' %}" method="GET">
+                                        {% csrf_token %}
+                                        <button type="submit" name="elId" value="{{it.id}}" class="btn btn-lg btn-primary">
+                                            Agregar al carro
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -164,30 +173,37 @@
     </div>
 
     <div class="row">  
-        <div class="col-3" style="background-image: linear-gradient(305deg, #32497d 0, #1f3259 50%, #0e1c37 100%);">
-            <p> <b>Selecione un filtro</b> </p>
+        <div class="col-3" style="background-image: linear-gradient(270deg, #f9ffff 0, #e4ffff 25%, #cdf2f2 50%, #b6e3e5 75%, #a1d6da 100%);">
+            <br>
+            <br>
+            <p> <b>Seleccione un filtro </b> </p>
             <form action="{% url '/' %}" method="GET">
                 {% csrf_token %}
-                <select name="clasificacion">
-                    <option value="0">Seleccione...</option>
-                        {% for it in list_TipoProducto %}
-                            <option value=" {{it.id}} "> {{ it.nombre}} </option>
-                        {% endfor%}
-                    </select>
-                <button type="submit" class="btn btn-success">Aplicar</button>
+                {% for tipoProducto in list_TipoProducto %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="Tipo" id="exampleRadios{{tipoProducto.id}}" value="{{tipoProducto.id}}">
+                    <label class="form-check-label" for="exampleRadios{{tipoProducto.id}}">
+                        {{tipoProducto.nombre}}
+                    </label>
+                  </div>
+                {% endfor %}
+                <br>
+                <br>
+                <button type="submit" name='clasificacion' class="btn btn-success">Aplicar</button>
+                <button type="submit" name='BorrarFiltro' class="btn btn-secondary">Borrar Filtro</button>
             </form>
         </div>
         <div class="col-9">
             <div class="row justify-content-md-center">
                 {% for it in objproducto %}
                     <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/1159/1159797.png?w=740&t=st=1665617494~exp=1665618094~hmac=3fda5ee76895c3c6e2d61e16102dece9bd524fdac95bbf459dcd2bee077a6a9a" alt="Card image cap">
+                        <img class="card-img-top" src="{{it.imagenUrl}}" alt="Card image cap">
                         <div class="card-body">
                             <h2>{{it.nombre}}</h2>
-                            <p>Descripcion: {{it.descripcion}}</p>
+                            {% comment %} <p>Descripcion: {{it.descripcion}}</p> {% endcomment %}
                             <p>Tipo: {{it.tipo}}</p>
                             <p>Proveedor: {{it.proveedor.user.username}}</p>
-        
+                            <h3>$ {{it.valor}}</h3>
                         
                             <a class="btn btn-secondary" href="{% url 'detalle_Producto' it.id %}" role="button">Mas informacion
                             &raquo;</a>
@@ -213,8 +229,8 @@
                 {% endfor %}
             </div>
 
-            <br> </br>
-            <nav aria-label="Productos paginados">
+            
+            {% comment %} <nav aria-label="Productos paginados">
                 <ul class="pagination justify-content-center">
                   <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                   <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -222,7 +238,7 @@
                   <li class="page-item"><a class="page-link" href="#">3</a></li>
                   <li class="page-item"><a class="page-link" href="#">Next</a></li>
                 </ul>
-              </nav>
+            </nav> {% endcomment %}
         </div>     
     </div>
   
