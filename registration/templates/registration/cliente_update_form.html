@@ -1,9 +1,4 @@
-{% extends "registration/perfil_cliente.html" %}
-
-
 {% block title %} Modificar Cliente {% endblock %}
-
-{% block contentCliente %}
 
 <form action="" method="POST">
     {% csrf_token %}
@@ -12,5 +7,3 @@
     </table>
     <input type="submit" value="Modificar">
 </form>
-
-{% endblock %}
