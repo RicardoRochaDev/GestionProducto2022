@@ -167,17 +167,18 @@ def detalle_producto_v(request, idProducto):
     for pedido in pedidos:
         if pedido.calificacion is not None:
             sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
-            cantidadCalifacion=+ 1
+            cantidadCalifacion+= 1
             comentarios.append(pedido.calificacion.comentario)
    
-    if cantidadCalifacion > 1:
+    if cantidadCalifacion > 0:
         puntajePromedio= sumaPuntaje / cantidadCalifacion
     
     return render(request, 'sistemadecompra/detalle_producto.html', {
         'producto': producto,
         'carrito': request.session['carrito'],
         'puntajePromedio': puntajePromedio,
-        'comentarios': comentarios
+        'comentarios': comentarios,
+        'cantidadCalifacion':cantidadCalifacion
     })
 
 def mostrar_perfil_proveedor_v(request):
@@ -517,12 +518,13 @@ def verInformacionProveedor(request):
     for pedido in pedidos:
         if pedido.calificacion is not None:
             sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
-            cantidadCalifacion=+ 1
-            comentarios.append(pedido.calificacion.comentario)
-            #comentarios.append({'comentario': pedido.calificacion.comentario, 'cliente': pedido.cliente.user.username})
+            cantidadCalifacion += 1
+            #comentarios.append(pedido.calificacion.comentario)
+            comentarios.append({'comentario': pedido.calificacion.comentario, 'cliente': pedido.cliente.user.username})
 
-   
-    if cantidadCalifacion > 1:
+    #print('sumaPuntaje: ', sumaPuntaje)
+    #print('cantidadCalifacion: ', cantidadCalifacion) 
+    if cantidadCalifacion > 0:
         puntajePromedio= sumaPuntaje / cantidadCalifacion
 
 

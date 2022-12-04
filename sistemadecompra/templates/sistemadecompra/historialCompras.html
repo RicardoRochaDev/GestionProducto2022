@@ -12,7 +12,7 @@
 				<form action="{% url 'ver_Historial_Compras' %}" id="formCalificacion{{dic.pedido.id}}" method="POST">
 					{% csrf_token %}
           <div class="modal-body">
-							<p> Califique el trato con el vendedor (puntaje): {{dic.pedido.id}}  </p>
+							<p> Califique el trato con el vendedor (puntaje): </p>
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="1" checked>
                 <label class="form-check-label" for="exampleRadios1">

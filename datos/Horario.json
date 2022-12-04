@@ -1,14 +1,38 @@
 [
     {
-        "HoraInicio": "12:00:00",
-        "HoraFinal": "18:00:00",
+        "HoraInicio": "08:00",
+        "HoraFinal": "12:00",
         "Dia": "Lunes",
-        "Proveedor": "DrakenProveedor"
+        "Proveedor": "Eureka"
     },
     {
-        "HoraInicio": "15:00:00",
-        "HoraFinal": "20:00:00",
+        "HoraInicio": "16:00",
+        "HoraFinal": "21:00",
+        "Dia": "Lunes",
+        "Proveedor": "Eureka"
+    },
+    {
+        "HoraInicio": "08:00",
+        "HoraFinal": "22:00",
         "Dia": "Martes",
-        "Proveedor": "DrakenProveedor"
+        "Proveedor": "Eureka"
+    },
+    {
+        "HoraInicio": "08:00",
+        "HoraFinal": "22:00",
+        "Dia": "Miercoles",
+        "Proveedor": "Eureka"
+    },
+    {
+        "HoraInicio": "08:00",
+        "HoraFinal": "22:00",
+        "Dia": "Jueves",
+        "Proveedor": "Eureka"
+    },
+    {
+        "HoraInicio": "08:00",
+        "HoraFinal": "22:00",
+        "Dia": "Viernes",
+        "Proveedor": "Eureka"
     }
 ]

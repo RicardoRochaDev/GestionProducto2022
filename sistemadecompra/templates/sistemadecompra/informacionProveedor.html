@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Comentarios de clientes</h5>
@@ -10,10 +10,24 @@
         </div>
         <div class="modal-body">
             {% if comentarios %}
-                {% for comentario in comentarios %}
-                    <p> {{comentario}} </p>
-                    <hr>
-                {% endfor %}
+                <ul class="list-unstyled">
+                    {% for dic in comentarios %}
+                        <li class="media">
+                            <div class="align-self-center mr-3">
+                                <p> fecha</p>
+                                <p> hora</p>
+                            </div>
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">{{dic.cliente}}</h5>
+                                <p>{{dic.comentario}}</p>
+                            </div>   
+                        </li>
+                        <hr>
+                        {% comment %} <p> Usuario: {{dic.cliente}} </p>
+                        <p> {{dic.comentario}} </p>
+                        <hr>  {% endcomment %}
+                    {% endfor %}
+                </ul>
             {% else %}
                 <p> Usted aun no tiene comentarios </p>            
             {% endif %}

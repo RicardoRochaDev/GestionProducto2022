@@ -232,7 +232,7 @@ class ProductoCreate(CreateView):
 
 class ProductoUpdate(UpdateView):
     model = Producto
-    fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor']
+    fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor','imagenUrl']
     #template_name_suffix = '_update_form'
 
     # lo mismo que ProductoUpdate

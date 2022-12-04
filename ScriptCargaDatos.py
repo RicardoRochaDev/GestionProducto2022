@@ -119,6 +119,17 @@ for producto in listaProducto:
     #producto_new.proveedor = Proveedor.objects.get(calle= producto['Proveedor'])
     producto_new.save()
 
+#Cargo los horarios de los proveedores
+for horario in listaHorario:
+    horario_new = Horario()
+    horario_new.horaInicio = horario['HoraInicio']
+    horario_new.horaFinal = horario['HoraFinal']
+    horario_new.dia = horario['Dia']
+
+    user= User.objects.get(username= horario['Proveedor'])
+    horario_new.proveedor = user.proveedor
+    horario_new.save()
+
 #Creo los clientes
 for cliente in listaCliente:
     #Creo el usuario(Instancia User)
@@ -145,6 +156,12 @@ for cliente in listaCliente:
     cliente_new.longitud = data['results'][0]['geometry']['location']['lng']
     cliente_new.telefono = cliente['Telefono']
     cliente_new.save()
+
+#---------------------------------------------------------------------
+#Hago una compra
+
+
+
 
 print('TERMINADO')
 

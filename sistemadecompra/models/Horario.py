@@ -2,8 +2,8 @@ from django.db import models
 from .Proveedor import Proveedor
 
 class Horario(models.Model):
-    horaInicio = models.TimeField()
-    horaFinal = models.TimeField()
+    horaInicio = models.TimeField(help_text="Please use the following format: <em>YYYY-MM-DD</em>.")
+    horaFinal = models.TimeField(help_text="Please use the following format: <em>YYYY-MM-DD</em>.")
     dia = models.CharField(max_length=15)
     proveedor = models.ForeignKey(
         Proveedor,
