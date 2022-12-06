@@ -37,7 +37,7 @@
             }
     
             footer {
-                background-color: #474747;
+                background-color: #17a2b8;
                 position: absolute;
                 bottom: 0;
                 width: 100%;
@@ -53,7 +53,7 @@
     </head>
 
     <body style="padding-top: 65px">
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-info">
             <a class="navbar-brand" href="{% url '/' %}">Inicio</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,7 +113,7 @@
                     </li> 
                     <li class="nav-item active">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                                 {{request.user}}
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
