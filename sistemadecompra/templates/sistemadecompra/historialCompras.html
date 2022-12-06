@@ -79,7 +79,9 @@
                 {% if pedido.pedido.calificacion is None %}
                   <button type="button" name="CambioFecha" class="btn btn-primary" data-toggle="modal" data-target="#modalCalificacion{{pedido.pedido.id}}">
                     Calificar al proveedor
-                  </button>        
+                  </button>    
+                {% else %}
+                  <p> ¡Calificado! </p>    
                 {% endif %} 
         
               </div>

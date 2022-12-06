@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('actualizarMensajeLeido/', views.actualizar_mensaje_leido, name='actualizar_mensaje_leido'),
     
+    path('eliminarItemCarrito/<int:idProducto>/', views.elimimar_item_carrito, name='elimimar_item_carrito'),
     
     #path('perfilProveedor/<int:idProveedor>/', views.mostrar_perfil_proveedor_v, name='mostrar_Perfil_Proveedor'),
     
