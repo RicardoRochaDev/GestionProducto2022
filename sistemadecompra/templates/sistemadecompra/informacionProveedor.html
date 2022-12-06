@@ -14,8 +14,8 @@
                     {% for dic in comentarios %}
                         <li class="media">
                             <div class="align-self-center mr-3">
-                                <p> fecha</p>
-                                <p> hora</p>
+                                <p class="font-weight-light font-italic"> {{dic.fecha.day}}/{{dic.fecha.month}}/{{dic.fecha.year}} </p>
+                                <p class="font-weight-light font-italic"> {{dic.fecha.time}} </p>
                             </div>
                             <div class="media-body">
                                 <h5 class="mt-0 mb-1">{{dic.cliente}}</h5>

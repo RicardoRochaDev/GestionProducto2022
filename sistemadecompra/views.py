@@ -257,16 +257,16 @@ def verCarrito(request):
             else:
                 print("Datos incorrectos. Vuelva a intentar")
                 messages.add_message(request, messages.ERROR, "Datos incorrectos. Vuelva a intentar")
-        if 'borrarItemProducto' in request.GET:
-            dic= request.GET
-            id= dic['borrarItemProducto']
-            id= int(id)
-            print('EL ID:', id)
-            carritoAux= request.session['carrito']
-            print ('CARRITOOO: ',carritoAux)
-            carritoAux.remove(id)
-            request.session['carrito']= carritoAux  
-            return redirect('ver_Carrito')
+        # if 'borrarItemProducto' in request.GET:
+        #     dic= request.GET
+        #     id= dic['borrarItemProducto']
+        #     id= int(id)
+        #     print('EL ID:', id)
+        #     carritoAux= request.session['carrito']
+        #     print ('CARRITOOO: ',carritoAux)
+        #     carritoAux.remove(id)
+        #     request.session['carrito']= carritoAux  
+        #     return redirect('ver_Carrito')
 
     print(proveedores)
     return render(request, "sistemadecompra/verCarrito.html", {"elCarrito": productosAgregados, "losProveedores": proveedores, "total": total, "horarios": horariosProveedor, 'fechaActual': fechaActual})
@@ -513,7 +513,7 @@ def verInformacionProveedor(request):
             sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
             cantidadCalifacion += 1
             #comentarios.append(pedido.calificacion.comentario)
-            comentarios.append({'comentario': pedido.calificacion.comentario, 'cliente': pedido.cliente.user.username})
+            comentarios.append({'comentario': pedido.calificacion.comentario, 'cliente': pedido.cliente.user.username, 'fecha': pedido.calificacion.fecha})
 
     #print('sumaPuntaje: ', sumaPuntaje)
     #print('cantidadCalifacion: ', cantidadCalifacion) 
@@ -598,4 +598,16 @@ def actualizar_mensaje_leido(request):
             n.leido = True
             n.save() 
     return HttpResponse(request)
+
+def elimimar_item_carrito(request, idProducto):
+    
+    producto = Producto.objects.get(id=idProducto)
+    carritoAux= request.session['carrito']
+    print ('CARRITOOO: ',carritoAux)
+    carritoAux.remove(idProducto)
+    request.session['carrito']= carritoAux  
+
+    return redirect('ver_Carrito')
+
+
 
