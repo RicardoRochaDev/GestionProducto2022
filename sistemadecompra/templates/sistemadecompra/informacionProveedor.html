@@ -14,18 +14,15 @@
                     {% for dic in comentarios %}
                         <li class="media">
                             <div class="align-self-center mr-3">
-                                <p class="font-weight-light font-italic"> {{dic.fecha.day}}/{{dic.fecha.month}}/{{dic.fecha.year}} </p>
+                                <p class="font-weight-light font-italic" style="margin: 0em;"> {{dic.fecha.day}}/{{dic.fecha.month}}/{{dic.fecha.year}} </p>
                                 <p class="font-weight-light font-italic"> {{dic.fecha.time}} </p>
                             </div>
-                            <div class="media-body">
+                            <div class="media-body" style="background-color: #F1F1F1; padding: 1em; margin: 0.7em; border-radius: 15px;">
                                 <h5 class="mt-0 mb-1">{{dic.cliente}}</h5>
                                 <p>{{dic.comentario}}</p>
                             </div>   
                         </li>
-                        <hr>
-                        {% comment %} <p> Usuario: {{dic.cliente}} </p>
-                        <p> {{dic.comentario}} </p>
-                        <hr>  {% endcomment %}
+                        
                     {% endfor %}
                 </ul>
             {% else %}
