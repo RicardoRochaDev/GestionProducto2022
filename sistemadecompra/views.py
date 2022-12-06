@@ -27,6 +27,7 @@ from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, 
 from django.shortcuts import redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 ## ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
@@ -202,8 +203,6 @@ def verCarrito(request):
         request.session['carrito'] = []
 
     carritoAux = request.session['carrito']
-    #carritoAux.append(1)
-    #carritoAux.append(2)
     #traigo todos los productos existentes
     productosQuerySet = Producto.objects.all()
 
@@ -223,7 +222,7 @@ def verCarrito(request):
 
     if (request.method == 'GET'):
         if 'solicitudCheckout' in request.GET:
-            datosValidados = True
+            datosValidados = False
             pedidosParaAlmacenar = []
             for prov in proveedores:
                 fechaProvId = "fecha" + str(prov.id)
@@ -237,33 +236,27 @@ def verCarrito(request):
                     diaDeLaSemana = datetime.strptime(fecha, '%Y-%m-%d').date().weekday()
                     diaDeLaSemana = diasDeLaSemana.get(diaDeLaSemana)
 
-                    hora = datetime.strptime(tiempo, '%H:%M').time()
-
-                    if diaDeLaSemana in Horario.objects.filter(proveedor = prov).values_list('dia', flat=True):
-                        for h in Horario.objects.filter(proveedor = prov, dia = diaDeLaSemana).values_list('horaInicio', flat=True):
-                            if(hora >= h):
-                                for h in Horario.objects.filter(proveedor = prov, dia = diaDeLaSemana).values_list('horaFinal', flat=True):
-                                    if(hora <= h):
-                                        #Si entra en este if, la fecha y hora esta validada
-                                        pedidosParaAlmacenar.append({
-                                            "proveedor": prov.id,
-                                            "cliente": request.user.cliente.id,
-                                            "hora": tiempo,
-                                            "fecha": fecha
-
-                                        })
-                                        datosValidados = datosValidados and True
-                                    else:
-                                        datosValidados = datosValidados and False
-                            else:
-                                datosValidados = datosValidados and False
-                    else:  
-                        datosValidados = datosValidados and False
+                    hora = datetime.strptime(tiempo, '%H:%M').time()        
+                    
+                    # Compruebo que el dia seleccionado este entre los dias que acepta el prov
+                    if diaDeLaSemana in prov.horario_set.all().values_list('dia', flat=True):
+                        # Obtengo todos los horarios del proveedor que coincidan con el dia
+                        for h in Horario.objects.filter(proveedor = prov, dia = diaDeLaSemana):
+                            if(hora >= h.horaInicio) and (hora <= h.horaFinal):
+                                pedidosParaAlmacenar.append({
+                                    "proveedor": prov.id,
+                                    "cliente": request.user.cliente.id,
+                                    "hora": tiempo,
+                                    "fecha": fecha
+                                })
+                                datosValidados = True
+                                break
             if datosValidados == True:
                 request.session['pedidosParaAlmacenar'] = pedidosParaAlmacenar 
                 return redirect('proceder_Checkout')
             else:
                 print("Datos incorrectos. Vuelva a intentar")
+                messages.add_message(request, messages.ERROR, "Datos incorrectos. Vuelva a intentar")
         if 'borrarItemProducto' in request.GET:
             dic= request.GET
             id= dic['borrarItemProducto']

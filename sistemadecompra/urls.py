@@ -24,6 +24,8 @@ urlpatterns = [
 
     path('actualizarMensajeLeido/', views.actualizar_mensaje_leido, name='actualizar_mensaje_leido'),
     
+    path('detalleProducto/<int:idProducto>/', views.detalle_producto_v, name='detalle_Producto'),
+
     
     #path('perfilProveedor/<int:idProveedor>/', views.mostrar_perfil_proveedor_v, name='mostrar_Perfil_Proveedor'),
     
