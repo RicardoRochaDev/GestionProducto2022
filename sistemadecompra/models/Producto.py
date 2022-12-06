@@ -15,7 +15,7 @@ class Producto(models.Model):
         on_delete = models.CASCADE)
 
     creado= models.DateTimeField(auto_now_add=True)
-    imagenUrl= models.CharField(max_length=500, null=True)
-
+    imagenUrl= models.CharField(max_length=500, null=True, blank=True)
+    imagen = models.ImageField(upload_to='uploads/productos', blank=True)
     def __str__(self):
         return self.nombre
