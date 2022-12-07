@@ -89,7 +89,10 @@ def registrar_usuario_proveedor_v(request):
             messages.add_message(request, messages.INFO,"Usuario creado con exito")
             return redirect(reverse_lazy('/'))
         else:
-            messages.add_message(request, messages.ERROR, form_user.errors.as_data())
+            dictErrores = form_user.errors.as_data()
+            print(dictErrores)
+            for item in dictErrores:
+                messages.add_message(request, messages.ERROR, dictErrores[item])
             form_user = UserForm()
             form_user_proveedor = ProveedorUserForm()
             context = {'form_user': form_user,
@@ -171,15 +174,23 @@ def registrar_usuario_cliente_v(request):
                 form_user = UserForm()
                 form_user_cliente = ClienteUserForm()
                 context = {'form_user': form_user,
-                    'form_user_proveedor': form_user_cliente}
+                    'form_user_cliente': form_user_cliente}
         else:
             # Muestro los errores de los formularios si no pudieron ser validados
-            messages.add_message(request, messages.ERROR, form_user.errors.as_data())
-            messages.add_message(request, messages.ERROR, form_user_cliente.errors.as_data())
+            dictUserErrores = form_user.errors.as_data()
+            print(dictUserErrores)
+            for item in dictUserErrores:
+                messages.add_message(request, messages.ERROR, dictUserErrores[item])
+                
+            dictClienteErrores = form_user_cliente.errors.as_data()
+            print(dictClienteErrores)
+            for item in dictClienteErrores:
+                messages.add_message(request, messages.ERROR, dictClienteErrores[item])
+            
             form_user = UserForm()
             form_user_cliente = ClienteUserForm()
             context = {'form_user': form_user,
-                'form_user_proveedor': form_user_cliente}
+                'form_user_cliente': form_user_cliente}
     else: 
         # Si es GET envio un formulario User y ClienteUser vacios al template
         form_user = UserForm()
@@ -232,11 +243,16 @@ class ProductoCreate(CreateView):
 
 class ProductoUpdate(UpdateView):
     model = Producto
-    fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor','imagenUrl']
+    form_class = ProductoForm
+    #fields = ['nombre', 'marca', 'tipo', 'descripcion', 'valor','imagenUrl']
     #template_name_suffix = '_update_form'
 
     # lo mismo que ProductoUpdate
     template_name = 'registration/producto_update_form.html'
+
+    def form_valid(self, form):
+        form.instance.proveedor = self.request.user.proveedor
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('ver_Produto_Proveedor')
@@ -245,7 +261,7 @@ class ProductoDelete(DeleteView):
     model = Producto
     # lo mismo que ProductoUpdate
     template_name = 'registration/producto_confirm_delete.html'
-    success_url = reverse_lazy('ver_Produto_Proveedor')
+    success_url = reverse_lazy('mostrar_Perfil_Proveedor')
 
 class ClienteUpdate(UpdateView):
     model = User

@@ -4,17 +4,20 @@
 {% block title %} Crear Producto {% endblock %}
 
 {% block content %}
-
-<div class="row">
-    <div class="col col-lg-12">
-        <form action="" method="POST">
-            {% csrf_token %}
-            <table>
-                {{ form }}
-            </table>
-            <input type="submit" class="btn btn-primary" value="Crear">
-        </form>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <h2>Crear Producto</h2>
+        </div>
     </div>
-</div>
-
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto shadow p-3 mb-5 bg-white rounded">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    {{ form }}
+                </table>
+                <input type="submit" class="btn btn-primary" value="Crear">
+            </form>
+        </div>
+    </div>
 {% endblock %}

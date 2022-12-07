@@ -1,39 +1,24 @@
 {% extends "sistemadecompra/base.html" %}
 
-{% block title %} LOGIN {% endblock %}
+{% block title %} Login {% endblock %}
 
 {% block content %}
 
-<div class="text-center">
-    <div class="row justify-content-center">
-        <form class="form-signin" action="" method="POST">
-            <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-            {% csrf_token %}
-            <table>
-                {{ form_user_sesion.as_table }}
-            </table>
-            {% comment %} {% for field in form_user_sesion %}
-                {{ field.label_tag }}<br>
-                {{ field }}
-            {% endfor %} {% endcomment %}
-
-            {% comment %} {% for field in form_user_sesion %}
-                <label class="sr-only">{{ field.label  }}</label>
-                {{ field.widget  }}
-                <input name="{{ field.name }}" class="form-control"  type="{{ field.widget.input_type  }}" value="{{ field.value|default_if_none:'' }}"
-                        placeholder="{{field.field.widget.attrs.placeholder}}">
-            {% endfor %} {% endcomment %}
-
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
-        </form>
+    <div class="text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-auto shadow p-3 mb-5 bg-white rounded">
+                <form class="form-signin" action="" method="POST">
+                    <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+                    <h1 class="h3 mb-3 font-weight-normal">Inicie sesión</h1>
+                    {% csrf_token %}
+                    <table>
+                        {{ form_user_sesion.as_table }}
+                    </table>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-
-
-
-
-
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

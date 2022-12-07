@@ -5,21 +5,30 @@
 
 {% block content %}
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <table>
-            <h1>Registro Horario</h1>
-        {{ form_horario.as_table }}
-    </table>
-    <input type="submit" class="btn btn-primary" type="button" value="Crear">
-</form>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <h2>Registrar Horario</h2>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto shadow p-3 mb-5 bg-white rounded">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    {{ form_horario.as_table }}
+                </table>
+                <input type="submit" class="btn btn-primary" type="button" value="Crear">
+            </form>
+        </div>
+    </div>
+
 
 {% endblock %}
