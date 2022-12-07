@@ -267,7 +267,7 @@ class ProveedorUpdate(UpdateView):
     template_name = 'registration/proveedor_update_form.html'
 
     def get_success_url(self):
-        return reverse_lazy('ver_Produto_Proveedor')
+        return reverse_lazy('mostrar_Perfil_Proveedor')
 
 
 

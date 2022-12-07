@@ -16,6 +16,5 @@ class Producto(models.Model):
 
     creado= models.DateTimeField(auto_now_add=True)
     imagenUrl= models.CharField(max_length=500, null=True, blank=True)
-    imagen = models.ImageField(upload_to='uploads/productos', blank=True)
     def __str__(self):
         return self.nombre

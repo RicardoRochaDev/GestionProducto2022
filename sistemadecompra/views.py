@@ -268,6 +268,9 @@ def verCarrito(request):
         #     request.session['carrito']= carritoAux  
         #     return redirect('ver_Carrito')
 
+    #le saco los espacios a 
+    #for proveedor in proveedores:
+    #    proveedor.user.username = proveedor.user.username.replace(" ","")
     print(proveedores)
     return render(request, "sistemadecompra/verCarrito.html", {"elCarrito": productosAgregados, "losProveedores": proveedores, "total": total, "horarios": horariosProveedor, 'fechaActual': fechaActual})
 

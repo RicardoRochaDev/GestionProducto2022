@@ -118,13 +118,17 @@ Mapas
       var punto;
       var waypts = [];
 
-      punto = {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}};
-      var marker = new google.maps.Marker({ position: punto, map: map});
+      //punto = {lat: {{destinoYOrigenLatitud}}, lng: {{destinoYOrigenLongitud}}};
+      //var marker = new google.maps.Marker({ position: punto, map: map});
 
       {% for c in coordenadas %}
 
         punto = {lat: {{c.latitud}}, lng: {{c.longitud}}};
-        var marker = new google.maps.Marker({ position: punto, map: map});
+        {% comment %} var marker = new google.maps.Marker({ 
+          position: punto, 
+          map: map,
+          title: 'aaaa'
+        }); {% endcomment %}
 
         waypts.push({
           location: {lat: {{c.latitud}}, lng:{{c.longitud}}},

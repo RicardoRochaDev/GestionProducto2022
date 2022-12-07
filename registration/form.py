@@ -100,11 +100,10 @@ class HorarioForm(forms.Form):
 
 class ProductoForm(ModelForm):
     descripcion = forms.CharField(widget=forms.Textarea)
-    file = forms.FileField()
     
     class Meta:
         model = Producto
-        fields = ['nombre','marca','tipo','descripcion','valor','imagenUrl', 'file']
+        fields = ['nombre','marca','tipo','descripcion','valor', 'imagenUrl']
     
     def __init__(self, *args, **kwargs):
         super(ProductoForm, self).__init__(*args, **kwargs)
