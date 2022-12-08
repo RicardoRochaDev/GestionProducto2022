@@ -1,5 +1,7 @@
 from django.urls import path
 #from .views import *
+from django.conf import settings
+from django.conf.urls.static import static 
 from . import views
 
 urlpatterns = [
@@ -27,4 +29,4 @@ urlpatterns = [
     path('eliminarHorario/<int:pk>/', views.HorarioDelete.as_view(), name='eliminar_Horario'),
 
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

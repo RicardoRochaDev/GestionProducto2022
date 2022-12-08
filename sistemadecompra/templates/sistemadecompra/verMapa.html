@@ -67,7 +67,7 @@ Mapas
 </div>
 <div class="row">
   <div class="col col-lg-12">
-    <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps">Abrir Google Maps</a>
+    <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps" target="_blank">Abrir Google Maps</a>
   </div>
 </div>
 {% block scripts %}
@@ -148,6 +148,18 @@ Mapas
           directionsRenderer.setDirections(response);
         })
         .catch((e) => window.alert("Directions request failed due to " + status));
+
+        // Armo la url para insertarla en el boton de redirecc|default_if_none:
+      var urlAppMaps = "https://www.google.com/maps/dir/?api=1&origin="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}} + "&waypoints=";
+      for (var i = 0; i < waypts.length; i++) {
+        //urlAppMaps += waypts[i]
+        //console.log(waypts[i].location.lat);
+        urlAppMaps += waypts[i].location.lat + "," + waypts[i].location.lng + "|";
+      }
+      urlAppMaps += "&destination="+{{destinoYOrigenLatitud}}+","+{{destinoYOrigenLongitud}};
+      urlAppMaps += "&travelMode=DRIVING";
+      const elem = document.getElementById('btnAbrirGoogleMaps');
+      elem.href=urlAppMaps; 
     }
   
     // Calcula el total de la kilometros de la ruta

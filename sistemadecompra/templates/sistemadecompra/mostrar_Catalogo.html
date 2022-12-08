@@ -190,7 +190,7 @@
                 {% endfor %}
                 <br>
                 <br>
-                <button type="submit" name='clasificacion' class="btn btn-success">Aplicar</button>
+                <button type="submit" name='clasificacion' class="btn btn-primary">Aplicar</button>
                 <button type="submit" name='BorrarFiltro' class="btn btn-secondary">Borrar Filtro</button>
             </form>
         </div>
@@ -198,9 +198,10 @@
             <div class="row justify-content-md-center">
                 {% for it in objproducto %}
                     <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="{{it.imagenUrl}}" alt="Card image cap" height="300" width="500">
+                        <img class="card-img-top" src="{{it.foto.url}}" alt="Card image cap" height="300" width="500">
                         <div class="card-body">
                             <h2>{{it.nombre}}</h2>
+                            {{it.foto.url}}
                             {% comment %} <p>Descripcion: {{it.descripcion}}</p> {% endcomment %}
                             <p>Tipo: {{it.tipo}}</p>
                             <p>Proveedor: {{it.proveedor.user.username}}</p>
