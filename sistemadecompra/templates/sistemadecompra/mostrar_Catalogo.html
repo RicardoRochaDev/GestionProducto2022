@@ -198,10 +198,14 @@
             <div class="row justify-content-md-center">
                 {% for it in objproducto %}
                     <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="{{it.foto.url}}" alt="Card image cap" height="300" width="500">
+                        {% if it.foto %}
+                            <img class="card-img-top" src="{{ it.foto.url}}" alt="Card image cap" height="300" width="500">
+                        {% else %}
+                            <img class="card-img-top" src="https://www.bicifan.uy/wp-content/uploads/2016/09/producto-sin-imagen.png" alt="Card image cap" height="300" width="500">
+                        {% endif %}  
+                        
                         <div class="card-body">
                             <h2>{{it.nombre}}</h2>
-                            {{it.foto.url}}
                             {% comment %} <p>Descripcion: {{it.descripcion}}</p> {% endcomment %}
                             <p>Tipo: {{it.tipo}}</p>
                             <p>Proveedor: {{it.proveedor.user.username}}</p>

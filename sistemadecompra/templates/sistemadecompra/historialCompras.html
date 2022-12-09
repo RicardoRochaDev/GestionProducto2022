@@ -76,6 +76,7 @@
                     <li>{{producto.nombre}}</li>
                   {% endfor %}
                 </ul>
+                <p class="mb-1">ESTADO: <b> {{pedido.pedido.estado.nombre}} </b></p>
                 {% if pedido.pedido.calificacion is None %}
                   <button type="button" name="CambioFecha" class="btn btn-primary" data-toggle="modal" data-target="#modalCalificacion{{pedido.pedido.id}}">
                     Calificar al proveedor

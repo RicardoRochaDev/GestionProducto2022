@@ -253,6 +253,7 @@ def verCarrito(request):
                                 break
             if datosValidados == True:
                 request.session['pedidosParaAlmacenar'] = pedidosParaAlmacenar 
+                print(pedidosParaAlmacenar)
                 return redirect('proceder_Checkout')
             else:
                 print("Datos incorrectos. Vuelva a intentar")
@@ -333,13 +334,13 @@ def verCheckout(request):
 
                 #guardo los objetos Producto dentro de productosAgregados
                 for producto in productosQuerySet:
-                    if producto.id in carritoAux:
+                    if producto.id in carritoAux and producto.proveedor == proveedor:
                         productosAgregados.append(producto)
                 for p in productosAgregados:
                     pedido.productos.add(p)
                 
-                request.session['carrito'] = []
-                return redirect(reverse_lazy('/'))
+            request.session['carrito'] = []
+            return redirect(reverse_lazy('/'))
     return render(request, 'sistemadecompra/checkout.html', {'losPagos': pagos})
 
 def verPedidos(request):
@@ -384,6 +385,7 @@ def verPedidos(request):
         if 'cancelar' in request.POST:
             dic=request.POST
             pedido = Pedido.objects.get(id = dic['cancelar'])
+            pedido.estado = EstadoPedido.objects.get(nombre="Cancelado")
 
             user_proveedor= request.user.username
             notificacion_nueva= Notificacion()
@@ -392,8 +394,8 @@ def verPedidos(request):
             notificacion_nueva.mensaje= "El proveedor " + user_proveedor + " ha cancelado su compra por falta de stock" 
             notificacion_nueva.save()
 
-            pedido.delete()
-            print(pedido)
+            pedido.save()
+            #print(pedido)
             ##return render(request, 'registration/perfil_proveedor.html') 
         
         if 'cambioFecha' in request.POST:
@@ -493,13 +495,20 @@ def cambioDeFecha(request, idPedido):
     return render(request, 'sistemadecompra/cambioDeFecha.html', {'pedido': pedido, 'proveedor': proveedor})
 
 def verHistorialVentas(request):
-    productos = Producto.objects.filter(proveedor = request.user.proveedor)
+    #productos = Producto.objects.filter(proveedor = request.user.proveedor)
     estado_entregado= EstadoPedido.objects.get(nombre='Entregado')
-    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, estado = estado_entregado).order_by('-fecha')
+    estado_cancelado= EstadoPedido.objects.get(nombre='Cancelado')
+    #pedidos = Pedido.objects.filter(proveedor = request.user.proveedor, estado = estado_entregado).order_by('-fecha')
+
+    pedidos = Pedido.objects.filter(proveedor = request.user.proveedor)
 
     pedidosHistorial = []
-    for p in pedidos:
-        pedidosHistorial.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
+    for pedido in pedidos:
+        if pedido.estado.nombre == "Entregado" or pedido.estado.nombre == "Cancelado":
+            pedidosHistorial.append({"pedido": pedido, "producto": Producto.objects.filter(pedido= pedido)})
+            #pedidosHistorial.append({"pedido": pedido, "producto": pedido.productos})
+            #print('CALIFICAION:', pedido.calificacion.puntaje)
+            #   
     return render(request, 'sistemadecompra/historialVentas.html',{'pedidosHistorial': pedidosHistorial})
 
 
@@ -549,7 +558,6 @@ def verHistorialCompras(request):
             calificacion_new = Calificacion()
             calificacion_new.puntaje = int(dic['exampleRadios'])
             calificacion_new.comentario = dic['message-text']
-            #calificacion_new.fecha
             
             calificacion_new.save()
             calificacion = Calificacion.objects.last()
