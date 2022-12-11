@@ -6,6 +6,8 @@
           </font>
         {% for pedidoProducto in pedidosSinConfirmar_Producto %}
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          {% comment %} <p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion.day}}/{{pedidoProducto.pedido.fecha_creacion.month}}/{{pedidoProducto.pedido.fecha_creacion.year}}. {{pedidoProducto.pedido.fecha_creacion.time}} </p> {% endcomment %}
+          <p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion}}</p>
           <p class="mb-1">Cliente: {{pedidoProducto.pedido.cliente.user.username}}  {{pedidoProducto.pedido.cliente.user.lastname}}</p>
           <p class="mb-1">Dirección: {{pedidoProducto.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
           <p class="mb-1">Dia de entrega sugerido: {{pedidoProducto.pedido.fecha}}</p>
@@ -22,9 +24,8 @@
             <button type="submit" name="cancelar" value="{{pedidoProducto.pedido.id}}" class="btn btn-danger">Cancelar Pedido</button>
             <button type="submit" name="cambioFecha" value="{{pedidoProducto.pedido.id}}" class="btn btn-warning">Cambio Fecha</button>
 
-          </form>
+          </form> 
         </a>
-
         {% endfor %}
     
     
@@ -38,6 +39,7 @@
       </font>
         {% for pedidoProducto in pedidosConfirmado_Producto %}
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion}}</p>
           <p class="mb-1">Cliente: {{pedidoProducto.pedido.cliente.user.username}}  {{pedidoProducto.pedido.cliente.user.lastname}}</p>
           <p class="mb-1">Dirección: {{pedidoProducto.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
           <p class="mb-1">Dia de entrega sugerido: {{pedidoProducto.pedido.fecha}}</p>
@@ -50,7 +52,6 @@
           </ul>
           <form action="{% url 'ver_Pedidos' %}" method="POST">
             {% csrf_token %}
-
             <button type="submit" name="confirmarEntrega" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Entrega</button>
           </form>
         </a>

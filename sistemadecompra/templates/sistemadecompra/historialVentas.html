@@ -3,6 +3,7 @@
     <div class="list-group">
       {% for p in pedidosHistorial %}
       <div class="list-group-item flex-column align-items-start">
+        <p class="text-right font-italic"> {{p.pedido.fecha_creacion}}</p>
         <p class="mb-1">Cliente: {{p.pedido.cliente.user.first_name}} {{p.pedido.cliente.user.last_name}}</p>
         <p class="mb-1">Dia de entrega sugerido: {{p.pedido.fecha}}</p>
         <p class="mb-1">Hora de entrega sugerido: {{p.pedido.hora}}</p>

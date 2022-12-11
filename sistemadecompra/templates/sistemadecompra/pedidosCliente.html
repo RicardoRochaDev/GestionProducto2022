@@ -62,6 +62,7 @@
           	</font>
 			{% for dic in misPedidos %}
 				<div class="list-group-item list-group-item-action flex-column align-items-start">
+					<p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion}}</p>
 					<p class="mb-1">Proveedor: {{dic.pedido.proveedor.user.username}}</p>
 					<p class="mb-1">Dia de entrega elegido: {{dic.pedido.fecha}}</p>
 					<p class="mb-1">Hora de entrega elegido: {{dic.pedido.hora}}</p>

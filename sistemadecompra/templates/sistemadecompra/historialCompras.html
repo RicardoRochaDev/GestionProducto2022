@@ -68,6 +68,7 @@
           <div class="list-group">
               {% for pedido in pedidosHistorial %}
               <div class="list-group-item flex-column align-items-start">
+                <p class="text-right font-italic"> {{pedido.pedido.fecha_creacion}}</p>
                 <p class="mb-1">Proveedor: {{pedido.pedido.proveedor.user.username}}</p>
                 <p class="mb-1">Dirección: {{pedido.pedido.calle}} {{pedido.pedido.numero}}</p>
                 <p class="mb-1">Productos pedidos:</p>
