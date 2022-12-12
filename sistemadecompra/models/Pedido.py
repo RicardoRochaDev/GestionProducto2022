@@ -25,8 +25,7 @@ class Pedido(models.Model):
     latitud = models.DecimalField(max_digits=20, decimal_places=10)
     longitud = models.DecimalField(max_digits=20, decimal_places=10)
 
-    productos = models.ManyToManyField(
-        Producto)
+    productos = models.ManyToManyField(Producto, through='PedidoProductos')
 
     estado = models.ForeignKey(
         EstadoPedido, 
@@ -38,3 +37,8 @@ class Pedido(models.Model):
 
     def __str__(self):
         return "Cliente: " + self.cliente.user.username + " - Proveedor: " + self.proveedor.user.username
+
+class PedidoProductos(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()
