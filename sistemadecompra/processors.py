@@ -27,7 +27,16 @@ def notificaciones(request):
 
             
             carrito_session = request.session.get('carrito', [])
-            cantidad_items_carrito = len( carrito_session)
+            cantidad_items_carrito = 0
+            
+            # solo por las dudas, filtro la lista de diccionarios para sacar los diccionarios vacios (pueden llegar a quedar diccionarios vacios a veces)
+            carrito_session = list(filter(None, carrito_session))
+            request.session['carrito']= carrito_session 
+            
+            for item in carrito_session:
+                print("item")
+                print(item)
+                cantidad_items_carrito += next(iter(item.values()))
     
                           
         if hasattr(request.user, 'proveedor'):

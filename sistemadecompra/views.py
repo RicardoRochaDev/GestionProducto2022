@@ -28,6 +28,7 @@ from django.shortcuts import redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from operator import itemgetter
 
 # Create your views here.
 ## ESTAS DOS VISTAS LAS CREAMOS NOSOTROS AHORA
@@ -106,6 +107,8 @@ def mostrar_catalogo_v(request): #Paso un parametro adicional con el valor del i
         list_id_users_proveedor.append(it.user.id)
         #print ('asdsadasd ', it.user.id)
 
+
+    # creo el carrito en la session por las dudas
     if 'carrito' not in request.session:
         request.session['carrito'] = []
 
@@ -128,18 +131,34 @@ def mostrar_catalogo_v(request): #Paso un parametro adicional con el valor del i
         if 'elId' in request.GET:
             dic = request.GET  # devuelve un diccionario
             id = dic['elId']
-            id = int(id)
+            #id = int(id)
             #id= int(dic['elId'])
 
             # print(type(id))
             carritoAux = request.session['carrito']
-            if id not in carritoAux:
-                carritoAux.append(id)
+            # if id not in carritoAux:
+            #     carritoAux.append(id)
+            
+            #ATENCION: SE TUVO QUE HACER ESTA PARTE DEL CODIGO MANUALMENTE POR FALTA DE CONOCIMIENTO
+
+            #busco si ya esta agregado el producto en el carrito
+            
+            existeElProducto = False
+            
+            for item in carritoAux:
+                print("itreacion")
+                if id in item:
+                    print("encontro el prod id")
+                    item.update({id: item.get(id) + 1})
+                    existeElProducto = True
+                    break
+            
+            if (existeElProducto == False):
+                 carritoAux.append({id: 1})
             request.session['carrito'] = carritoAux
-        # if 'clasificacion' in request.GET:
-        #     dic = request.GET
-        #     if dic['clasificacion'] == "1":
-        #         p = Producto.objects.get(id=1)
+            
+            print("imprimo carrito en consola")
+            print(carritoAux)
             return render(request, 'sistemadecompra/mostrar_catalogo.html', {"objproducto": list_Producto, 
                                                                             "list_producto_nuevos":list_producto_nuevos})            
 
@@ -211,17 +230,18 @@ def verCarrito(request):
     proveedores = []
     total = 0
     horariosProveedor = Horario.objects.all()
-
-    # guardo los objetos Producto dentro de productosAgregados y extraigo los proveedores
-    for producto in productosQuerySet:
-        if producto.id in carritoAux:
-            productosAgregados.append(producto)
-            if not(Proveedor.objects.get(id=producto.proveedor.id) in proveedores):
-                proveedores.append(Proveedor.objects.get(id=producto.proveedor.id))
-            total = total + producto.valor
-
+    
+    
     if (request.method == 'GET'):
         if 'solicitudCheckout' in request.GET:
+            # Actualizo las cantidades de los productos del carrito
+            for item in carritoAux:
+                keyAux = "cantProd" + next(iter(item.keys()))
+                dic= request.GET
+                print(dic[keyAux])
+                item.update({next(iter(item.keys())): int(dic[keyAux])})
+            request.session['carrito'] = carritoAux
+            
             datosValidados = False
             pedidosParaAlmacenar = []
             for prov in proveedores:
@@ -268,6 +288,29 @@ def verCarrito(request):
         #     carritoAux.remove(id)
         #     request.session['carrito']= carritoAux  
         #     return redirect('ver_Carrito')
+
+
+
+    # Obtengo las keys que estan en el carrito de la session para tener una lista con los productos ids
+    listaProductosIdsFromCarrito = []
+    for item in carritoAux:
+        idInt = int(next(iter(item.keys())))
+        listaProductosIdsFromCarrito.append(idInt)
+    
+    # guardo los objetos Producto dentro de productosAgregados y extraigo los proveedores
+    for producto in productosQuerySet:
+        if producto.id in listaProductosIdsFromCarrito:
+            prodIdStr = str(producto.id)
+            cantAux = 0
+            for item in carritoAux:
+                if str(producto.id) in item:
+                    cantAux = item.get(prodIdStr)
+                    break
+            
+            productosAgregados.append({"producto": producto, "cantidad": cantAux})
+            if not(Proveedor.objects.get(id=producto.proveedor.id) in proveedores):
+                proveedores.append(Proveedor.objects.get(id=producto.proveedor.id))
+            total = total + producto.valor
 
     #le saco los espacios a 
     #for proveedor in proveedores:
@@ -615,7 +658,20 @@ def elimimar_item_carrito(request, idProducto):
     producto = Producto.objects.get(id=idProducto)
     carritoAux= request.session['carrito']
     print ('CARRITOOO: ',carritoAux)
-    carritoAux.remove(idProducto)
+    strProdId = str(idProducto)
+    for item in carritoAux:
+        if strProdId in item:
+            item.pop(strProdId)
+            break
+    
+    # Al eliminar el producto (que esta representado por un diccionario), queda un diccionario vacio y rompe todo el sistema.
+    # Uso filter para eliminar ese diccionario vacio
+    carritoAux = list(filter(None, carritoAux))
+    
+    # print(type(idProducto))
+    # carritoAux.pop(str(idProducto))
+    print ('CARRITOOO2: ',carritoAux)
+    
     request.session['carrito']= carritoAux  
 
     return redirect('ver_Carrito')
