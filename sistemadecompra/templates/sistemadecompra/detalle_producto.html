@@ -36,7 +36,12 @@
                     <h6 class="card-subtitle">{{producto.marca}}</h6>
                     <div class="row">
                         <div class="col-6">
-                            <div class="white-box text-center"><img src="{{producto.foto.url}}" width="440" height="500" class="img-responsive"></div>
+                            {% if producto.foto %}
+                                <img class="white-box text-center" src="{{ producto.foto.url}}" alt="Card image cap" height="300" width="440">
+                            {% else %}
+                                <img class="white-box text-center" src="https://www.bicifan.uy/wp-content/uploads/2016/09/producto-sin-imagen.png" alt="Card image cap" height="300" width="440">
+                            {% endif %}  
+                            {% comment %} <div class="white-box text-center"><img src="{{producto.foto.url}}" width="440" height="500" class="img-responsive"></div> {% endcomment %}
                         </div>
                         <div class="col-6">
                             <h4 class="box-title mt-5">Descripción</h4>

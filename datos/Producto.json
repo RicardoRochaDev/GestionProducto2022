@@ -6,7 +6,7 @@
         "Descripcion": "Bebida con gas",
         "Valor": 500,
         "imagenUrl" : "http://www.mojitos.com.ar/images/fotos/prd/10_Coca-Cola-2.5l.jpg",
-        "Proveedor": "La pronto"
+        "Proveedor": "Lapronto"
     },
     {
         "Nombre": "Agua 1.5L",
@@ -15,7 +15,7 @@
         "Descripcion": " Bebida sin gas",
         "Valor": 200,
         "imagenUrl" : "https://d1on8qs0xdu5jz.cloudfront.net/webapp/images/productos/b/0000001000/1002.jpg",
-        "Proveedor": "La pronto"
+        "Proveedor": "Lapronto"
     },
     {
         "Nombre": "Agua 2.5L",
@@ -24,7 +24,7 @@
         "Descripcion": " Bebida sin gas",
         "Valor": 300,
         "imagenUrl" : "https://http2.mlstatic.com/D_NQ_NP_861910-MLA46946865742_082021-O.webp",
-        "Proveedor": "La pronto"
+        "Proveedor": "Lapronto"
     },
     {
         "Nombre": "Pan",
