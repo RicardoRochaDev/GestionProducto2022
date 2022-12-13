@@ -23,9 +23,7 @@
 
 {% endblock %}
 
-{% block title %}
-Mapas
-{% endblock %}
+
 {% comment %} <div class="row">
   <div class="col col-lg-10">
     <div id="floating-panel">
@@ -49,6 +47,13 @@ Mapas
     </div>
   </div>
 </div> {% endcomment %}
+<div class="row">
+  <div class="col col-lg-12">
+    <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps" target="_blank">Abrir Google Maps</a>
+  </div>
+</div>
+<br>
+
 <div id="floating-panel">
       <b>Modo de Viaje: </b>
       <select id="modoViaje">
@@ -57,19 +62,20 @@ Mapas
         <option value="BICYCLING">En Bicicleta</option>
         {% comment %} <option value="TRANSIT">Bus?</option> {% endcomment %}
       </select>
-    </div>
+</div>
+
 <div id="container">
-  <div id="mapDirections"></div>
-  <div id="sidebar">
-    <p>Total Distance: <span id="total"></span></p>
-    <div id="panel"></div>
+  <div id="mapDirections">
+
   </div>
+    <div id="sidebar">
+      <p>Total Distance: <span id="total"></span></p>
+      <div id="panel" class="overflow-auto">
+      
+      </div>
+    </div>
 </div>
-<div class="row">
-  <div class="col col-lg-12">
-    <a class="btn btn-primary" href="" role="button" id="btnAbrirGoogleMaps" target="_blank">Abrir Google Maps</a>
-  </div>
-</div>
+
 {% block scripts %}
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgnETqEf92aH6sMfZ8TT3oXpR1ZWubs0Y&callback=iniciarMapa"></script> 
 
