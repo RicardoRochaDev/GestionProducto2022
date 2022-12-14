@@ -14,8 +14,8 @@
           <p class="mb-1">Hora de entrega sugerido: {{pedidoProducto.pedido.hora}}</p>
           <p class="mb-1">Productos pedidos:</p>
           <ul>
-            {% for producto in pedidoProducto.producto%}
-            <li>{{producto.nombre}}</li>
+            {% for prodCant in pedidoProducto.producto_cantidad%}
+              <li>{{prodCant.producto.nombre}} x{{prodCant.cantidad}}</li>
             {% endfor %}
           </ul>
           <form action="{% url 'ver_Pedidos' %}" method="POST">
@@ -46,8 +46,8 @@
           <p class="mb-1">Hora de entrega sugerido: {{pedidoProducto.pedido.hora}}</p>
           <p class="mb-1">Productos pedidos:</p>
           <ul>
-            {% for producto in pedidoProducto.producto%}
-            <li>{{producto.nombre}}</li>
+            {% for prodCant in pedidoProducto.producto_cantidad%}
+              <li>{{prodCant.producto.nombre}} x{{prodCant.cantidad}}</li>
             {% endfor %}
           </ul>
           <form action="{% url 'ver_Pedidos' %}" method="POST">

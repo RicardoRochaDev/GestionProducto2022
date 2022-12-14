@@ -18,7 +18,7 @@
                                 <p class="font-weight-light font-italic"> {{dic.fecha.time}} </p>
                             </div>
                             <div class="media-body" style="background-color: #F1F1F1; padding: 1em; margin: 0.7em; border-radius: 15px;">
-                                <h5 class="mt-0 mb-1">{{dic.cliente}}</h5>
+                                <h5 class="mt-0 mb-1">{{dic.cliente}} ({{dic.puntaje}} estrellas)</h5>
                                 <p>{{dic.comentario}}</p>
                             </div>   
                         </li>
@@ -70,7 +70,7 @@
         {% if puntajePromedio == 0 %}
                 <p> Sin puntaje aun. </p>
             {% else %}
-                <p>{{puntajePromedio}} ({{cantidadCalifacion}})</p>
+                <p>{{puntajePromedio}} de 5 ({{cantidadCalifacion}})</p>
             {% endif %}  
     </div>
 </div>

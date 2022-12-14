@@ -34,8 +34,6 @@ def notificaciones(request):
             request.session['carrito']= carrito_session 
             
             for item in carrito_session:
-                print("item")
-                print(item)
                 cantidad_items_carrito += next(iter(item.values()))
     
                           

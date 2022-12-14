@@ -23,7 +23,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy
-from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto, Notificacion, EstadoPedido
+from sistemadecompra.models import Producto, Proveedor, Producto, MetodoDePago, TipoProducto, Notificacion, EstadoPedido, PedidoProductos
 from django.shortcuts import redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -231,6 +231,27 @@ def verCarrito(request):
     total = 0
     horariosProveedor = Horario.objects.all()
     
+    # Obtengo las keys que estan en el carrito de la session para tener una lista con los productos ids
+    listaProductosIdsFromCarrito = []
+    for item in carritoAux:
+        idInt = int(next(iter(item.keys())))
+        listaProductosIdsFromCarrito.append(idInt)
+    
+    # guardo los objetos Producto dentro de productosAgregados y extraigo los proveedores
+    for producto in productosQuerySet:
+        if producto.id in listaProductosIdsFromCarrito:
+            prodIdStr = str(producto.id)
+            cantAux = 0
+            for item in carritoAux:
+                if str(producto.id) in item:
+                    cantAux = item.get(prodIdStr)
+                    break
+            
+            productosAgregados.append({"producto": producto, "cantidad": cantAux})
+            if not(Proveedor.objects.get(id=producto.proveedor.id) in proveedores):
+                proveedores.append(Proveedor.objects.get(id=producto.proveedor.id))
+            total = total + producto.valor
+
     
     if (request.method == 'GET'):
         if 'solicitudCheckout' in request.GET:
@@ -238,7 +259,6 @@ def verCarrito(request):
             for item in carritoAux:
                 keyAux = "cantProd" + next(iter(item.keys()))
                 dic= request.GET
-                print(dic[keyAux])
                 item.update({next(iter(item.keys())): int(dic[keyAux])})
             request.session['carrito'] = carritoAux
             
@@ -248,6 +268,8 @@ def verCarrito(request):
                 fechaProvId = "fecha" + str(prov.id)
                 tiempoProvId = "tiempo" + str(prov.id)
                 
+                print("fechaprovid")
+                print(fechaProvId)
                 if fechaProvId in request.GET:
                     dic= request.GET # devuelve un diccionario
                     fecha = dic[fechaProvId]
@@ -271,9 +293,10 @@ def verCarrito(request):
                                 })
                                 datosValidados = True
                                 break
+            print("datos validados")
+            print(datosValidados)
             if datosValidados == True:
-                request.session['pedidosParaAlmacenar'] = pedidosParaAlmacenar 
-                print(pedidosParaAlmacenar)
+                request.session['pedidosParaAlmacenar'] = pedidosParaAlmacenar
                 return redirect('proceder_Checkout')
             else:
                 print("Datos incorrectos. Vuelva a intentar")
@@ -291,31 +314,10 @@ def verCarrito(request):
 
 
 
-    # Obtengo las keys que estan en el carrito de la session para tener una lista con los productos ids
-    listaProductosIdsFromCarrito = []
-    for item in carritoAux:
-        idInt = int(next(iter(item.keys())))
-        listaProductosIdsFromCarrito.append(idInt)
     
-    # guardo los objetos Producto dentro de productosAgregados y extraigo los proveedores
-    for producto in productosQuerySet:
-        if producto.id in listaProductosIdsFromCarrito:
-            prodIdStr = str(producto.id)
-            cantAux = 0
-            for item in carritoAux:
-                if str(producto.id) in item:
-                    cantAux = item.get(prodIdStr)
-                    break
-            
-            productosAgregados.append({"producto": producto, "cantidad": cantAux})
-            if not(Proveedor.objects.get(id=producto.proveedor.id) in proveedores):
-                proveedores.append(Proveedor.objects.get(id=producto.proveedor.id))
-            total = total + producto.valor
-
     #le saco los espacios a 
     #for proveedor in proveedores:
     #    proveedor.user.username = proveedor.user.username.replace(" ","")
-    print(proveedores)
     return render(request, "sistemadecompra/verCarrito.html", {"elCarrito": productosAgregados, "losProveedores": proveedores, "total": total, "horarios": horariosProveedor, 'fechaActual': fechaActual})
 
 def verCheckout(request):
@@ -375,12 +377,34 @@ def verCheckout(request):
                 productosQuerySet = Producto.objects.all()
                 productosAgregados = []
 
+                # Obtengo las keys que estan en el carrito de la session para tener una lista con los productos ids
+                listaProductosIdsFromCarrito = []
+                for item in carritoAux:
+                    idInt = int(next(iter(item.keys())))
+                    listaProductosIdsFromCarrito.append(idInt)
+                
+                
+                
                 #guardo los objetos Producto dentro de productosAgregados
                 for producto in productosQuerySet:
-                    if producto.id in carritoAux and producto.proveedor == proveedor:
-                        productosAgregados.append(producto)
+                    if producto.id in listaProductosIdsFromCarrito and producto.proveedor == proveedor:
+                        prodIdStr = str(producto.id)
+                        cantAux = 0
+                        for item in carritoAux:
+                            if prodIdStr in item:
+                                cantAux = item.get(prodIdStr)
+                                break
+                        productosAgregados.append({"producto": producto, "cantidad": cantAux})
+                        
+                #asocio los productos al pedido
                 for p in productosAgregados:
-                    pedido.productos.add(p)
+                    print("p?")
+                    print(p)
+                    #pedido.productos(p.get('producto'), through_defaults={'cantidad': p.get('cantidad')})
+                    
+                    pedidoProducto = PedidoProductos(producto=p.get('producto'), pedido=pedido,
+                    cantidad=p.get('cantidad'),)
+                    pedidoProducto.save()
                 
             request.session['carrito'] = []
             return redirect(reverse_lazy('/'))
@@ -462,10 +486,18 @@ def verPedidos(request):
 
     for p in pedidos:
         if p.estado.nombre == "Creado":
-            pedidosSinConfirmar_Producto.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
+            listaProd = []
+            for producto in p.productos.all():
+                pedProd = producto.pedidoproductos_set.get(pedido=p)
+                listaProd.append({"producto": pedProd.producto, "cantidad": pedProd.cantidad})
+            pedidosSinConfirmar_Producto.append({"pedido": p, "producto_cantidad": listaProd})
         else:
             if p.estado.nombre == "Confirmado":
-                pedidosConfirmado_Producto.append({"pedido": p, "producto": Producto.objects.filter(pedido= p)})
+                listaProd = []
+                for producto in p.productos.all():
+                    pedProd = producto.pedidoproductos_set.get(pedido=p)
+                    listaProd.append({"producto": pedProd.producto, "cantidad": pedProd.cantidad})
+                pedidosConfirmado_Producto.append({"pedido": p, "producto_cantidad": listaProd})
 
     #print(pedidosConfirmado_Producto)
     return render(request, 'sistemadecompra/pedidos.html',{'pedidosSinConfirmar_Producto': pedidosSinConfirmar_Producto, 'pedidosConfirmado_Producto': pedidosConfirmado_Producto})
@@ -568,7 +600,10 @@ def verInformacionProveedor(request):
             sumaPuntaje= sumaPuntaje + pedido.calificacion.puntaje
             cantidadCalifacion += 1
             #comentarios.append(pedido.calificacion.comentario)
-            comentarios.append({'comentario': pedido.calificacion.comentario, 'cliente': pedido.cliente.user.username, 'fecha': pedido.calificacion.fecha})
+            comentarios.append({'comentario': pedido.calificacion.comentario, 
+                                'cliente': pedido.cliente.user.username, 
+                                'fecha': pedido.calificacion.fecha,
+                                'puntaje': pedido.calificacion.puntaje})
 
     #print('sumaPuntaje: ', sumaPuntaje)
     #print('cantidadCalifacion: ', cantidadCalifacion) 
@@ -634,8 +669,13 @@ def verPedidosCliente(request):
     for pedido in auxPedidos:
         if pedido.estado.nombre == "Creado" or pedido.estado.nombre == "Cambio Fecha" or pedido.estado.nombre == "Confirmado":
             print ("HORARIOSSSS: ", pedido.proveedor.horario_set.all())
-            
-            misPedidos.append({"pedido": pedido, "producto": Producto.objects.filter(pedido= pedido)})
+            listaProd = []
+            for producto in pedido.productos.all():
+                p = producto.pedidoproductos_set.get(pedido=pedido)
+                print("productos")
+                print(p.producto)
+                listaProd.append({"producto": p.producto, "cantidad": p.cantidad})
+            misPedidos.append({"pedido": pedido, "producto_cantidad": listaProd})
 
     #print(pedidosSinConfirmar_Producto[0].productos)
     #print(pedidosConfirmado_Producto)

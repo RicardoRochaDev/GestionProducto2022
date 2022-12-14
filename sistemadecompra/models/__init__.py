@@ -8,3 +8,4 @@ from .TipoProducto import TipoProducto
 from .Notificacion import Notificacion
 from .Calificacion import Calificacion
 from .EstadoPedido import EstadoPedido
+from .Pedido import PedidoProductos

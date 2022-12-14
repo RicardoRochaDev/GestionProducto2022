@@ -68,8 +68,8 @@
 					<p class="mb-1">Hora de entrega elegido: {{dic.pedido.hora}}</p>
 					<p class="mb-1">Productos pedidos:</p>
 					<ul>
-						{% for producto in dic.producto %}
-							<li>{{producto.nombre}}</li>
+						{% for prodCant in dic.producto_cantidad %}
+							<li>{{prodCant.producto.nombre}} x{{prodCant.cantidad}}</li>
 						{% endfor %}
 					</ul>  
 
