@@ -3,12 +3,12 @@
 
 <h2> LISTA DE HORARIOS </h2>
 
-{% for it in lista_horario_proveedor %}
-    <h5>Dia: {{ it.dia }} </h5> 
-    <h5>Hora Inicio: {{ it.horaInicio }} </h5>
-    <h5>Hora Final: {{ it.horaFinal }} </h5>  
+{% for dic in lista_horario_proveedor %}
+    <h5>Dia: {{ dic.dia }} </h5> 
+    <h5>Hora Inicio: {{ dic.horaInicio }} </h5>
+    <h5>Hora Final: {{ dic.horaFinal }} </h5>  
 
-    <a href="{% url 'eliminar_Horario' it.id %}"> Eliminar Horario</a></h3>
+    <a href="{% url 'eliminar_Horario' dic.id %}"> Eliminar Horario</a></h3>
     <hr>
 {% endfor %} {% endcomment %}
 
@@ -19,25 +19,53 @@
 </div>
 <hr>
 
-{% for it in lista_horario_proveedor %}
-<div class="row">
-    <div class="col col-lg-4">
-        <h6>Día</h6>
-        <p>{{it.dia}}</p>
-    </div>
-    <div class="col col-lg-4">
-        <h6>Hora Inicio</h6>
-        <p>{{ it.horaInicio }}</p>
-    </div>
-    <div class="col col-lg-4">
-        <h6>Hora Final</h6>
-        <p>{{it.horaFinal}} </p>
-    </div>
-</div>
-<div class="row">
-    <div class="col col-lg-12">
-        <a  class="btn btn-danger btn-sm" href="{% url 'eliminar_Horario' it.id %}"> Eliminar</a>
-    </div>
-</div>
+{% for horario in lista_horario_proveedor %}
+    <div class="row">
+        <div class="col col-lg-3">
+            <h6 class="p-1 mb-2 bg-success text-white">Día: {{horario.Dia}}</h6>
+        </div>       
+        <div class="col col-lg-3">
+            <h6>Hora Inicio</h6>
+        </div>
+        <div class="col col-lg-3">
+            <h6>Hora Final</h6>
+        </div>
+        <div class="col col-lg-3">
+            
+        </div>
+    </div>   
+    {% if horario.lista %} 
+        {% for dic in horario.lista %}
+        <div class="row">
+            <div class="col col-lg-3">
+
+            </div>       
+            <div class="col col-lg-3">
+                <h6>{{dic.horaInicio}}</h6>
+            </div>
+            <div class="col col-lg-3">
+                <h6>{{dic.horaFinal}}</h6>
+            </div>
+            <div class="col col-lg-3">
+                <a  class="btn btn-danger btn-sm" href="{% url 'eliminar_Horario' dic.id %}"> Eliminar</a>  
+            </div>
+        </div>
+        {% endfor %}
+    {% else  %}
+        <div class="row">
+            <div class="col col-lg-3">
+
+            </div>       
+            <div class="col col-lg-3">
+                <h6>---</h6>
+            </div>
+            <div class="col col-lg-3">
+                <h6>---</h6>
+            </div>
+            <div class="col col-lg-3">
+
+            </div>
+        </div>
+    {% endif %}
 <hr>
 {% endfor %}

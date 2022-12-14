@@ -213,7 +213,53 @@ def ver_productos_proveedor(request):
 def ver_horarios_proveedor(request):
     lista_horario_proveedor = Horario.objects.filter(
         proveedor=request.user.proveedor)
-    context = {'lista_horario_proveedor': lista_horario_proveedor}
+    
+    lista_horario_ordenada = []
+    
+    lista_horario_dia = []
+    for horario in lista_horario_proveedor:
+        if horario.dia == 'Lunes':
+            lista_horario_dia.append(horario)
+    lista_horario_ordenada.append({"Dia":"Lunes","lista": lista_horario_dia})
+
+    lista_horario_dia = []
+    for horario in lista_horario_proveedor:
+        if horario.dia == 'Martes':
+            lista_horario_dia.append(horario)
+    lista_horario_ordenada.append({"Dia":"Martes","lista": lista_horario_dia})
+
+    lista_horario_dia = []
+    for horario in lista_horario_proveedor:
+        if horario.dia == 'Miercoles':
+            lista_horario_dia.append(horario)
+    lista_horario_ordenada.append({"Dia":"Miercoles","lista": lista_horario_dia})
+
+    lista_horario_dia = []
+    for horario in lista_horario_proveedor:
+        if horario.dia == 'Jueves':
+            lista_horario_dia.append(horario)
+    lista_horario_ordenada.append({"Dia":"Jueves","lista": lista_horario_dia})
+
+    lista_horario_dia = []
+    for horario in lista_horario_proveedor:
+        if horario.dia == 'Viernes':
+            lista_horario_dia.append(horario)
+    lista_horario_ordenada.append({"Dia":"Viernes","lista": lista_horario_dia})
+
+    lista_horario_dia = []
+    for horario in lista_horario_proveedor:
+        if horario.dia == 'Sabado':
+            lista_horario_dia.append(horario)
+    lista_horario_ordenada.append({"Dia":"Sabado","lista": lista_horario_dia})
+
+    lista_horario_dia = []
+    for horario in lista_horario_proveedor:
+        if horario.dia == 'Domingo':
+            lista_horario_dia.append(horario)
+    lista_horario_ordenada.append({"Dia":"Domingo","lista": lista_horario_dia})
+         
+    
+    context = {'lista_horario_proveedor': lista_horario_ordenada}
     return render(request, 'registration/horario_proveedor.html', context)
 
 
