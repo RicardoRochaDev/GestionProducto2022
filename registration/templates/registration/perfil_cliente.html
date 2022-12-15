@@ -7,15 +7,14 @@
 <input type="hidden" name="tabHidden" id="tabHidden" value="{{tab}}">
 
 <div class="row">
-    <div class="col col-lg-2">
-      <div class="nav flex-column nav-pills menuvertical" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="{% url 'ver_Informacion_Cliente' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">Información</a>
-        <a class="nav-link" id="tabHistorialCompras" data-toggle="pill" href="{% url 'ver_Historial_Compras' %}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Historial de Compras</a>
-        <a class="nav-link" id="tabPedidos" data-toggle="pill" href="{% url 'ver_Pedidos_Cliente' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Pedidos</a>
-        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'modificar_Cliente' request.user.id %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Modificar datos</a>
+    <div class="col col-lg-2" style="background-color: #004b8d;  height: 650px; margin-top: -10px; padding-top: 0">
+      <div class="text-white nav flex-column nav-pills menuvertical" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a style="font-size: 18px;" class="text-white nav-link active" id="tabInformacion" data-toggle="pill" href="{% url 'ver_Informacion_Cliente' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">Información</a>
+        <a style="font-size: 18px;" class="text-white nav-link" id="tabHistorialCompras" data-toggle="pill" href="{% url 'ver_Historial_Compras' %}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Historial de Compras</a>
+        <a style="font-size: 18px;" class="text-white nav-link" id="tabPedidos" data-toggle="pill" href="{% url 'ver_Pedidos_Cliente' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Pedidos</a>
       </div>
     </div> 
-    <div class="col col-lg-10" id="contenido">
+    <div class="col col-lg-10 overflow-auto" id="contenido" style="height: 650px;">
       
     </div>
   </div>
@@ -37,6 +36,10 @@
               $("#tabPedidos").addClass("active");
               var href = $("#tabPedidos").attr('href');
             }
+            cargarVista(href);
+          }else{
+            $("#tabInformacion").addClass("active");
+            var href = $("#tabInformacion").attr('href');
             cargarVista(href);
           }
           

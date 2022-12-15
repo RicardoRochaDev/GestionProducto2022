@@ -1,4 +1,4 @@
-{% for dic in misPedidos %}
+{% comment %} {% for dic in misPedidos %}
 	<!-- Modal -->
 	<div class="modal fade" id="modalCambioFecha{{dic.pedido.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -29,7 +29,7 @@
 			</div>
 		</div>
 	</div>
-{% endfor %}
+{% endfor %} {% endcomment %}
 
 {% comment %} {% for dic in misPedidos %}
 	<!-- Modal -->
@@ -62,7 +62,7 @@
           	</font>
 			{% for dic in misPedidos %}
 				<div class="list-group-item list-group-item-action flex-column align-items-start">
-					<p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion}}</p>
+					<p class="text-right font-italic"> {{dic.pedido.fecha_creacion}}</p>
 					<p class="mb-1">Proveedor: {{dic.pedido.proveedor.user.username}}</p>
 					<p class="mb-1">Dia de entrega elegido: {{dic.pedido.fecha}}</p>
 					<p class="mb-1">Hora de entrega elegido: {{dic.pedido.hora}}</p>
@@ -84,7 +84,7 @@
 							{% comment %} <button type="button" name="CambioFecha" class="btn btn-warning" data-toggle="modal" data-target="#modalCambioFecha{{dic.pedido.id}}">
 								Cambiar Fecha
 							</button> {% endcomment %}
-							<a class="btn btn-warning" href="{% url 'cambio_De_Fecha' dic.pedido.id %}" role="button">Cambiar Fecha
+							<a class="btn btn-warning" href="{% url 'cambio_De_Fecha' dic.pedido.id %}" role="button">Cambiar Fecha</a>
 						{% endif %}
 					</form>
 				</div>

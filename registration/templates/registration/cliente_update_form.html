@@ -1,9 +1,20 @@
-{% block title %} Modificar Cliente {% endblock %}
+{% extends "sistemadecompra/base.html" %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Modificar">
-</form>
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <h2>Modificar Cliente</h2>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto shadow p-3 mb-5 bg-white rounded">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input class="btn btn-primary" type="submit" value="Modificar">
+            </form>
+        </div>
+    </div>
+{% endblock %}

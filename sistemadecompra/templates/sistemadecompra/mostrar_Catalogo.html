@@ -193,9 +193,11 @@
                 <button type="submit" name='clasificacion' class="btn btn-primary">Aplicar</button>
                 <button type="submit" name='BorrarFiltro' class="btn btn-secondary">Borrar Filtro</button>
             </form>
+            <br>
+            <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Buscar por nombre del producto">
         </div>
         <div class="col-9">
-            <div class="row justify-content-md-center">
+            <div class="row justify-content-md-center" id="myItems">
                 {% for it in objproducto %}
                     <div class="card" style="width: 18rem;">
                         {% if it.foto %}
@@ -205,7 +207,7 @@
                         {% endif %}  
                         
                         <div class="card-body">
-                            <h2>{{it.nombre}}</h2>
+                            <h2 class="card-title">{{it.nombre}}</h2>
                             {% comment %} <p>Descripcion: {{it.descripcion}}</p> {% endcomment %}
                             <p>Tipo: {{it.tipo}}</p>
                             <p>Proveedor: {{it.proveedor.user.username}}</p>
@@ -249,6 +251,25 @@
     </div>
   
 </main>
+
+<script>
+    function myFunction() {
+        var input, filter, cards, cardContainer, h2, title, i;
+        input = document.getElementById("myFilter");
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById("myItems");
+        cards = cardContainer.getElementsByClassName("card");
+        for (i = 0; i < cards.length; i++) {
+            title = cards[i].querySelector(".card-body h2.card-title");
+            if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+    </script>
+    
 
 {% endblock %}
 {% comment %} <p>Usuario Actual: {{request.user}} </p>

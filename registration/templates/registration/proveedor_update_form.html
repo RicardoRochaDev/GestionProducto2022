@@ -1,14 +1,20 @@
 {% extends "sistemadecompra/base.html" %}
 
-
-
 {% block content %}
-{% block title %} Modificar Proveedor {% endblock %}
-<form action="" method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Modificar">
-</form>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <h2>Modificar Proveedor</h2>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto shadow p-3 mb-5 bg-white rounded">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="Modificar" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
 {% endblock %}

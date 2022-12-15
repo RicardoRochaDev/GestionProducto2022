@@ -8,13 +8,12 @@
     {% comment %} <div class="col col-lg-2" style="background-color:#173ca4;"> {% endcomment %}
     <div class="col col-lg-2">
       <div class="nav flex-column nav-pills menuvertical" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="{% url 'ver_Informacion_Proveedor' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">Información</a>
+        <a class="nav-link active" id="tabInformacion" data-toggle="pill" href="{% url 'ver_Informacion_Proveedor' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">Información</a>
         <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="{% url 'ver_Historial_Ventas' %}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Historial de Ventas</a>
         <a class="nav-link" id="tabPedidos" data-toggle="pill" href="{% url 'ver_Pedidos' %}" role="tab" aria-controls="v-pills-messages" aria-selected="false">Pedidos</a>
         <a class="nav-link" id="tabProductos" data-toggle="pill" href="{% url 'ver_Produto_Proveedor' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Productos</a>
         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'ver_Horario_Proveedor' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Horarios</a>
         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="{% url 'ver_Mapa' %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Mapa</a>
-        <a class="nav-link" id="tabModificarProveedor" data-toggle="pill" href="{% url 'modificar_Proveedor' request.user.id %}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Modificar datos</a>
       </div>
     </div> 
     <div class="col col-lg-10" id="contenido">
@@ -42,6 +41,10 @@
               var href = $("#tabProductos").attr('href');
               cargarVista(href);
             }
+          }else{
+            $("#tabInformacion").addClass("active");
+            var href = $("#tabInformacion").attr('href');
+            cargarVista(href);
           }
 
           // Esperando a que se genere un evento del tipo click en algun "a" que sea hijo de la clase "menuvertical"
