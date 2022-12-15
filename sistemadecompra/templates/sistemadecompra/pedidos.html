@@ -8,7 +8,7 @@
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
           {% comment %} <p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion.day}}/{{pedidoProducto.pedido.fecha_creacion.month}}/{{pedidoProducto.pedido.fecha_creacion.year}}. {{pedidoProducto.pedido.fecha_creacion.time}} </p> {% endcomment %}
           <p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion}}</p>
-          <p class="mb-1">Cliente: {{pedidoProducto.pedido.cliente.user.username}}  {{pedidoProducto.pedido.cliente.user.lastname}}</p>
+          <p class="mb-1">Cliente: {{pedidoProducto.pedido.cliente.user.first_name}}  {{pedidoProducto.pedido.cliente.user.last_name}}</p>
           <p class="mb-1">Dirección: {{pedidoProducto.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
           <p class="mb-1">Dia de entrega sugerido: {{pedidoProducto.pedido.fecha}}</p>
           <p class="mb-1">Hora de entrega sugerido: {{pedidoProducto.pedido.hora}}</p>
@@ -38,23 +38,23 @@
         Pedidos confirmados
       </font>
         {% for pedidoProducto in pedidosConfirmado_Producto %}
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-          <p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion}}</p>
-          <p class="mb-1">Cliente: {{pedidoProducto.pedido.cliente.user.username}}  {{pedidoProducto.pedido.cliente.user.lastname}}</p>
-          <p class="mb-1">Dirección: {{pedidoProducto.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
-          <p class="mb-1">Dia de entrega sugerido: {{pedidoProducto.pedido.fecha}}</p>
-          <p class="mb-1">Hora de entrega sugerido: {{pedidoProducto.pedido.hora}}</p>
-          <p class="mb-1">Productos pedidos:</p>
-          <ul>
-            {% for prodCant in pedidoProducto.producto_cantidad%}
-              <li>{{prodCant.producto.nombre}} x{{prodCant.cantidad}}</li>
-            {% endfor %}
-          </ul>
-          <form action="{% url 'ver_Pedidos' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" name="confirmarEntrega" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Entrega</button>
-          </form>
-        </a>
+          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            <p class="text-right font-italic"> {{pedidoProducto.pedido.fecha_creacion}}</p>
+            <p class="mb-1">Cliente: {{pedidoProducto.pedido.cliente.user.first_name}}  {{pedidoProducto.pedido.cliente.user.last_name}}</p>
+            <p class="mb-1">Dirección: {{pedidoProducto.pedido.calle}} {{pedidoProducto.pedido.numero}}</p>
+            <p class="mb-1">Dia de entrega sugerido: {{pedidoProducto.pedido.fecha}}</p>
+            <p class="mb-1">Hora de entrega sugerido: {{pedidoProducto.pedido.hora}}</p>
+            <p class="mb-1">Productos pedidos:</p>
+            <ul>
+              {% for prodCant in pedidoProducto.producto_cantidad%}
+                <li>{{prodCant.producto.nombre}} x{{prodCant.cantidad}}</li>
+              {% endfor %}
+            </ul>
+            <form action="{% url 'ver_Pedidos' %}" method="POST">
+              {% csrf_token %}
+              <button type="submit" name="confirmarEntrega" value="{{pedidoProducto.pedido.id}}" class="btn btn-success">Confirmar Entrega</button>
+            </form>
+          </a>
         {% endfor %}
       </div>
   </div>

@@ -7,6 +7,50 @@
 {% block content %}
     <h2>Checkout</h2>
 
+    <h4>Su pedido:</h4>
+
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Proveedor</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Subotal</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for prov in losProveedores %}
+                <tr>
+                    <td style="font-weight: bolder;">{{prov.user.username}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% for productoCantidad in elCarrito %}
+                {% if prov == productoCantidad.producto.proveedor %}
+                <tr>
+                    <td></td>
+                    <td>{{productoCantidad.producto.nombre}}</td>
+                    <td id="valorProd{{productoCantidad.producto.id}}" class="colPrecio">${{productoCantidad.producto.valor}}</td>
+                    <td>{{productoCantidad.cantidad}}</td>
+                    <td id="totalProd{{productoCantidad.producto.id}}" class="colTotalProd"> ${{productoCantidad.subTotal}}</td>
+                  </tr>
+                {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td style="text-align: right; font-weight: bolder; font-size: large;">Total</td>
+              <td id="totalProveedor" style="font-weight: bolder; font-size: large;"> ${{totalFinal}}</td>
+            </tr>
+          </tfoot>
+      </table>
     <p>
         Elija metodo de pago:
     </p>

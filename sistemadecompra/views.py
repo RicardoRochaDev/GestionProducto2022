@@ -262,9 +262,10 @@ def verCarrito(request):
                 item.update({next(iter(item.keys())): int(dic[keyAux])})
             request.session['carrito'] = carritoAux
             
-            datosValidados = False
             pedidosParaAlmacenar = []
             for prov in proveedores:
+                datosValidados = False
+                
                 fechaProvId = "fecha" + str(prov.id)
                 tiempoProvId = "tiempo" + str(prov.id)
                 
@@ -279,7 +280,8 @@ def verCarrito(request):
                     diaDeLaSemana = diasDeLaSemana.get(diaDeLaSemana)
 
                     hora = datetime.strptime(tiempo, '%H:%M').time()        
-                    
+                    print("horarios por prov?")
+                    print(prov.horario_set.all().values_list('dia', flat=True))
                     # Compruebo que el dia seleccionado este entre los dias que acepta el prov
                     if diaDeLaSemana in prov.horario_set.all().values_list('dia', flat=True):
                         # Obtengo todos los horarios del proveedor que coincidan con el dia
@@ -300,7 +302,7 @@ def verCarrito(request):
                 return redirect('proceder_Checkout')
             else:
                 print("Datos incorrectos. Vuelva a intentar")
-                messages.add_message(request, messages.ERROR, "Datos incorrectos. Vuelva a intentar")
+                messages.add_message(request, messages.ERROR, "Ha ingresado una fecha invalida para el proveedor.")
         # if 'borrarItemProducto' in request.GET:
         #     dic= request.GET
         #     id= dic['borrarItemProducto']
@@ -408,7 +410,37 @@ def verCheckout(request):
                 
             request.session['carrito'] = []
             return redirect(reverse_lazy('/'))
-    return render(request, 'sistemadecompra/checkout.html', {'losPagos': pagos})
+        
+        #traigo todos los productos existentes
+        productosQuerySet = Producto.objects.all()
+        
+        # inicializo las variables que voy a pasar al template
+        productosAgregados = []
+        proveedores = []
+        totalFinal = 0
+        carritoAux = request.session['carrito']
+        # Obtengo las keys que estan en el carrito de la session para tener una lista con los productos ids
+        listaProductosIdsFromCarrito = []
+        for item in carritoAux:
+            idInt = int(next(iter(item.keys())))
+            listaProductosIdsFromCarrito.append(idInt)
+    
+        
+        # guardo los objetos Producto dentro de productosAgregados y extraigo los proveedores
+        for producto in productosQuerySet:
+            if producto.id in listaProductosIdsFromCarrito:
+                prodIdStr = str(producto.id)
+                cantAux = 0
+                for item in carritoAux:
+                    if str(producto.id) in item:
+                        cantAux = item.get(prodIdStr)
+                        break
+                
+                productosAgregados.append({"producto": producto, "cantidad": cantAux, "subTotal": producto.valor * cantAux})
+                if not(Proveedor.objects.get(id=producto.proveedor.id) in proveedores):
+                    proveedores.append(Proveedor.objects.get(id=producto.proveedor.id))
+                totalFinal = totalFinal + producto.valor * cantAux
+    return render(request, 'sistemadecompra/checkout.html', {"elCarrito": productosAgregados, "losProveedores": proveedores, 'losPagos': pagos, "totalFinal": totalFinal})
 
 def verPedidos(request):
 
@@ -505,7 +537,7 @@ def verPedidos(request):
 def verMapa(request):
     estadoConfirmado = EstadoPedido.objects.get(nombre="Confirmado")
     coordenadas=[]
-    pedidosQuerySet = Pedido.objects.filter(estado = estadoConfirmado)
+    pedidosQuerySet = Pedido.objects.filter(estado = estadoConfirmado, proveedor = request.user.proveedor)
     print("pedidos:")
     print(pedidosQuerySet)
     for p in pedidosQuerySet:

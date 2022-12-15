@@ -30,6 +30,13 @@ Carrito
             Se muestra una pestaña por cada proveedor    
         {% endcomment %}
         
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Recordá que se debe cargar una fecha y hora por cada proveedor!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             {% for prov in losProveedores %}
                 <li class="nav-item">
@@ -85,6 +92,7 @@ Carrito
                             <th scope="col">Producto</th>
                             <th scope="col">Precio</th>
                             <th scope="col">Cantidad</th>
+                            <th scope="col">Total</th>
                             <th scope="col">Acción</th>
                           </tr>
                         </thead>
@@ -93,10 +101,11 @@ Carrito
                                 {% if prov == productoCantidad.producto.proveedor %}
                                 <tr>
                                     <td>{{productoCantidad.producto.nombre}}</td>
-                                    <td>${{productoCantidad.producto.valor}}</td>
+                                    <td id="valorProd{{productoCantidad.producto.id}}" class="colPrecio">${{productoCantidad.producto.valor}}</td>
                                     <td style="width: 16.66%">
-                                        <input class="form-control" type="number" id="cantProd{{productoCantidad.producto.id}}" name="cantProd{{productoCantidad.producto.id}}" value="{{productoCantidad.cantidad}}" min="1">
+                                        <input class="form-control inputCantidad" type="number" id="cantProd{{productoCantidad.producto.id}}" name="cantProd{{productoCantidad.producto.id}}" value="{{productoCantidad.cantidad}}" min="1">
                                     </td>
+                                    <td id="totalProd{{productoCantidad.producto.id}}" class="colTotalProd"> 0.00</td>
                                     <td>
                                         <a class="btn btn-danger" href="{% url 'elimimar_item_carrito' productoCantidad.producto.id %}" role="button">
                                             <i class="bi bi-trash3"></i>
@@ -106,6 +115,15 @@ Carrito
                                 {% endif %}
                             {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                              <td></td>
+                              <td></td>
+                              <td style="text-align: right; font-weight: bolder; font-size: large;">Total</td>
+                              <td id="totalProveedor" style="font-weight: bolder; font-size: large;"></td>
+                              <td></td>
+                            </tr>
+                          </tfoot>
                       </table>
 
 
@@ -126,7 +144,7 @@ Carrito
                 {% endfor %}
             </div>
             <input type="hidden" name="solicitudCheckout">
-            <p>Total: ${{total}}</p>
+            <p></p>
             <button type="submit" name="elboton" value="botonv" class="btn btn-success">Checkout</button>
         </form>
     {% endif %}
@@ -153,7 +171,41 @@ Carrito
     <script>
         $(document).ready(function () {
             $('.toast').toast('show');
+            
+            function calcularTotales(){
+                $( ".colPrecio" ).each(function( index ) {
+                    var productoId = $(this).attr('id').replace('valorProd','');
 
+                    var precio = $(this).text().replace('$','').replace(',','.');
+                    
+                    var cantidadProducto = $("#cantProd" + productoId).val();
+
+                    var totalProd = (precio* cantidadProducto).toFixed(2);
+                    
+                    $("#totalProd" + productoId).text("$" + totalProd.toString().replace('.',','));
+                  });
+
+                  // Calculo el total por proveedor
+                  $( ".table" ).each(function( index ) {
+                    
+                    var a = $(this).find( ".colTotalProd");
+                    var totalProveedor = 0;
+                    $(a).each(function( index ) {
+                        totalProveedor += Number($(this).text().replace('$','').replace(',','.'));
+                    });
+                    
+
+                    var colTotalProveedor = $(this).find( "#totalProveedor");
+                    $(colTotalProveedor).text("$" + totalProveedor.toString().replace('.',','))
+                  });
+            }
+
+            $('.inputCantidad').on('change keyup', function() {
+            console.log("evento")
+            calcularTotales();
+            });
+
+            calcularTotales();
         });
     </script>
     {% endblock %}

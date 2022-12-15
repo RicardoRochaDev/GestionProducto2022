@@ -51,17 +51,7 @@ def registrar_usuario_proveedor_v(request):
             descripcionNegocio = request.POST.get('descripcionNegocio')
             calificacion = request.POST.get('calificacion')
 
-            user = User.objects.create_user(username, email, password1)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
-
-            user = User.objects.last()
-            user_proveedor = Proveedor()
-            user_proveedor.user = user
-            user_proveedor.calle = calle
-            user_proveedor.numero = numero
-
+            #valido la direccion
             calleNombreAux = calle.replace(" ","+")
             calleNumero = numero
             print("callenombreaux")
@@ -76,18 +66,38 @@ def registrar_usuario_proveedor_v(request):
             print("data")
             data = json.loads(json_url.read())
             print(data)
-            user_proveedor.latitud = data['results'][0]['geometry']['location']['lat']
-            user_proveedor.longitud = data['results'][0]['geometry']['location']['lng']
+            if len(data['results']) == 0:
+                messages.add_message(request, messages.ERROR, "Hubo un problema al obtener la latitud y longitud.")
+                form_user = UserForm()
+                form_user_proveedor = ProveedorUserForm()
+                context = {'form_user': form_user,
+                   'form_user_proveedor': form_user_proveedor} 
+            else:
+                user = User.objects.create_user(username, email, password1)
+                user.first_name = first_name
+                user.last_name = last_name
+                user.save()
 
-            user_proveedor.telefono = telefono
-            user_proveedor.descripcionNegocio = descripcionNegocio
-            user_proveedor.calificacion = 0
-            user_proveedor.save()
-            print('USUARIO Y PROVEEDOR CREADO')
-            login(request, user)
-            # return render(request, 'maxproductos/mostrar_Catalogo.html')
-            messages.add_message(request, messages.INFO,"Usuario creado con exito")
-            return redirect(reverse_lazy('/'))
+                user = User.objects.last()
+                user_proveedor = Proveedor()
+                user_proveedor.user = user
+                user_proveedor.calle = calle
+                user_proveedor.numero = numero
+
+                
+                
+                user_proveedor.latitud = data['results'][0]['geometry']['location']['lat']
+                user_proveedor.longitud = data['results'][0]['geometry']['location']['lng']
+
+                user_proveedor.telefono = telefono
+                user_proveedor.descripcionNegocio = descripcionNegocio
+                user_proveedor.calificacion = 0
+                user_proveedor.save()
+                print('USUARIO Y PROVEEDOR CREADO')
+                login(request, user)
+                # return render(request, 'maxproductos/mostrar_Catalogo.html')
+                messages.add_message(request, messages.INFO,"Usuario creado con exito")
+                return redirect(reverse_lazy('/'))
         else:
             dictErrores = form_user.errors.as_data()
             print(dictErrores)
@@ -170,7 +180,7 @@ def registrar_usuario_cliente_v(request):
                 login(request, user)
                 return redirect(reverse_lazy('/'))
             else:
-                messages.add_message(request, messages.ERROR, "La dirección ingresada no existe.")
+                messages.add_message(request, messages.ERROR, "Hubo un problema al obtener la latitud y longitud.")
                 form_user = UserForm()
                 form_user_cliente = ClienteUserForm()
                 context = {'form_user': form_user,

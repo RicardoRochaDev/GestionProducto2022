@@ -75,11 +75,11 @@
 
 					<p class="mb-1">ESTADO: <b> {{dic.pedido.estado.nombre}} </b></p>
 					<form action="{% url 'ver_Pedidos_Cliente' %}" method="GET">
-						{% if dic.pedido.estado.nombre == 'Creado' %}
+						{% comment %} {% if dic.pedido.estado.nombre == 'Creado' %}
 							<button type="submit" name="CancelarCompraCliente" value="{{pedido.pedido.id}}" class="btn btn-danger">
 								Cancelar Compra
 							</button>
-						{% endif %}
+						{% endif %} {% endcomment %}
 						{% if dic.pedido.estado.nombre == 'Cambio Fecha' %}		
 							{% comment %} <button type="button" name="CambioFecha" class="btn btn-warning" data-toggle="modal" data-target="#modalCambioFecha{{dic.pedido.id}}">
 								Cambiar Fecha
